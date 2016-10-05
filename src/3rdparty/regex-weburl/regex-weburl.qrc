@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/dperini/regexweburl">
+        <file>qmldir</file>
+        <file>regex-weburl.js</file>
+    </qresource>
+</RCC>

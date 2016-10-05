@@ -1,0 +1,32 @@
+module Liri.Browser.Components
+
+# controls
+ActionBar 1.0 controls/ActionBar.qml
+
+# tabview
+TabView 1.0 tabview/TabView.qml
+TabBar 1.0 tabview/TabBar.qml
+TabController 1.0 tabview/TabController.qml
+TabContentView 1.0 tabview/TabContentView.qml
+TabContentPage 1.0 tabview/TabContentPage.qml
+
+# dockcanvas
+DockCanvas 1.0 dockcanvas/DockCanvas.qml
+DockContainer 1.0 dockcanvas/DockContainer.qml
+DockElement 1.0 dockcanvas/DockElement.qml
+
+# omnibox
+Omnibox 1.0 omnibox/Omnibox.qml
+
+# toolbar
+Toolbar 1.0 toolbar/Toolbar.qml
+
+# pages
+WebPage 1.0 pages/WebPage.qml
+
+# window
+BrowserWindow 1.0 window/BrowserWindow.qml
+
+# utils
+singleton ColorUtils 1.0 utils/ColorUtils.qml
+singleton UrlUtils 1.0 utils/UrlUtils.qml

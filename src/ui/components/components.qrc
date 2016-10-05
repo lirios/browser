@@ -1,0 +1,24 @@
+<RCC>
+    <qresource prefix="/Liri/Browser/Components">
+        <file>tabview/TabBar.qml</file>
+        <file>tabview/TabView.qml</file>
+        <file>tabview/TabDelegate.qml</file>
+        <file>tabview/TabIndicator.qml</file>
+        <file>qmldir</file>
+        <file>dockcanvas/DockCanvas.qml</file>
+        <file>dockcanvas/DockContainer.qml</file>
+        <file>dockcanvas/DockElement.qml</file>
+        <file>utils/ColorUtils.qml</file>
+        <file>tabview/TabBarActionBar.qml</file>
+        <file>tabview/TabController.qml</file>
+        <file>tabview/TabContentView.qml</file>
+        <file>tabview/TabContentPage.qml</file>
+        <file>omnibox/Omnibox.qml</file>
+        <file>pages/WebPage.qml</file>
+        <file>toolbar/Toolbar.qml</file>
+        <file>controls/ActionBar.qml</file>
+        <file>utils/UrlUtils.qml</file>
+        <file>window/BrowserWindow.qml</file>
+        <file>tabview/TabActionManager.qml</file>
+    </qresource>
+</RCC>
