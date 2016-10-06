@@ -113,6 +113,7 @@ Item {
             color: "red"
 
             Behavior on width {
+                enabled: tabsModel.active.loading
                 NumberAnimation {
                     duration: 200
                     easing.type: Easing.InOutQuad
