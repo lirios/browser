@@ -21,6 +21,9 @@ Omnibox 1.0 omnibox/Omnibox.qml
 # toolbar
 Toolbar 1.0 toolbar/Toolbar.qml
 
+# drawer
+Drawer 1.0 drawer/Drawer.qml
+
 # pages
 WebPage 1.0 pages/WebPage.qml
 

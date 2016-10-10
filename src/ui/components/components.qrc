@@ -20,5 +20,6 @@
         <file>utils/UrlUtils.qml</file>
         <file>window/BrowserWindow.qml</file>
         <file>tabview/TabActionManager.qml</file>
+        <file>drawer/Drawer.qml</file>
     </qresource>
 </RCC>

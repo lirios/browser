@@ -55,6 +55,11 @@ FluidWindow {
     width: 1024
     height: 640
 
+    Drawer {
+        edge: Qt.RightEdge
+        height: parent.height
+    }
+
     DockCanvas {
         id: dockCanvas
         anchors.fill: parent
