@@ -18,19 +18,6 @@
  */
 
 import QtQuick 2.7
-import QtQuick.Controls 2.0
-import Fluid.Controls 1.0
-import Liri.Browser.Components 1.0
-import Liri.Browser.Core 1.0
+import ".."
 
-Item {
-    id: dockCanvas
-    property bool editActive: false
-    property int layoutSpacing: 0
-
-    NoiseBackground {
-        id: background
-        anchors.fill: parent
-        color: "grey"
-    }
-}
+ActionBar {}

@@ -1,2 +1,1 @@
-RESOURCES += $$PWD/ui.qrc \
-             $$PWD/components/components.qrc
+RESOURCES += $$PWD/ui.qrc

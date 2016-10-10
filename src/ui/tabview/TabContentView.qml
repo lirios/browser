@@ -18,7 +18,7 @@
  */
 
 import QtQuick 2.7
-import Liri.Browser.Core 1.0
+import core 1.0
 
 Item {
     id: tabContentView

@@ -45,11 +45,12 @@ int main(int argc, char *argv[])
         QtWebEngine::initialize();
     #endif
 
+    // create qml app engine
     QQmlApplicationEngine engine;
 
     // register types
-    qmlRegisterUncreatableType<Tab>("Liri.Browser.Core", 1, 0, "Tab", "Tab (from module Liri.Browser.Core) may not be created directly.");
-    qmlRegisterType<TabsModel>("Liri.Browser.Core", 1, 0, "TabsModel");
+    qmlRegisterUncreatableType<Tab>("core", 1, 0, "Tab", "Tab (from module Liri.Browser.Core) may not be created directly.");
+    qmlRegisterType<TabsModel>("core", 1, 0, "TabsModel");
 
     // setup qml imports
     engine.addImportPath("qrc:/");

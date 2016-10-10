@@ -22,8 +22,8 @@ import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.0
 import Fluid.Controls 1.0
 import SlimeEngine 0.2
-import Liri.Browser.Components 1.0
-import Liri.Browser.Core 1.0
+import core 1.0
+import ".."
 
 FluidWindow {
     id: window

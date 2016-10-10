@@ -18,28 +18,19 @@
  */
 
 import QtQuick 2.7
-import QtQuick.Layouts 1.1
-import Liri.Browser.Core 1.0
+import QtQuick.Controls 2.0
+import Fluid.Controls 1.0
+import core 1.0
+import ".."
 
 Item {
-    id: tabView
-    property TabsModel tabsModel
-    property TabBar tabBar: tabBar
+    id: dockCanvas
+    property bool editActive: false
+    property int layoutSpacing: 0
 
-    ColumnLayout {
+    NoiseBackground {
+        id: background
         anchors.fill: parent
-        spacing: 0
-
-        TabBar {
-            id: tabBar
-            Layout.fillWidth: true
-            tabsModel: tabView.tabsModel
-        }
-
-        Rectangle {
-            color: "green"
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-        }
+        color: "grey"
     }
 }

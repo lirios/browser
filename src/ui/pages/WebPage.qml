@@ -19,7 +19,7 @@
 
 import QtQuick 2.7
 import SlimeEngine 0.2
-import Liri.Browser.Components 1.0
+import ".."
 
 TabContentPage {
     id: page

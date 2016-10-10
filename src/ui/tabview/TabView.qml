@@ -18,6 +18,28 @@
  */
 
 import QtQuick 2.7
-import Liri.Browser.Components 1.0
+import QtQuick.Layouts 1.1
+import core 1.0
 
-ActionBar {}
+Item {
+    id: tabView
+    property TabsModel tabsModel
+    property TabBar tabBar: tabBar
+
+    ColumnLayout {
+        anchors.fill: parent
+        spacing: 0
+
+        TabBar {
+            id: tabBar
+            Layout.fillWidth: true
+            tabsModel: tabView.tabsModel
+        }
+
+        Rectangle {
+            color: "green"
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+        }
+    }
+}

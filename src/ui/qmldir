@@ -1,7 +1,7 @@
-module Liri.Browser.Components
+module ui
 
-# controls
-ActionBar 1.0 controls/ActionBar.qml
+# components
+ActionBar 1.0 components/ActionBar.qml
 
 # tabview
 TabView 1.0 tabview/TabView.qml

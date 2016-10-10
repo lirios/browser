@@ -19,7 +19,7 @@
 
 import QtQuick 2.7
 import Fluid.Controls 1.0
-import Liri.Browser.Components 1.0
+import ".."
 
 Rectangle {
     id: actionBar

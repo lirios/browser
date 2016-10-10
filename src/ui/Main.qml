@@ -18,8 +18,8 @@
  */
 
 import QtQuick 2.7
-import Liri.Browser.Components 1.0
 import SlimeEngine 0.2
+import "."
 
 QtObject {
     id: root

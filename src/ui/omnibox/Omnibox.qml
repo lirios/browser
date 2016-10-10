@@ -21,9 +21,9 @@ import QtQuick 2.7
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.0
 import Fluid.Material 1.0
-import Liri.Browser.Components 1.0
-import Liri.Browser.Core 1.0
 import dperini.regexweburl 1.0
+import core 1.0
+import ".."
 
 Item {
     id: omnibox
