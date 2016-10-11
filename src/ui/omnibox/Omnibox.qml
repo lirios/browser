@@ -89,7 +89,10 @@ Item {
                             tabController.openUrl(url);
                         }
                         else {
+                            var reload = (tabsModel.active.url == url);
                             tabsModel.active.url = url;
+                            if (reload)
+                                tabsModel.active.reload();
                         }
                         showUrlField.editActive = false;
                     }
