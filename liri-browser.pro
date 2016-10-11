@@ -1,5 +1,5 @@
 TEMPLATE = app
-TARGET = fluid-browser
+TARGET = liri-browser
 
 CONFIG += c++11
 QT += qml quick
