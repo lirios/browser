@@ -20,7 +20,7 @@
 #ifndef TABSMODEL_H
 #define TABSMODEL_H
 
-#include <QAbstractItemModel>
+#include <QAbstractListModel>
 #include "tab.h"
 
 class TabsModel : public QAbstractListModel
@@ -34,7 +34,15 @@ public:
     explicit TabsModel(QObject *parent = 0);
 
     enum TabRoles {
-        Uid
+        Uid,
+        Url,
+        Title,
+        IconUrl,
+        CanGoBack,
+        CanGoForward,
+        Loading,
+        LoadProgress,
+        Invalid
     };
 
     int rowCount(const QModelIndex &parent=QModelIndex()) const;

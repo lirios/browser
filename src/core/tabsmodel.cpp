@@ -19,7 +19,6 @@
 
 #include "tabsmodel.h"
 #include "tab.h"
-#include <QDebug>
 
 TabsModel::TabsModel(QObject *parent) : QAbstractListModel(parent)
 {
@@ -39,7 +38,22 @@ QVariant TabsModel::data(const QModelIndex &index, int role) const
     switch(role) {
         case Uid:
             return QVariant(tab->uid());
-            break;
+        case Url:
+            return QVariant(tab->url());
+        case Title:
+            return QVariant(tab->title());
+        case IconUrl:
+            return QVariant(tab->iconUrl());
+        case CanGoBack:
+            return QVariant(tab->canGoBack());
+        case CanGoForward:
+            return QVariant(tab->canGoForward());
+        case Loading:
+            return QVariant(tab->loading());
+        case LoadProgress:
+            return QVariant(tab->loadProgress());
+        case Invalid:
+            return QVariant(tab->invalid());
     }
     return QVariant();
 }
@@ -48,6 +62,14 @@ QHash<int, QByteArray> TabsModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
     roles[Uid] = "uid";
+    roles[Url] = "url";
+    roles[Title] = "title";
+    roles[IconUrl] = "iconUrl";
+    roles[CanGoBack] = "canGoBack";
+    roles[CanGoForward] = "canGoForward";
+    roles[Loading] = "loading";
+    roles[LoadProgress] = "loadProgress";
+    roles[Invalid] = "invalid";
     return roles;
 }
 
