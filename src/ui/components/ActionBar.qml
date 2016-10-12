@@ -28,11 +28,16 @@ Rectangle {
     property bool animationsEnabled: true
     property int iconSize: 24
 
+    function itemAt(index) {
+        return actionRepeater.itemAt(index);
+    }
+
     implicitHeight: childrenRect.height
     implicitWidth: childrenRect.width
 
     Row {
         Repeater {
+            id: actionRepeater
             model: actions
             delegate: IconButton {
                 id: iconButton

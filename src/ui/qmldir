@@ -23,6 +23,10 @@ Toolbar 1.0 toolbar/Toolbar.qml
 
 # drawer
 Drawer 1.0 drawer/Drawer.qml
+DrawerContentItem 1.0 drawer/DrawerContentItem.qml
+
+# drawer content
+DrawerDownloadsContent 1.0 drawer/content/DrawerDownloadsContent.qml
 
 # pages
 WebPage 1.0 pages/WebPage.qml

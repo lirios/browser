@@ -28,6 +28,12 @@ Rectangle {
     property TabController tabController
     property TabsModel tabsModel
 
+    property list<Action> leftActions
+    property list<Action> rightActions
+
+    readonly property ActionBar leftActionBar: leftActionBar
+    readonly property ActionBar rightActionBar: rightActionBar
+
     implicitHeight: 64
     implicitWidth: 256
 
@@ -38,18 +44,8 @@ Rectangle {
         }
 
         ActionBar {
-            actions: [
-                Action {
-                    iconName: "navigation/arrow_back"
-                    enabled: !tabsModel.active.invalid && tabsModel.active.canGoBack
-                    onTriggered: tabsModel.active.goBack()
-                },
-                Action {
-                    iconName: "navigation/arrow_forward"
-                    enabled: !tabsModel.active.invalid && tabsModel.active.canGoForward
-                    onTriggered: tabsModel.active.goForward()
-                }
-            ]
+            id: leftActionBar
+            actions: leftActions
         }
 
         Omnibox {
@@ -60,18 +56,8 @@ Rectangle {
         }
 
         ActionBar {
-            actions: [
-                Action {
-                    enabled: !tabsModel.active.invalid
-                    iconName: tabsModel.active.loading ? "navigation/close" : "navigation/refresh"
-                    onTriggered: {
-                        if (tabsModel.active.loading)
-                            tabsModel.active.stop();
-                        else
-                            tabsModel.active.reload();
-                    }
-                }
-            ]
+            id: rightActionBar
+            actions: rightActions
         }
     }
 }

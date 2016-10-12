@@ -24,6 +24,8 @@
 
 #include "../core/tabsmodel.h"
 #include "../core/tab.h"
+#include "../core/downloadsmodel.h"
+#include "../core/webdownload.h"
 
 // Include QtWebEngine if enabled (otherwise Oxide is expected)
 #if IS_QTWEBENGINE_ENABLED == 1
@@ -48,9 +50,12 @@ int main(int argc, char *argv[])
     // create qml app engine
     QQmlApplicationEngine engine;
 
-    // register types
-    qmlRegisterUncreatableType<Tab>("core", 1, 0, "Tab", "Tab (from module Liri.Browser.Core) may not be created directly.");
+    // register core types
+    qmlRegisterUncreatableType<Tab>("core", 1, 0, "Tab", "Tab (from module core) may not be created directly.");
     qmlRegisterType<TabsModel>("core", 1, 0, "TabsModel");
+
+    qmlRegisterUncreatableType<WebDownload>("core", 1, 0, "WebDownload", "WebDownload (from module core) may not be created directly.");
+    qmlRegisterType<DownloadsModel>("core", 1, 0, "DownloadsModel");
 
     // setup qml imports
     engine.addImportPath("qrc:/");
