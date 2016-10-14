@@ -21,39 +21,37 @@ import QtQuick 2.7
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.0
 import Fluid.Controls 1.0
+import core 1.0
+import "../../.."
 
-Drawer {
-    property list<Component> contentComponents
-    property int currentContentIndex: -1
+DrawerContentItem {
+    id: drawerContentItem
+    title: "Downloads"
 
-    function loadContent(index) {
-        currentContentIndex = index;
+    property DownloadsModel downloadsModel
+
+    ListView {
+        anchors.fill: parent
+        clip: true
+        model: downloadsModel
+        delegate: DownloadItemDelegate {
+            downloadsModel: drawerContentItem.downloadsModel
+        }
     }
 
-    width: 256
-    // Disabled dragMargin because Drawer shows different content based
-    // on which menu item is selected.
-    // The drag-in gesture also conflicts with the browser webview
-    // scrollbar on some platforms
-    dragMargin: 0
+    Label {
+        id: lblNoDownloads
+        anchors.top: parent.top
 
-    ColumnLayout {
-        anchors {
-            fill: parent
-            margins: 16
-        }
+        visible: downloadsModel.count === 0
+        text: "No downloads for this session"
+        wrapMode: Text.WordWrap
+        width: Math.min(noDownloadsMetrics.width, parent.width)
 
-        spacing: 16
-
-        TitleLabel {
-            text: contentLoader.item ? contentLoader.item.title : ""
-        }
-
-        Loader {
-            id: contentLoader
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            sourceComponent: currentContentIndex >= 0 ? contentComponents[currentContentIndex] : null
+        TextMetrics {
+            id: noDownloadsMetrics
+            font: lblNoDownloads.font
+            text: lblNoDownloads.text
         }
     }
 }
