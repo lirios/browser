@@ -146,6 +146,14 @@ FluidWindow {
                         }
                     },
                     Action {
+                        visible: downloadsModel.count > 0
+                        iconName: "file/file_download"
+                        onTriggered: {
+                            rightDrawer.loadContent(rightDrawer.downloads);
+                            rightDrawer.open();
+                        }
+                    },
+                    Action {
                         id: toolbarOverflowAction
                         iconName: "navigation/more_vert"
                         onTriggered: {
