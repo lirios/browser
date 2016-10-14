@@ -1,7 +1,9 @@
 /*
  * This file is part of Liri Browser
  *
- * Copyright (C) 2016 Tim Süberkrüb (https://github.com/tim-sueberkrueb)
+ * Copyright (C) 2016 Tim Süberkrüb <tim.sueberkrueb@web.de>
+ *
+ * $BEGIN_LICENSE:GPL3+$
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,7 +17,9 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ *
+ * $END_LICENSE$
+*/
 
 import QtQuick 2.7
 import SlimeEngine 0.2
