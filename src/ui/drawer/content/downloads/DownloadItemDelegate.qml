@@ -24,9 +24,10 @@ import Fluid.Controls 1.0
 
 
 BaseListItem {
-    implicitHeight: 74
     property var downloadsModel
     property var download: downloadsModel.get(index)
+
+    implicitHeight: 74
 
     RowLayout {
         anchors {
