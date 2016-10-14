@@ -22,5 +22,8 @@
         <file>drawer/Drawer.qml</file>
         <file>components/ActionBar.qml</file>
         <file>Main.qml</file>
+        <file>drawer/DrawerContentItem.qml</file>
+        <file>drawer/content/downloads/DownloadItemDelegate.qml</file>
+        <file>drawer/content/downloads/DrawerDownloadsContent.qml</file>
     </qresource>
 </RCC>

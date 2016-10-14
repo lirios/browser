@@ -34,12 +34,14 @@ FluidWindow {
 
     property var root
     property WebProfile profile
+    property TabsModel tabsModel: TabsModel {}
+    property DownloadsModel downloadsModel
 
     property TabController tabController: TabController {
         id: tabController
         tabBar: tabBar
         tabContentView: tabContentView
-        tabsModel: TabsModel {}
+        tabsModel: window.tabsModel
         profile: window.profile
         webengine: root.webengine
         webviewComponent: Component {
@@ -60,8 +62,20 @@ FluidWindow {
     height: 640
 
     Drawer {
+        id: rightDrawer
+
+        property int downloads: 0
+
         edge: Qt.RightEdge
         height: parent.height
+        contentComponents: [
+            Component {
+                DrawerDownloadsContent {
+                    downloadsModel: window.downloadsModel
+                }
+            }
+        ]
+        currentContentIndex: 0
     }
 
     DockCanvas {
@@ -109,8 +123,48 @@ FluidWindow {
             minimumHeight: 64
             minimumWidth: 256
             content: Toolbar {
+                id: toolbar
                 tabController: tabController
                 tabsModel: tabController.tabsModel
+                leftActions: [
+                    Action {
+                        iconName: "navigation/arrow_back"
+                        enabled: !tabsModel.active.invalid && tabsModel.active.canGoBack
+                        onTriggered: tabsModel.active.goBack()
+                    },
+                    Action {
+                        iconName: "navigation/arrow_forward"
+                        enabled: !tabsModel.active.invalid && tabsModel.active.canGoForward
+                        onTriggered: tabsModel.active.goForward()
+                    }
+                ]
+                rightActions: [
+                    Action {
+                        enabled: !tabsModel.active.invalid
+                        iconName: tabsModel.active.loading ? "navigation/close" : "navigation/refresh"
+                        onTriggered: {
+                            if (tabsModel.active.loading)
+                                tabsModel.active.stop();
+                            else
+                                tabsModel.active.reload();
+                        }
+                    },
+                    Action {
+                        visible: downloadsModel.count > 0
+                        iconName: "file/file_download"
+                        onTriggered: {
+                            rightDrawer.loadContent(rightDrawer.downloads);
+                            rightDrawer.open();
+                        }
+                    },
+                    Action {
+                        id: toolbarOverflowAction
+                        iconName: "navigation/more_vert"
+                        onTriggered: {
+                            toolbarActionsOverflowMenu.open();
+                        }
+                    }
+                ]
             }
         }
 
@@ -122,6 +176,35 @@ FluidWindow {
             content: TabContentView {
                 id: tabContentView
                 tabsModel: tabController.tabsModel
+            }
+        }
+    }
+
+    Menu {
+        id: toolbarActionsOverflowMenu
+        onAboutToShow: {
+            // Set menu popup position before showing
+            var offset = Qt.point(-width/2, 0);
+            var actionDelegate = toolbar.rightActionBar.itemAt(toolbarOverflowAction.index);
+            var popupPosition = actionDelegate.mapToItem(parent, 0, 0);
+            x = popupPosition.x + offset.x;
+            y = popupPosition.y + offset.y;
+        }
+
+        MenuItem {
+            text: "Downloads"
+            onClicked: {
+                rightDrawer.loadContent(rightDrawer.downloads);
+                rightDrawer.open();
+            }
+        }
+
+        Connections {
+            enabled: toolbarActionsOverflowMenu.visible
+            target: window
+            onWidthChanged: {
+                // Close the menu on window width change
+                toolbarActionsOverflowMenu.close();
             }
         }
     }

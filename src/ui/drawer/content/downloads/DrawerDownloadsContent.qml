@@ -23,45 +23,39 @@
 
 import QtQuick 2.7
 import QtQuick.Layouts 1.1
+import QtQuick.Controls 2.0
 import Fluid.Controls 1.0
 import core 1.0
-import ".."
+import "../../.."
 
-Rectangle {
-    id: toolbar
-    property TabController tabController
-    property TabsModel tabsModel
+DrawerContentItem {
+    id: drawerContentItem
+    title: "Downloads"
 
-    property list<Action> leftActions
-    property list<Action> rightActions
+    property DownloadsModel downloadsModel
 
-    readonly property ActionBar leftActionBar: leftActionBar
-    readonly property ActionBar rightActionBar: rightActionBar
-
-    implicitHeight: 64
-    implicitWidth: 256
-
-    RowLayout {
-        anchors {
-            fill: parent
-            rightMargin: 16
+    ListView {
+        anchors.fill: parent
+        clip: true
+        model: downloadsModel
+        delegate: DownloadItemDelegate {
+            downloadsModel: drawerContentItem.downloadsModel
         }
+    }
 
-        ActionBar {
-            id: leftActionBar
-            actions: leftActions
-        }
+    Label {
+        id: lblNoDownloads
+        anchors.top: parent.top
 
-        Omnibox {
-            Layout.preferredHeight: 48
-            Layout.fillWidth: true
-            tabsModel: toolbar.tabsModel
-            tabController: toolbar.tabController
-        }
+        visible: downloadsModel.count === 0
+        text: "No downloads for this session"
+        wrapMode: Text.WordWrap
+        width: Math.min(noDownloadsMetrics.width, parent.width)
 
-        ActionBar {
-            id: rightActionBar
-            actions: rightActions
+        TextMetrics {
+            id: noDownloadsMetrics
+            font: lblNoDownloads.font
+            text: lblNoDownloads.text
         }
     }
 }

@@ -23,6 +23,7 @@
 
 import QtQuick 2.7
 import SlimeEngine 0.2
+import core 1.0
 import "."
 
 QtObject {
@@ -31,16 +32,73 @@ QtObject {
     property int webengine
 
     property WebProfile defaultProfile
+    property DownloadsModel downloadsModel: DownloadsModel {}
 
     property Component browserWindowComponent: Component {
         BrowserWindow {
-            profile: defaultProfile
+            profile: root.defaultProfile
+            downloadsModel: root.downloadsModel
+        }
+    }
+
+    property Component downloadWatcherComponent: Component {
+        Item {
+            id: downloadWatcher
+            property var engineDownload
+            property var downloadModelItem
+
+            Connections {
+                target: engineDownload
+                onFinished: {
+                    console.log("Download finished")
+                    downloadWatcher.downloadModelItem.finished = true;
+                }
+                onFailed: {
+                    console.log("Download failed");
+                }
+            }
+
+            Connections {
+                target: downloadModelItem
+                onCancel: {
+                    engineDownload.cancel();
+                }
+            }
+
+            Binding {
+                target: downloadModelItem
+                property: "progress"
+                value: engineDownload.progress
+            }
+
+            Binding {
+                target: downloadModelItem
+                property: "path"
+                value: engineDownload.path
+            }
+
+            Binding {
+                target: downloadModelItem
+                property: "mimeType"
+                value: engineDownload.mimeType
+            }
         }
     }
 
     property Component webProfileComponent: Component {
         WebProfile {
             engine: webengine
+            onDownloadRequested: {
+                // Accept download request, returns SlimeEngine Download item
+                var engineItem = request.accept();
+                // Create model representation
+                var modelItem = downloadsModel.add();
+                // Create download watcher
+                var watcher = downloadWatcherComponent.createObject(null, {
+                    engineDownload: engineItem,
+                    downloadModelItem: modelItem
+                });
+            }
         }
     }
 
