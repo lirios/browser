@@ -21,6 +21,10 @@ Omnibox 1.0 omnibox/Omnibox.qml
 # toolbar
 Toolbar 1.0 toolbar/Toolbar.qml
 
+# expansionbar
+ExpansionBar 1.0 expansionbar/ExpansionBar.qml
+SearchPageBar 1.0 expansionbar/content/SearchPageBar.qml
+
 # drawer
 Drawer 1.0 drawer/Drawer.qml
 DrawerContentItem 1.0 drawer/DrawerContentItem.qml

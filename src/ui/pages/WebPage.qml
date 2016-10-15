@@ -112,5 +112,8 @@ TabContentPage {
         onReload: {
             webview.reload();
         }
+        onFindText: {
+            webview.findText(text, backwards, caseSensitive);
+        }
     }
 }

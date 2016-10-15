@@ -99,6 +99,12 @@ FluidWindow {
             }
 
             DockContainer {
+                id: expansionBarContainer
+                Layout.fillWidth: true
+                Layout.preferredHeight: expansionBar.showing && !dockCanvas.editActive ? 64 : 0
+            }
+
+            DockContainer {
                 id: tabContentContainer
                 Layout.fillHeight: true
                 Layout.fillWidth: true
@@ -106,6 +112,7 @@ FluidWindow {
         }
 
         DockElement {
+            // tabbar
             editActive: dockCanvas.editActive
             container: tabBarContainer
             minimumHeight: content.tabHeight
@@ -118,6 +125,7 @@ FluidWindow {
         }
 
         DockElement {
+            // toolbar
             editActive: dockCanvas.editActive
             container: toolbarContainer
             minimumHeight: 64
@@ -169,6 +177,67 @@ FluidWindow {
         }
 
         DockElement {
+            // expansion bar
+            editActive: dockCanvas.editActive
+            container: expansionBarContainer
+            minimumHeight: 64
+            minimumWidth: 256
+
+            content: ExpansionBar {
+                id: expansionBar
+
+                property bool showing: false
+                property int searchPage: 0
+
+                function show() { showing = true; }
+
+                contentComponents: [
+                    Component {
+                        SearchPageBar {
+                            // list of tabs that where searched
+                            property var tabsList: []
+
+                            searchEnabled: !tabController.tabsModel.empty
+                            onSearchRequested: {
+                                var activeTab = tabController.tabsModel.active;
+                                activeTab.findText(text, backwards, false);
+                                if (tabsList.indexOf(activeTab) === -1) {
+                                    tabsList.push(activeTab);
+                                }
+                            }
+                            onClosed: {
+                                // Undo search:
+                                // Not an optimal solution
+                                // Better: remove tab from SearchPageBar.tabsList
+                                // when it gets closed.
+                                for (var tabIndex in tabsList) {
+                                    var tab = tabsList[tabIndex];
+                                    try {
+                                        tab.findText("", false, false);
+                                    }
+                                    catch (e) {
+                                        if (e instanceof TypeError) {
+                                            // Ignore, tab could be closed in the meantime.
+                                        }
+                                        else {
+                                            throw e;
+                                        }
+                                    }
+                                }
+                                tabsList = [];
+                            }
+                        }
+                    }
+                ]
+
+                onClosed: {
+                    showing = false;
+                }
+            }
+        }
+
+        DockElement {
+            // content view
             editActive: dockCanvas.editActive
             container: tabContentContainer
             minimumHeight: 200
@@ -189,6 +258,14 @@ FluidWindow {
             var popupPosition = actionDelegate.mapToItem(parent, 0, 0);
             x = popupPosition.x + offset.x;
             y = popupPosition.y + offset.y;
+        }
+
+        MenuItem {
+            text: "Search in page"
+            onClicked: {
+                expansionBar.loadContent(expansionBar.searchPage);
+                expansionBar.show();
+            }
         }
 
         MenuItem {

@@ -28,7 +28,7 @@ Item {
 
     property var container: undefined
     property Item content: Item {}
-    property bool animationsEnabled: true
+    property bool animationsEnabled: editActive
     property bool editActive: false
 
     property int minimumWidth

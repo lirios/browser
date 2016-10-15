@@ -83,6 +83,7 @@ signals:
     void goForward();
     void reload();
     void stop();
+    void findText(QString text, bool backwards, bool caseSensitive);
 
 public slots:
 
