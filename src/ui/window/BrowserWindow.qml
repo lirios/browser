@@ -194,6 +194,7 @@ FluidWindow {
                 contentComponents: [
                     Component {
                         SearchPageBar {
+                            id: searchBar
                             // list of tabs that where searched
                             property var tabsList: []
 
@@ -206,25 +207,25 @@ FluidWindow {
                                 }
                             }
                             onClosed: {
-                                // Undo search:
-                                // Not an optimal solution
-                                // Better: remove tab from SearchPageBar.tabsList
-                                // when it gets closed.
+                                // Undo search in all affected tabs
                                 for (var tabIndex in tabsList) {
                                     var tab = tabsList[tabIndex];
-                                    try {
-                                        tab.findText("", false, false);
-                                    }
-                                    catch (e) {
-                                        if (e instanceof TypeError) {
-                                            // Ignore, tab could be closed in the meantime.
-                                        }
-                                        else {
-                                            throw e;
+                                    tab.findText("", false, false);
+                                }
+                                tabsList = [];
+                            }
+
+                            Connections {
+                                target: tabController.tabsModel
+                                onBeforeTabRemoved: {
+                                    // Remove tab from list of searched tabs one close
+                                    for (var tabIndex in searchBar.tabsList) {
+                                        var t = searchBar.tabsList[tabIndex];
+                                        if (t == tab) {
+                                            searchBar.tabsList.splice(tabIndex, 1);
                                         }
                                     }
                                 }
-                                tabsList = [];
                             }
                         }
                     }

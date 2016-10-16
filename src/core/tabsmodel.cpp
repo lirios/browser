@@ -134,6 +134,10 @@ bool TabsModel::remove(Tab *tab)
     int index = m_tabs_list.indexOf(tab);
     if (index == -1)
         return false;
+
+    // Call signal before removing and deleting tab
+    beforeTabRemoved(tab);
+
     beginRemoveRows(QModelIndex(), index, index);
     m_tabs_list.removeAt(index);
 

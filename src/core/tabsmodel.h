@@ -78,6 +78,7 @@ signals:
     void emptyChanged(bool empty);
     void activeChanged(Tab* tab);
     void activeIndexChanged(int index);
+    void beforeTabRemoved(Tab* tab);
 
 public slots:
 
