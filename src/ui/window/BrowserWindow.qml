@@ -78,175 +78,132 @@ FluidWindow {
         currentContentIndex: 0
     }
 
-    DockCanvas {
-        id: dockCanvas
+    ColumnLayout {
         anchors.fill: parent
+        spacing: 0
 
-        ColumnLayout {
-            anchors.fill: parent
-            spacing: parent.layoutSpacing
+        TabBar {
+            id: tabBar
 
-            DockContainer {
-                id: tabBarContainer
-                Layout.fillWidth: true
-                Layout.preferredHeight: 48
-            }
+            Layout.fillWidth: true
+            Layout.preferredHeight: 48
 
-            DockContainer {
-                id: toolbarContainer
-                Layout.fillWidth: true
-                Layout.preferredHeight: 64
-            }
-
-            DockContainer {
-                id: expansionBarContainer
-                Layout.fillWidth: true
-                Layout.preferredHeight: expansionBar.showing && !dockCanvas.editActive ? 64 : 0
-            }
-
-            DockContainer {
-                id: tabContentContainer
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-            }
+            tabController: tabController
+            tabsModel: tabController.tabsModel
         }
 
-        DockElement {
-            // tabbar
-            editActive: dockCanvas.editActive
-            container: tabBarContainer
-            minimumHeight: content.tabHeight
-            minimumWidth: content.tabWidth
-            content: TabBar {
-                id: tabBar
-                tabController: tabController
-                tabsModel: tabController.tabsModel
-            }
-        }
+        Toolbar {
+            id: toolbar
 
-        DockElement {
-            // toolbar
-            editActive: dockCanvas.editActive
-            container: toolbarContainer
-            minimumHeight: 64
-            minimumWidth: 256
-            content: Toolbar {
-                id: toolbar
-                tabController: tabController
-                tabsModel: tabController.tabsModel
-                leftActions: [
-                    Action {
-                        iconName: "navigation/arrow_back"
-                        enabled: !tabsModel.active.invalid && tabsModel.active.canGoBack
-                        onTriggered: tabsModel.active.goBack()
-                    },
-                    Action {
-                        iconName: "navigation/arrow_forward"
-                        enabled: !tabsModel.active.invalid && tabsModel.active.canGoForward
-                        onTriggered: tabsModel.active.goForward()
+            Layout.fillWidth: true
+            Layout.preferredHeight: 64
+
+            tabController: tabController
+            tabsModel: tabController.tabsModel
+            leftActions: [
+                Action {
+                    iconName: "navigation/arrow_back"
+                    enabled: !tabsModel.active.invalid && tabsModel.active.canGoBack
+                    onTriggered: tabsModel.active.goBack()
+                },
+                Action {
+                    iconName: "navigation/arrow_forward"
+                    enabled: !tabsModel.active.invalid && tabsModel.active.canGoForward
+                    onTriggered: tabsModel.active.goForward()
+                }
+            ]
+            rightActions: [
+                Action {
+                    enabled: !tabsModel.active.invalid
+                    iconName: tabsModel.active.loading ? "navigation/close" : "navigation/refresh"
+                    onTriggered: {
+                        if (tabsModel.active.loading)
+                            tabsModel.active.stop();
+                        else
+                            tabsModel.active.reload();
                     }
-                ]
-                rightActions: [
-                    Action {
-                        enabled: !tabsModel.active.invalid
-                        iconName: tabsModel.active.loading ? "navigation/close" : "navigation/refresh"
-                        onTriggered: {
-                            if (tabsModel.active.loading)
-                                tabsModel.active.stop();
-                            else
-                                tabsModel.active.reload();
-                        }
-                    },
-                    Action {
-                        visible: downloadsModel.count > 0
-                        iconName: "file/file_download"
-                        onTriggered: {
-                            rightDrawer.loadContent(rightDrawer.downloads);
-                            rightDrawer.open();
-                        }
-                    },
-                    Action {
-                        id: toolbarOverflowAction
-                        iconName: "navigation/more_vert"
-                        onTriggered: {
-                            toolbarActionsOverflowMenu.open();
-                        }
+                },
+                Action {
+                    visible: downloadsModel.count > 0
+                    iconName: "file/file_download"
+                    onTriggered: {
+                        rightDrawer.loadContent(rightDrawer.downloads);
+                        rightDrawer.open();
                     }
-                ]
-            }
+                },
+                Action {
+                    id: toolbarOverflowAction
+                    iconName: "navigation/more_vert"
+                    onTriggered: {
+                        toolbarActionsOverflowMenu.open();
+                    }
+                }
+            ]
         }
 
-        DockElement {
-            // expansion bar
-            editActive: dockCanvas.editActive
-            container: expansionBarContainer
-            minimumHeight: 64
-            minimumWidth: 256
+        ExpansionBar {
+            id: expansionBar
 
-            content: ExpansionBar {
-                id: expansionBar
+            Layout.fillWidth: true
+            Layout.preferredHeight: expansionBar.showing ? 64 : 0
 
-                property bool showing: false
-                property int searchPage: 0
+            property bool showing: false
+            property int searchPage: 0
 
-                function show() { showing = true; }
+            function show() { showing = true; }
 
-                contentComponents: [
-                    Component {
-                        SearchPageBar {
-                            id: searchBar
-                            // list of tabs that where searched
-                            property var tabsList: []
+            contentComponents: [
+                Component {
+                    SearchPageBar {
+                        id: searchBar
+                        // list of tabs that where searched
+                        property var tabsList: []
 
-                            searchEnabled: !tabController.tabsModel.empty
-                            onSearchRequested: {
-                                var activeTab = tabController.tabsModel.active;
-                                activeTab.findText(text, backwards, false);
-                                if (tabsList.indexOf(activeTab) === -1) {
-                                    tabsList.push(activeTab);
-                                }
+                        searchEnabled: !tabController.tabsModel.empty
+                        onSearchRequested: {
+                            var activeTab = tabController.tabsModel.active;
+                            activeTab.findText(text, backwards, false);
+                            if (tabsList.indexOf(activeTab) === -1) {
+                                tabsList.push(activeTab);
                             }
-                            onClosed: {
-                                // Undo search in all affected tabs
-                                for (var tabIndex in tabsList) {
-                                    var tab = tabsList[tabIndex];
-                                    tab.findText("", false, false);
-                                }
-                                tabsList = [];
+                        }
+                        onClosed: {
+                            // Undo search in all affected tabs
+                            for (var tabIndex in tabsList) {
+                                var tab = tabsList[tabIndex];
+                                tab.findText("", false, false);
                             }
+                            tabsList = [];
+                        }
 
-                            Connections {
-                                target: tabController.tabsModel
-                                onBeforeTabRemoved: {
-                                    // Remove tab from list of searched tabs one close
-                                    for (var tabIndex in searchBar.tabsList) {
-                                        var t = searchBar.tabsList[tabIndex];
-                                        if (t == tab) {
-                                            searchBar.tabsList.splice(tabIndex, 1);
-                                        }
+                        Connections {
+                            target: tabController.tabsModel
+                            onBeforeTabRemoved: {
+                                // Remove tab from list of searched tabs one close
+                                for (var tabIndex in searchBar.tabsList) {
+                                    var t = searchBar.tabsList[tabIndex];
+                                    if (t == tab) {
+                                        searchBar.tabsList.splice(tabIndex, 1);
                                     }
                                 }
                             }
                         }
                     }
-                ]
-
-                onClosed: {
-                    showing = false;
                 }
+            ]
+
+            onClosed: {
+                showing = false;
             }
         }
 
-        DockElement {
-            // content view
-            editActive: dockCanvas.editActive
-            container: tabContentContainer
-            minimumHeight: 200
-            minimumWidth: 300
-            content: TabContentView {
-                id: tabContentView
-                tabsModel: tabController.tabsModel
-            }
+        TabContentView {
+            id: tabContentView
+
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+
+            tabsModel: tabController.tabsModel
         }
     }
 
