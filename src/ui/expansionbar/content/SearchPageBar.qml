@@ -73,4 +73,9 @@ ExpansionBarItem {
             }
         }
     }
+
+    Component.onCompleted: {
+        // Force active focus on search field when loaded by ExpansionBar's loader
+        searchField.forceActiveFocus();
+    }
 }
