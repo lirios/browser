@@ -38,7 +38,7 @@ Rectangle {
     readonly property ActionBar leftActionBar: leftActionBar
     readonly property ActionBar rightActionBar: rightActionBar
 
-    implicitHeight: 64
+    implicitHeight: 56
     implicitWidth: 256
 
     RowLayout {
