@@ -23,7 +23,6 @@ Toolbar 1.0 toolbar/Toolbar.qml
 
 # expansionbar
 ExpansionBar 1.0 expansionbar/ExpansionBar.qml
-SearchPageBar 1.0 expansionbar/content/SearchPageBar.qml
 
 # overlays
 BaseOverlay 1.0 overlay/BaseOverlay.qml

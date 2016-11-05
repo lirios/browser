@@ -25,7 +25,6 @@
         <file>drawer/DrawerContentItem.qml</file>
         <file>drawer/content/downloads/DownloadItemDelegate.qml</file>
         <file>drawer/content/downloads/DrawerDownloadsContent.qml</file>
-        <file>expansionbar/content/SearchPageBar.qml</file>
         <file>expansionbar/ExpansionBar.qml</file>
         <file>expansionbar/ExpansionBarItem.qml</file>
         <file>overlay/SearchOverlay.qml</file>
