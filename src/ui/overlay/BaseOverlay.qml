@@ -22,24 +22,19 @@
 */
 
 import QtQuick 2.7
+import Fluid.Material 1.0
 
-Item {
-    id: expansionBar
+Rectangle {
+    id: baseOverlay
 
-    property list<Component> contentComponents
-    property int currentContentIndex: -1
     property bool showing: false
 
-    signal opened();
-    signal closed();
-
-    function loadContent(index) {
-        currentContentIndex = index;
-    }
+    signal opened()
+    signal closed()
 
     function open() {
         showing = true;
-        showAnimation.start();
+        openAnimation.start();
     }
 
     function close() {
@@ -47,55 +42,33 @@ Item {
         closeAnimation.start();
     }
 
-    clip: true
+    visible: height > 0
 
-    Rectangle {
-        id: contentContainer
-        anchors {
-            left: parent.left
-            right: parent.right
-            bottom: parent.bottom
-        }
+    layer.enabled: true
+    layer.effect: ElevationEffect { elevation: 2 }
 
-        height: 48
-
-        Loader {
-            id: contentLoader
-            anchors {
-                fill: parent
-                leftMargin: 16
-                rightMargin: 16
-            }
-            sourceComponent: currentContentIndex >= 0 ? contentComponents[currentContentIndex] : null
-        }
-    }
+    implicitWidth: 300
+    height: 0
 
     NumberAnimation {
-        id: showAnimation
-        target: expansionBar
-        property: "implicitHeight"
+        id: openAnimation
+        target: baseOverlay
+        property: "height"
+        from: 0
+        to: 48
         duration: 200
         easing.type: Easing.InOutQuad
-        to: 56
         onStopped: opened()
     }
 
     NumberAnimation {
         id: closeAnimation
-        target: expansionBar
-        property: "implicitHeight"
+        target: baseOverlay
+        property: "height"
+        from: 48
+        to: 0
         duration: 200
         easing.type: Easing.InOutQuad
-        to: 0
         onStopped: closed()
-    }
-
-    Connections {
-        enabled: currentContentIndex >= 0 && contentLoader.status === Loader.Ready
-        target: contentLoader.item
-        onClosed: {
-            expansionBar.close();
-            currentContentIndex = -1;
-        }
     }
 }

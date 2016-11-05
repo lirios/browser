@@ -37,7 +37,6 @@ Rectangle {
     signal closeRequested()
 
     implicitWidth: 200
-    implicitHeight: 24
     color: backgroundColor
 
     RowLayout {
@@ -76,6 +75,8 @@ Rectangle {
             onClicked: closeRequested()
             iconColor: active ? foregroundColor : ColorUtils.shadeColor(foregroundColor, 0.5)
             iconSize: 18
+            implicitHeight: 24
+            implicitWidth: 24
 
             Behavior on iconColor {
                 ColorAnimation {

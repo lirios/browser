@@ -28,5 +28,7 @@
         <file>expansionbar/content/SearchPageBar.qml</file>
         <file>expansionbar/ExpansionBar.qml</file>
         <file>expansionbar/ExpansionBarItem.qml</file>
+        <file>overlay/SearchOverlay.qml</file>
+        <file>overlay/BaseOverlay.qml</file>
     </qresource>
 </RCC>
