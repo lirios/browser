@@ -24,7 +24,9 @@
 import QtQuick 2.7
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.0
+ import QtQuick.Controls.Material 2.0
 import Fluid.Controls 1.0
+import Fluid.Material 1.0
 import SlimeEngine 0.2
 import core 1.0
 import ".."
@@ -82,128 +84,132 @@ FluidWindow {
         anchors.fill: parent
         spacing: 0
 
-        TabBar {
-            id: tabBar
+        ToolBar {
+            id: toolbarContainer
 
+            z: 5
             Layout.fillWidth: true
-            Layout.preferredHeight: 48
+            Material.primary: "white"
+            Material.elevation: 0
 
-            tabController: tabController
-            tabsModel: tabController.tabsModel
-        }
+            ColumnLayout {
+                id: headColumn
+                anchors.fill: parent
+                spacing: 0
 
-        Toolbar {
-            id: toolbar
+                TabBar {
+                    id: tabBar
 
-            Layout.fillWidth: true
-            Layout.preferredHeight: 64
+                    Layout.fillWidth: true
 
-            tabController: tabController
-            tabsModel: tabController.tabsModel
-            leftActions: [
-                Action {
-                    iconName: "navigation/arrow_back"
-                    enabled: !tabsModel.active.invalid && tabsModel.active.canGoBack
-                    onTriggered: tabsModel.active.goBack()
-                },
-                Action {
-                    iconName: "navigation/arrow_forward"
-                    enabled: !tabsModel.active.invalid && tabsModel.active.canGoForward
-                    onTriggered: tabsModel.active.goForward()
+                    tabController: tabController
+                    tabsModel: tabController.tabsModel
                 }
-            ]
-            rightActions: [
-                Action {
-                    enabled: !tabsModel.active.invalid
-                    iconName: tabsModel.active.loading ? "navigation/close" : "navigation/refresh"
-                    onTriggered: {
-                        if (tabsModel.active.loading)
-                            tabsModel.active.stop();
-                        else
-                            tabsModel.active.reload();
-                    }
-                },
-                Action {
-                    visible: downloadsModel.count > 0
-                    iconName: "file/file_download"
-                    onTriggered: {
-                        rightDrawer.loadContent(rightDrawer.downloads);
-                        rightDrawer.open();
-                    }
-                },
-                Action {
-                    id: toolbarOverflowAction
-                    iconName: "navigation/more_vert"
-                    onTriggered: {
-                        toolbarActionsOverflowMenu.open();
-                    }
-                }
-            ]
-        }
 
-        ExpansionBar {
-            id: expansionBar
+                Toolbar {
+                    id: toolbar
 
-            Layout.fillWidth: true
-            Layout.preferredHeight: expansionBar.showing ? 64 : 0
+                    Layout.fillWidth: true
 
-            property bool showing: false
-            property int searchPage: 0
-
-            function show() { showing = true; }
-
-            contentComponents: [
-                Component {
-                    SearchPageBar {
-                        id: searchBar
-                        // list of tabs that where searched
-                        property var tabsList: []
-
-                        searchEnabled: !tabController.tabsModel.empty
-                        onSearchRequested: {
-                            var activeTab = tabController.tabsModel.active;
-                            activeTab.findText(text, backwards, false);
-                            if (tabsList.indexOf(activeTab) === -1) {
-                                tabsList.push(activeTab);
+                    tabController: tabController
+                    tabsModel: tabController.tabsModel
+                    leftActions: [
+                        Action {
+                            iconName: "navigation/arrow_back"
+                            enabled: !tabsModel.active.invalid && tabsModel.active.canGoBack
+                            onTriggered: tabsModel.active.goBack()
+                        },
+                        Action {
+                            iconName: "navigation/arrow_forward"
+                            enabled: !tabsModel.active.invalid && tabsModel.active.canGoForward
+                            onTriggered: tabsModel.active.goForward()
+                        }
+                    ]
+                    rightActions: [
+                        Action {
+                            enabled: !tabsModel.active.invalid
+                            iconName: tabsModel.active.loading ? "navigation/close" : "navigation/refresh"
+                            onTriggered: {
+                                if (tabsModel.active.loading)
+                                    tabsModel.active.stop();
+                                else
+                                    tabsModel.active.reload();
+                            }
+                        },
+                        Action {
+                            visible: downloadsModel.count > 0
+                            iconName: "file/file_download"
+                            onTriggered: {
+                                rightDrawer.loadContent(rightDrawer.downloads);
+                                rightDrawer.open();
+                            }
+                        },
+                        Action {
+                            id: toolbarOverflowAction
+                            iconName: "navigation/more_vert"
+                            onTriggered: {
+                                toolbarActionsOverflowMenu.open();
                             }
                         }
-                        onClosed: {
-                            // Undo search in all affected tabs
-                            for (var tabIndex in tabsList) {
-                                var tab = tabsList[tabIndex];
-                                tab.findText("", false, false);
-                            }
-                            tabsList = [];
-                        }
-
-                        Connections {
-                            target: tabController.tabsModel
-                            onBeforeTabRemoved: {
-                                // Remove tab from list of searched tabs one close
-                                for (var tabIndex in searchBar.tabsList) {
-                                    var t = searchBar.tabsList[tabIndex];
-                                    if (t == tab) {
-                                        searchBar.tabsList.splice(tabIndex, 1);
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    ]
                 }
-            ]
-
-            onClosed: {
-                showing = false;
             }
         }
 
-        TabContentView {
-            id: tabContentView
-
-            Layout.fillHeight: true
+        Item {
+            // Body
             Layout.fillWidth: true
+            Layout.fillHeight: true
 
-            tabsModel: tabController.tabsModel
+            TabContentView {
+                id: tabContentView
+                anchors.fill: parent
+                tabsModel: tabController.tabsModel
+            }
+
+            SearchOverlay {
+                id: searchOverlay
+
+                anchors {
+                    top: parent.top
+                    right: parent.right
+                    margins: 4
+                }
+
+                // list of tabs that where searched
+                property var tabsList: []
+
+                z: 5
+                searchEnabled: !tabController.tabsModel.empty
+                onSearchRequested: {
+                    var activeTab = tabController.tabsModel.active;
+                    activeTab.findText(text, backwards, false);
+                    if (tabsList.indexOf(activeTab) === -1) {
+                        tabsList.push(activeTab);
+                    }
+                }
+                onClosed: {
+                    // Undo search in all affected tabs
+                    for (var tabIndex in tabsList) {
+                        var tab = tabsList[tabIndex];
+                        tab.findText("", false, false);
+                    }
+                    tabsList = [];
+                }
+
+                Connections {
+                    target: tabController.tabsModel
+                    onBeforeTabRemoved: {
+                        // Remove tab from list of searched tabs one close
+                        for (var tabIndex in searchOverlay.tabsList) {
+                            var t = searchOverlay.tabsList[tabIndex];
+                            if (t == tab) {
+                                searchOverlay.tabsList.splice(tabIndex, 1);
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -219,10 +225,9 @@ FluidWindow {
         }
 
         MenuItem {
-            text: "Search in page"
+            text: "Find in page"
             onClicked: {
-                expansionBar.loadContent(expansionBar.searchPage);
-                expansionBar.show();
+                searchOverlay.open();
             }
         }
 
@@ -235,11 +240,12 @@ FluidWindow {
         }
 
         Connections {
-            enabled: toolbarActionsOverflowMenu.visible
             target: window
+            enabled: toolbarActionsOverflowMenu.visible
             onWidthChanged: {
                 // Close the menu on window width change
-                toolbarActionsOverflowMenu.close();
+                if (toolbarActionsOverflowMenu.visible)
+                    toolbarActionsOverflowMenu.close();
             }
         }
     }

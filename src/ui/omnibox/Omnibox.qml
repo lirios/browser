@@ -34,7 +34,7 @@ Item {
     property TabController tabController
     property TabsModel tabsModel
 
-    implicitHeight: 48
+    implicitHeight: 40
     implicitWidth: 256
 
     Rectangle {

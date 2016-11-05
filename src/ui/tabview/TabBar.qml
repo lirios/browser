@@ -35,7 +35,7 @@ Rectangle {
     property var tabController
     property TabsModel tabsModel
     property int tabWidth: 200
-    property int tabHeight: 48
+    property int tabHeight: 38
     property bool dragActive: false
     property color indicatorColor: "#2196f3"
 

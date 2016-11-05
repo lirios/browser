@@ -25,19 +25,29 @@ import QtQuick 2.7
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.0
 import Fluid.Controls 1.0
-import "../"
 
-ExpansionBarItem {
-    id: searchBarItem
+BaseOverlay {
+    id: searchOverlay
 
     property bool searchEnabled: true
 
     signal searchRequested(string text, bool backwards)
 
-    RowLayout {
-        anchors.fill: parent
+    onOpened: {
+        searchField.forceActiveFocus();
+    }
 
-        spacing: 8
+    implicitWidth: childrenRect.width
+
+    RowLayout {
+        id: rowLayout
+
+        anchors {
+            top: parent.top
+            bottom: parent.bottom
+        }
+
+        Item { implicitWidth: 16 }  // Spacer
 
         TextField {
             id: searchField
@@ -50,6 +60,8 @@ ExpansionBarItem {
 
         IconButton {
             enabled: searchEnabled
+            implicitHeight: 40
+            implicitWidth: 40
             iconName: "hardware/keyboard_arrow_up"
             onClicked: {
                 searchRequested(searchField.text, true);
@@ -58,24 +70,23 @@ ExpansionBarItem {
 
         IconButton {
             enabled: searchEnabled
+            implicitHeight: 40
+            implicitWidth: 40
             iconName: "hardware/keyboard_arrow_down"
             onClicked: {
                 searchRequested(searchField.text, false);
             }
         }
 
-        Item { Layout.fillWidth: true }     // Placeholder
-
         IconButton {
+            implicitHeight: 40
+            implicitWidth: 40
             iconName: "navigation/close"
             onClicked: {
-                searchBarItem.closed();
+                searchOverlay.close();
             }
         }
-    }
 
-    Component.onCompleted: {
-        // Force active focus on search field when loaded by ExpansionBar's loader
-        searchField.forceActiveFocus();
+        Item { implicitWidth: 8 }  // Spacer
     }
 }

@@ -46,6 +46,8 @@ Rectangle {
             delegate: IconButton {
                 id: iconButton
                 visible: model.visible
+                implicitHeight: 40
+                implicitWidth: 40
                 iconSource: model.iconSource
                 iconSize: actionBar.iconSize
                 enabled: model.enabled

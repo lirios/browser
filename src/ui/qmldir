@@ -25,6 +25,10 @@ Toolbar 1.0 toolbar/Toolbar.qml
 ExpansionBar 1.0 expansionbar/ExpansionBar.qml
 SearchPageBar 1.0 expansionbar/content/SearchPageBar.qml
 
+# overlays
+BaseOverlay 1.0 overlay/BaseOverlay.qml
+SearchOverlay 1.0 overlay/SearchOverlay.qml
+
 # drawer
 Drawer 1.0 drawer/Drawer.qml
 DrawerContentItem 1.0 drawer/DrawerContentItem.qml

@@ -47,13 +47,14 @@ Rectangle {
             rightMargin: 16
         }
 
+        Layout.alignment: Qt.AlignLeft | Qt.AlignHCenter
+
         ActionBar {
             id: leftActionBar
             actions: leftActions
         }
 
         Omnibox {
-            Layout.preferredHeight: 48
             Layout.fillWidth: true
             tabsModel: toolbar.tabsModel
             tabController: toolbar.tabController
