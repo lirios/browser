@@ -36,6 +36,7 @@ FluidWindow {
 
     property var root
     property WebProfile profile
+    property bool incognito: profile.incognito
     property TabsModel tabsModel: TabsModel {}
     property DownloadsModel downloadsModel
 
@@ -62,6 +63,10 @@ FluidWindow {
 
     width: 1024
     height: 640
+
+    title: "%1 - Liri Browser %2".arg(tabController.tabsModel.empty ? "New window"
+                                                                    : tabsModel.active.title || "New tab")
+                                 .arg(incognito ? "(Private mode)" : "")
 
     Drawer {
         id: rightDrawer
@@ -223,6 +228,22 @@ FluidWindow {
             var popupPosition = actionDelegate.mapToItem(parent, 0, 0);
             x = popupPosition.x + offset.x;
             y = popupPosition.y + offset.y;
+        }
+
+        MenuItem {
+            text: "New Window"
+            onClicked: {
+                var window = root.newWindow();
+                window.showNormal();
+            }
+        }
+
+        MenuItem {
+            text: "New Private Window"
+            onClicked: {
+                var window = root.newIncognitoWindow();
+                window.showNormal();
+            }
         }
 
         MenuItem {
