@@ -227,6 +227,8 @@ FluidWindow {
 
         MenuItem {
             text: "Find in page"
+            // Disable find in page overlay when there is no open tab
+            enabled: !tabController.tabsModel.empty
             onClicked: {
                 searchOverlay.open();
             }
@@ -237,6 +239,15 @@ FluidWindow {
             onClicked: {
                 rightDrawer.loadContent(rightDrawer.downloads);
                 rightDrawer.open();
+            }
+        }
+
+        Connections {
+            target: tabController.tabsModel
+            onEmptyChanged: {
+                // Hide find in page overlay when the last tab was closed
+                if (empty && searchOverlay.showing)
+                    searchOverlay.close();
             }
         }
 
