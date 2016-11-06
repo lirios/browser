@@ -69,7 +69,6 @@ Rectangle {
                 tabController.openUrl("http://google.com")
             }
         }
-
     ]
 
     signal tabCloseRequested(int uid)
