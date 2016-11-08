@@ -37,6 +37,8 @@ FluidWindow {
     property var root
     property WebProfile profile
     property bool incognito: profile.incognito
+    property url startUrl: "https://www.duckduckgo.com"
+    property bool openStartUrl: true
     property TabsModel tabsModel: TabsModel {}
     property DownloadsModel downloadsModel
 
@@ -281,5 +283,19 @@ FluidWindow {
                     toolbarActionsOverflowMenu.close();
             }
         }
+    }
+
+    Connections {
+        target: tabController.tabsModel
+        onBeforeTabRemoved: {
+            // Close the window if the last tab was closed
+            if (tabsModel.count === 1)
+                window.close();
+        }
+    }
+
+    Component.onCompleted: {
+        if (openStartUrl)
+            tabController.openUrl(startUrl);
     }
 }

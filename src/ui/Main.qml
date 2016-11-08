@@ -105,15 +105,16 @@ QtObject {
     }
 
     function openWindowRequest(request) {
-        var window = newWindow();
+        var window = newWindow(false, false);
         window.openRequest(request);
         window.showNormal();
     }
 
-    function newWindow(incognito) {
+    function newWindow(incognito, openStartUrl) {
         var properties = {root: root}
         if (incognito)
             properties["profile"] = incognitoProfile;
+        properties["openStartUrl"] = openStartUrl;
         var window = browserWindowComponent.createObject(root, properties);
         return window;
     }
