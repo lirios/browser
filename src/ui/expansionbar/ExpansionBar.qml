@@ -30,8 +30,8 @@ Item {
     property int currentContentIndex: -1
     property bool showing: false
 
-    signal opened();
-    signal closed();
+    signal opened()
+    signal closed()
 
     function loadContent(index) {
         currentContentIndex = index;
