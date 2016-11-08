@@ -31,6 +31,7 @@ Rectangle {
     id: toolbar
     property TabController tabController
     property TabsModel tabsModel
+    property string searchUrl
 
     property list<Action> leftActions
     property list<Action> rightActions
@@ -58,6 +59,7 @@ Rectangle {
             Layout.fillWidth: true
             tabsModel: toolbar.tabsModel
             tabController: toolbar.tabController
+            searchUrl: toolbar.searchUrl
         }
 
         ActionBar {

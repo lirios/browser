@@ -38,6 +38,7 @@ FluidWindow {
     property WebProfile profile
     property bool incognito: profile.incognito
     property url startUrl: "https://www.duckduckgo.com"
+    property string searchUrl: "https://duckduckgo.com/?q=%1"
     property bool openStartUrl: true
     property TabsModel tabsModel: TabsModel {}
     property DownloadsModel downloadsModel
@@ -112,6 +113,7 @@ FluidWindow {
 
                     tabController: tabController
                     tabsModel: tabController.tabsModel
+                    newTabUrl: startUrl
                 }
 
                 Toolbar {
@@ -121,6 +123,7 @@ FluidWindow {
 
                     tabController: tabController
                     tabsModel: tabController.tabsModel
+                    searchUrl: window.searchUrl
                     leftActions: [
                         Action {
                             iconName: "navigation/arrow_back"
