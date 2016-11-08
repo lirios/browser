@@ -32,6 +32,8 @@ QtObject {
     property int webengine
 
     property WebProfile defaultProfile
+    property WebProfile incognitoProfile
+
     property DownloadsModel downloadsModel: DownloadsModel {}
 
     property Component browserWindowComponent: Component {
@@ -103,19 +105,29 @@ QtObject {
     }
 
     function openWindowRequest(request) {
-        var window = newWindow();
+        var window = newWindow(false, false);
         window.openRequest(request);
         window.showNormal();
     }
 
-    function newWindow() {
-        var window = browserWindowComponent.createObject(root, {root: root});
+    function newWindow(incognito, openStartUrl) {
+        var properties = {root: root}
+        if (incognito)
+            properties["profile"] = incognitoProfile;
+        properties["openStartUrl"] = openStartUrl;
+        var window = browserWindowComponent.createObject(root, properties);
         return window;
+    }
+
+    function newIncognitoWindow() {
+        return newWindow(true);
     }
 
     function load() {
         // Create the default profile after the webengine to use has been decided on the C++ side
         defaultProfile = webProfileComponent.createObject(root, {});
+        // Create an incognito profile
+        incognitoProfile = webProfileComponent.createObject(root, {incognito: true});
         // Create the first window and show it
         newWindow().showNormal();
     }

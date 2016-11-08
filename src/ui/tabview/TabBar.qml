@@ -38,6 +38,7 @@ Rectangle {
     property int tabHeight: 38
     property bool dragActive: false
     property color indicatorColor: "#2196f3"
+    property url newTabUrl
 
     // Using flick might not be the best solution
     // for programmatically scrolling through the tabs
@@ -66,7 +67,7 @@ Rectangle {
         Action {
             iconName: "content/add"
             onTriggered: {
-                tabController.openUrl("http://google.com")
+                tabController.openUrl(newTabUrl)
             }
         }
     ]

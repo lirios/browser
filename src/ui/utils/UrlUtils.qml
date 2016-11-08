@@ -30,7 +30,7 @@ QtObject {
         return url.match(RegexWebUrl.re_weburl) !== null;
     }
 
-    function validUrl(url) {
+    function validUrl(url, searchUrl) {
         // Valid web url
         var httpedUrl = (url.indexOf("http://") === 0 || url.indexOf("https://") === 0) ? url : "http://%1".arg(url);
         if (isWebUrl(httpedUrl)) {
@@ -38,7 +38,7 @@ QtObject {
         }
         // Search term
         else {
-            return "https://www.google.com/search?q=%1".arg(url);
+            return searchUrl.arg(url);
         }
     }
 }

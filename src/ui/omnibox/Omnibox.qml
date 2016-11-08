@@ -33,6 +33,7 @@ Item {
     id: omnibox
     property TabController tabController
     property TabsModel tabsModel
+    property string searchUrl
 
     implicitHeight: 40
     implicitWidth: 256
@@ -88,7 +89,7 @@ Item {
                     font.pixelSize: 14
 
                     onAccepted: {
-                        var url = UrlUtils.validUrl(text);
+                        var url = UrlUtils.validUrl(text, searchUrl);
                         if (tabsModel.active.invalid) {
                             tabController.openUrl(url);
                         }

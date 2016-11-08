@@ -36,6 +36,10 @@ FluidWindow {
 
     property var root
     property WebProfile profile
+    property bool incognito: profile.incognito
+    property url startUrl: "https://www.duckduckgo.com"
+    property string searchUrl: "https://duckduckgo.com/?q=%1"
+    property bool openStartUrl: true
     property TabsModel tabsModel: TabsModel {}
     property DownloadsModel downloadsModel
 
@@ -62,6 +66,10 @@ FluidWindow {
 
     width: 1024
     height: 640
+
+    title: "%1 - Liri Browser %2".arg(tabController.tabsModel.empty ? "New window"
+                                                                    : tabsModel.active.title || "New tab")
+                                 .arg(incognito ? "(Private mode)" : "")
 
     Drawer {
         id: rightDrawer
@@ -105,6 +113,7 @@ FluidWindow {
 
                     tabController: tabController
                     tabsModel: tabController.tabsModel
+                    newTabUrl: startUrl
                 }
 
                 Toolbar {
@@ -114,6 +123,7 @@ FluidWindow {
 
                     tabController: tabController
                     tabsModel: tabController.tabsModel
+                    searchUrl: window.searchUrl
                     leftActions: [
                         Action {
                             iconName: "navigation/arrow_back"
@@ -226,6 +236,22 @@ FluidWindow {
         }
 
         MenuItem {
+            text: "New Window"
+            onClicked: {
+                var window = root.newWindow();
+                window.showNormal();
+            }
+        }
+
+        MenuItem {
+            text: "New Private Window"
+            onClicked: {
+                var window = root.newIncognitoWindow();
+                window.showNormal();
+            }
+        }
+
+        MenuItem {
             text: "Find in page"
             // Disable find in page overlay when there is no open tab
             enabled: !tabController.tabsModel.empty
@@ -260,5 +286,19 @@ FluidWindow {
                     toolbarActionsOverflowMenu.close();
             }
         }
+    }
+
+    Connections {
+        target: tabController.tabsModel
+        onBeforeTabRemoved: {
+            // Close the window if the last tab was closed
+            if (tabsModel.count === 1)
+                window.close();
+        }
+    }
+
+    Component.onCompleted: {
+        if (openStartUrl)
+            tabController.openUrl(startUrl);
     }
 }
