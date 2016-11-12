@@ -37,7 +37,7 @@ qmake .. CONFIG+=QTWEBENGINE_ENABLED
 Use `make distclean` from inside your `build` directory to clean up.
 You need to do this before rerunning `qmake` with different options. 
 
-# Install
+## Install
 
 From your build directory, run:
 ```sh
