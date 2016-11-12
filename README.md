@@ -29,10 +29,25 @@ mkdir build && cd build
 qmake ..
 make
 ```
-Note: Oxide web engine is expected by default. To build for QtWebEngine, add `CONFIG+=QTWEBENGINE_ENABLED` to your `qmake` line.
+Note: Oxide web engine is expected by default. To build for QtWebEngine, add `CONFIG+=QTWEBENGINE_ENABLED` to your `qmake` line:
+```sh
+qmake .. CONFIG+=QTWEBENGINE_ENABLED
+```
 
 Use `make distclean` from inside your `build` directory to clean up.
 You need to do this before rerunning `qmake` with different options. 
+
+# Install
+
+From your build directory, run:
+```sh
+sudo make install
+```
+The browser will be installed to `/usr/local` by default. To specify a custom installation prefix,
+set the `PREFIX` environment variable when running `qmake`. For example:
+```sh
+PREFIX=/opt qmake ..
+```
 
 ## Licensing
 Licensed under the terms of the GNU General Public License version 3 or, at your option, any later version.

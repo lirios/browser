@@ -4,6 +4,16 @@ TARGET = liri-browser
 CONFIG += c++11
 QT += qml quick
 
+# Install to /usr/local by default
+# Set the PREFIX environment variable to define
+# a custom installation location
+prefix = $$(PREFIX)
+isEmpty(prefix) {
+    prefix = /usr/local
+}
+target.path = $${prefix}/bin
+INSTALLS += target
+
 # Specify CONFIG+=QTWEBENGINE_ENABLED when running qmake.
 # Otherwise, Liri Browser expects the Oxide web engine.
 contains(CONFIG, QTWEBENGINE_ENABLED) {
