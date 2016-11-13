@@ -131,4 +131,11 @@ QtObject {
         // Create the first window and show it
         newWindow().showNormal();
     }
+
+    Component.onDestruction: {
+        if (Settings.dirty) {
+            console.log("Saving settings ...");
+            Settings.save();
+        }
+    }
 }

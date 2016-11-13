@@ -36,6 +36,7 @@ class Tab : public QObject
     Q_PROPERTY(QUrl iconUrl READ iconUrl WRITE setIconUrl NOTIFY iconUrlChanged)
     Q_PROPERTY(bool canGoBack READ canGoBack  WRITE setCanGoBack  NOTIFY canGoBackChanged)
     Q_PROPERTY(bool canGoForward READ canGoForward WRITE setCanGoForward NOTIFY canGoForwardChanged)
+    Q_PROPERTY(bool canReload READ canReload WRITE setCanReload NOTIFY canReloadChanged)
     Q_PROPERTY(bool loading READ loading WRITE setLoading NOTIFY loadingChanged)
     Q_PROPERTY(unsigned int loadProgress READ loadProgress WRITE setLoadProgress NOTIFY loadProgressChanged)
     Q_PROPERTY(bool invalid READ invalid NOTIFY invalidChanged)
@@ -60,6 +61,9 @@ public:
     bool canGoForward() const;
     void setCanGoForward(bool canGoForward);
 
+    bool canReload() const;
+    void setCanReload(bool canReload);
+
     bool loading() const;
     void setLoading(bool loading);
 
@@ -75,6 +79,7 @@ signals:
     void iconUrlChanged(QUrl iconUrl);
     void canGoBackChanged(bool canGoBack);
     void canGoForwardChanged(bool canGoForward);
+    void canReloadChanged(bool canReload);
     void invalidChanged(bool invalid);
     void loadingChanged(bool loading);
     void loadProgressChanged(unsigned int loadProgress);
@@ -94,6 +99,7 @@ private:
     QUrl m_iconUrl;
     bool m_canGoBack;
     bool m_canGoForward;
+    bool m_canReload;
     bool m_loading;
     int m_loadProgress;
 

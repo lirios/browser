@@ -1,11 +1,15 @@
 HEADERS += \
-    $$PWD/tabsmodel.h \
-    $$PWD/tab.h \
-    $$PWD/downloadsmodel.h \
-    $$PWD/webdownload.h
+    $$PWD/models/tabsmodel.h \
+    $$PWD/models/tab.h \
+    $$PWD/models/downloadsmodel.h \
+    $$PWD/models/webdownload.h \
+    $$PWD/settings/settings.h \
+    $$PWD/settings/startconfig.h
 
 SOURCES += \
-    $$PWD/tabsmodel.cpp \
-    $$PWD/tab.cpp \
-    $$PWD/downloadsmodel.cpp \
-    $$PWD/webdownload.cpp
+    $$PWD/models/tabsmodel.cpp \
+    $$PWD/models/tab.cpp \
+    $$PWD/models/downloadsmodel.cpp \
+    $$PWD/models/webdownload.cpp \
+    $$PWD/settings/settings.cpp \
+    $$PWD/settings/startconfig.cpp

@@ -21,34 +21,33 @@
  * $END_LICENSE$
 */
 
-pragma Singleton
-import QtQuick 2.7
-import dperini.regexweburl 1.0
+#ifndef STARTCONFIG_H
+#define STARTCONFIG_H
 
-QtObject {
-    property var webUrlRegex: RegexWebUrl.re_weburl
+#include <QObject>
+#include <QUrl>
 
-    function isWebUrl(url) {
-        return url.match(webUrlRegex) !== null;
-    }
+class StartConfig : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(QUrl startUrl READ startUrl WRITE setStartUrl NOTIFY startUrlChanged)
+    Q_PROPERTY(QUrl defaultStartUrl MEMBER m_defaultStartUrl NOTIFY defaultStartUrlChanged)
+public:
+    explicit StartConfig(QObject *parent = 0);
 
-    function isLiriUrl(url) {
-        return url.toString().indexOf("liri://") === 0;
-    }
+    QUrl startUrl() const { return m_startUrl; }
+    void setStartUrl(QUrl url) { startUrlChanged(m_startUrl = url); }
 
-    function validUrl(url, searchUrl) {
-        // Valid web url
-        var httpedUrl = (url.indexOf("http://") === 0 || url.indexOf("https://") === 0) ? url : "http://%1".arg(url);
-        if (isWebUrl(httpedUrl)) {
-            return httpedUrl;
-        }
-        // Liri url
-        else if (isLiriUrl(url)) {
-            return url;
-        }
-        // Search term
-        else {
-            return searchUrl.arg(url);
-        }
-    }
-}
+    QUrl defaultStartUrl() const { return m_defaultStartUrl; }
+
+signals:
+    void startUrlChanged(QUrl url);
+    void defaultStartUrlChanged(QUrl url);
+
+private:
+    QUrl m_startUrl;
+    QUrl m_defaultStartUrl;
+
+};
+
+#endif // STARTCONFIG_H

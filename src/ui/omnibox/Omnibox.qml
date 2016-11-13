@@ -90,14 +90,19 @@ Item {
 
                     onAccepted: {
                         var url = UrlUtils.validUrl(text, searchUrl);
-                        if (tabsModel.active.invalid) {
+                        if (UrlUtils.isLiriUrl(url) || UrlUtils.isLiriUrl(tabsModel.active.url)) {
                             tabController.openUrl(url);
                         }
                         else {
-                            var reload = (tabsModel.active.url == url);
-                            tabsModel.active.url = url;
-                            if (reload)
-                                tabsModel.active.reload();
+                            if (tabsModel.active.invalid) {
+                                tabController.openUrl(url);
+                            }
+                            else {
+                                var reload = (tabsModel.active.url == url);
+                                tabsModel.active.url = url;
+                                if (reload)
+                                    tabsModel.active.reload();
+                            }
                         }
                         showUrlField.editActive = false;
                     }

@@ -24,6 +24,7 @@
 import QtQuick 2.7
 import SlimeEngine 0.2
 import core 1.0
+import ".."
 
 QtObject {
     id: tabController
@@ -35,13 +36,18 @@ QtObject {
     property int webengine
 
     property Component webviewComponent
+    property Component settingsPageComponent: Component {
+        SettingsPage {}
+    }
+
     property Component actionManagerComponent: Component {
         TabActionManager {}
     }
 
     property QtObject tabType: QtObject {
         property int webview: 0
-        property int other: 1
+        property int settings: 1
+        property int other: 2
     }
 
     property QtObject internal: QtObject {
@@ -56,14 +62,21 @@ QtObject {
     signal newWindowRequested(var request)
 
     function openUrl(url, background) {
-        addTab(tabType.webview, {
-            url: url,
-            background: background,
-            properties: {
-                url: url,
-                profile: profile
+        if (UrlUtils.isLiriUrl(url)) {
+            if (url === "liri://settings") {
+                addTab(tabType.settings, {properties: {}});
             }
-        });
+        }
+        else {
+            addTab(tabType.webview, {
+                url: url,
+                background: background,
+                properties: {
+                    url: url,
+                    profile: profile
+                }
+            });
+        }
     }
 
     function openNewViewRequest(request) {
@@ -79,6 +92,7 @@ QtObject {
     function addTab(type, data) {
         // Register new unique id
         var uid = lastUID++;
+        var page;
         switch(type) {
             case tabType.webview:
                 // Add tab model representation
@@ -90,7 +104,21 @@ QtObject {
                 // Set engine
                 data.properties["webengine"] = webengine
                 // Create page
-                var page = webviewComponent.createObject(tabContentView.container, data.properties);
+                page = webviewComponent.createObject(tabContentView.container, data.properties);
+                // Create an action manager for this tab
+                page.actionManager = actionManagerComponent.createObject(page, {});
+                page.actionManager.internal.tabController = tabController;
+                page.actionManager.internal.uid = uid;
+                // Register page to content view
+                tabContentView.registerPage(uid, page);
+                break;
+            case tabType.settings:
+                // Add tab model representation
+                tabsModel.add(uid);
+                // Add reference to the tab model object
+                data.properties["tab"] = tabsModel.byUID(uid);
+                // Create page
+                page = settingsPageComponent.createObject(tabContentView.container, data.properties);
                 // Create an action manager for this tab
                 page.actionManager = actionManagerComponent.createObject(page, {});
                 page.actionManager.internal.tabController = tabController;
