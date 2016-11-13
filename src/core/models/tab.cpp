@@ -27,6 +27,7 @@
 Tab::Tab(QObject *parent, bool invalid) : QObject(parent)
 {
     m_uid = -1;
+    m_canReload = true;
     invalidChanged(m_invalid = invalid);
 }
 
@@ -88,6 +89,16 @@ bool Tab::canGoForward() const
 void Tab::setCanGoForward(bool canGoForward)
 {
     canGoForwardChanged(m_canGoForward = canGoForward);
+}
+
+bool Tab::canReload() const
+{
+    return m_canReload;
+}
+
+void Tab::setCanReload(bool canReload)
+{
+    canReloadChanged(m_canReload = canReload);
 }
 
 bool Tab::loading() const

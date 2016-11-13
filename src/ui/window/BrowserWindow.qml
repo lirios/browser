@@ -37,7 +37,7 @@ FluidWindow {
     property var root
     property WebProfile profile
     property bool incognito: profile.incognito
-    property url startUrl: "https://www.duckduckgo.com"
+    property url startUrl: Settings.startConfig.startUrl
     property string searchUrl: "https://duckduckgo.com/?q=%1"
     property bool openStartUrl: true
     property TabsModel tabsModel: TabsModel {}
@@ -138,7 +138,7 @@ FluidWindow {
                     ]
                     rightActions: [
                         Action {
-                            enabled: !tabsModel.active.invalid
+                            enabled: !tabsModel.active.invalid && tabsModel.active.canReload
                             iconName: tabsModel.active.loading ? "navigation/close" : "navigation/refresh"
                             onTriggered: {
                                 if (tabsModel.active.loading)
@@ -265,6 +265,13 @@ FluidWindow {
             onClicked: {
                 rightDrawer.loadContent(rightDrawer.downloads);
                 rightDrawer.open();
+            }
+        }
+
+        MenuItem {
+            text: "Settings"
+            onClicked: {
+                tabController.openUrl("liri://settings");
             }
         }
 

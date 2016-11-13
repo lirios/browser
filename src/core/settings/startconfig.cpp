@@ -21,34 +21,9 @@
  * $END_LICENSE$
 */
 
-pragma Singleton
-import QtQuick 2.7
-import dperini.regexweburl 1.0
+#include "startconfig.h"
 
-QtObject {
-    property var webUrlRegex: RegexWebUrl.re_weburl
-
-    function isWebUrl(url) {
-        return url.match(webUrlRegex) !== null;
-    }
-
-    function isLiriUrl(url) {
-        return url.toString().indexOf("liri://") === 0;
-    }
-
-    function validUrl(url, searchUrl) {
-        // Valid web url
-        var httpedUrl = (url.indexOf("http://") === 0 || url.indexOf("https://") === 0) ? url : "http://%1".arg(url);
-        if (isWebUrl(httpedUrl)) {
-            return httpedUrl;
-        }
-        // Liri url
-        else if (isLiriUrl(url)) {
-            return url;
-        }
-        // Search term
-        else {
-            return searchUrl.arg(url);
-        }
-    }
+StartConfig::StartConfig(QObject *parent) : QObject(parent)
+{
+    defaultStartUrlChanged(m_defaultStartUrl = QUrl("https://duckduckgo.com"));
 }

@@ -32,6 +32,7 @@ DrawerDownloadsContent 1.0 drawer/content/downloads/DrawerDownloadsContent.qml
 
 # pages
 WebPage 1.0 pages/WebPage.qml
+SettingsPage 1.0 pages/SettingsPage.qml
 
 # window
 BrowserWindow 1.0 window/BrowserWindow.qml

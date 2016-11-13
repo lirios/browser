@@ -26,10 +26,11 @@
 #include <QQmlApplicationEngine>
 #include <QDebug>
 
-#include "../core/tabsmodel.h"
-#include "../core/tab.h"
-#include "../core/downloadsmodel.h"
-#include "../core/webdownload.h"
+#include "../core/models/tabsmodel.h"
+#include "../core/models/tab.h"
+#include "../core/models/downloadsmodel.h"
+#include "../core/models/webdownload.h"
+#include "../core/settings/settings.h"
 
 // Include QtWebEngine if enabled (otherwise Oxide is expected)
 #if IS_QTWEBENGINE_ENABLED == 1
@@ -51,6 +52,10 @@ int main(int argc, char *argv[])
         QtWebEngine::initialize();
     #endif
 
+    // Create settings instance and load
+    Settings settings;
+    settings.load();
+
     // create qml app engine
     QQmlApplicationEngine engine;
 
@@ -60,6 +65,9 @@ int main(int argc, char *argv[])
 
     qmlRegisterUncreatableType<WebDownload>("core", 1, 0, "WebDownload", "WebDownload (from module core) may not be created directly.");
     qmlRegisterType<DownloadsModel>("core", 1, 0, "DownloadsModel");
+
+    // Register context properties
+    engine.rootContext()->setContextProperty("Settings", &settings);
 
     // setup qml imports
     engine.addImportPath("qrc:/");
