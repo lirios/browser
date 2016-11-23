@@ -125,9 +125,9 @@ QtObject {
 
     function load() {
         // Create the default profile after the webengine to use has been decided on the C++ side
-        defaultProfile = webProfileComponent.createObject(root, {});
+        defaultProfile = webProfileComponent.createObject(null, {});
         // Create an incognito profile
-        incognitoProfile = webProfileComponent.createObject(root, {incognito: true});
+        incognitoProfile = webProfileComponent.createObject(null, {incognito: true});
         // Create the first window and show it
         newWindow().showNormal();
     }
