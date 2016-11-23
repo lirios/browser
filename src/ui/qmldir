@@ -8,7 +8,12 @@ TabView 1.0 tabview/TabView.qml
 TabBar 1.0 tabview/TabBar.qml
 TabController 1.0 tabview/TabController.qml
 TabContentView 1.0 tabview/TabContentView.qml
-TabContentPage 1.0 tabview/TabContentPage.qml
+TabContent 1.0 tabview/TabContent.qml
+singleton TabType 1.0 tabview/TabType.qml
+
+# content
+WebContent 1.0 tabview/content/WebContent.qml
+SettingsContent 1.0 tabview/content/SettingsContent.qml
 
 # omnibox
 Omnibox 1.0 omnibox/Omnibox.qml
@@ -29,10 +34,6 @@ DrawerContentItem 1.0 drawer/DrawerContentItem.qml
 
 # drawer content
 DrawerDownloadsContent 1.0 drawer/content/downloads/DrawerDownloadsContent.qml
-
-# pages
-WebPage 1.0 pages/WebPage.qml
-SettingsPage 1.0 pages/SettingsPage.qml
 
 # window
 BrowserWindow 1.0 window/BrowserWindow.qml

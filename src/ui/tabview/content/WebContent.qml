@@ -23,9 +23,9 @@
 
 import QtQuick 2.7
 import SlimeEngine 0.2
-import ".."
+import "../.."
 
-TabContentPage {
+TabContent {
     id: page
 
     property var webview: webview
