@@ -50,10 +50,6 @@ FluidWindow {
         tabsModel: window.tabsModel
         profile: window.profile
         webengine: root.webengine
-        webviewComponent: Component {
-            WebPage {}
-        }
-
         onNewWindowRequested: {
             root.openWindowRequest(request);
         }

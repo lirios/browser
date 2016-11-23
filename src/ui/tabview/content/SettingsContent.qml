@@ -26,10 +26,10 @@ import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.0
 import Fluid.Core 1.0
 import Fluid.Controls 1.0
-import ".."
+import "../.."
 
-TabContentPage {
-    id: page
+TabContent {
+    id: content
 
     Flickable {
         anchors {
@@ -39,11 +39,11 @@ TabContentPage {
 
         ScrollBar.vertical: ScrollBar {}
 
-        contentHeight: content.childrenRect.height
+        contentHeight: contentItem.childrenRect.height
         interactive: contentHeight > height
 
         Item {
-            id: content
+            id: contentItem
             width: parent.width
             height: childrenRect.height
 
@@ -85,49 +85,49 @@ TabContentPage {
     }
 
     Binding {
-        target: page.tab
+        target: content.tab
         property: "canReload"
         value: false
     }
 
     Binding {
-        target: page.tab
+        target: content.tab
         property: "iconUrl"
         value: Utils.getSourceForIconName("action/settings")
     }
 
     Binding {
-        target: page.tab
+        target: content.tab
         property: "canGoBack"
         value: false
     }
 
     Binding {
-        target: page.tab
+        target: content.tab
         property: "canGoForward"
         value: false
     }
 
     Binding {
-        target: page.tab
+        target: content.tab
         property: "loading"
         value: false
     }
 
     Binding {
-        target: page.tab
+        target: content.tab
         property: "loadProgress"
         value: 100
     }
 
     Binding {
-        target: page.tab
+        target: content.tab
         property: "url"
         value: "liri://settings"
     }
 
     Binding {
-        target: page.tab
+        target: content.tab
         property: "title"
         value: "Settings"
     }

@@ -35,20 +35,8 @@ QtObject {
     property int lastUID: 0
     property int webengine
 
-    property Component webviewComponent
-    property Component settingsPageComponent: Component {
-        SettingsPage {}
-    }
-
-    property Component actionManagerComponent: Component {
-        TabActionManager {}
-    }
-
-    property QtObject tabType: QtObject {
-        property int webview: 0
-        property int settings: 1
-        property int other: 2
-    }
+    property Component tabPageComponent: Component { TabPage {} }
+    property Component actionManagerComponent: Component { TabActionManager {} }
 
     property QtObject internal: QtObject {
         property Connections tabBarCloseConnections: Connections {
@@ -62,25 +50,14 @@ QtObject {
     signal newWindowRequested(var request)
 
     function openUrl(url, background) {
-        if (UrlUtils.isLiriUrl(url)) {
-            if (url === "liri://settings") {
-                addTab(tabType.settings, {properties: {}});
-            }
-        }
-        else {
-            addTab(tabType.webview, {
-                url: url,
-                background: background,
-                properties: {
-                    url: url,
-                    profile: profile
-                }
-            });
-        }
+        addTab(TabType.fromUrl(url), {
+            url: url,
+            background: background
+        });
     }
 
     function openNewViewRequest(request) {
-        addTab(tabType.webview, {
+        addTab(TabType.webview, {
             background: request.destination === NewViewRequest.NewViewInBackgroundTab,
             properties: {
                 profile: profile,
@@ -93,40 +70,30 @@ QtObject {
         // Register new unique id
         var uid = lastUID++;
         var page;
-        switch(type) {
-            case tabType.webview:
-                // Add tab model representation
-                tabsModel.add(uid);
-                // Add reference to the tab model object
-                data.properties["tab"] = tabsModel.byUID(uid);
-                // Set title
-                data.properties["tab"].title = "New tab";
-                // Set engine
-                data.properties["webengine"] = webengine
-                // Create page
-                page = webviewComponent.createObject(tabContentView.container, data.properties);
-                // Create an action manager for this tab
-                page.actionManager = actionManagerComponent.createObject(page, {});
-                page.actionManager.internal.tabController = tabController;
-                page.actionManager.internal.uid = uid;
-                // Register page to content view
-                tabContentView.registerPage(uid, page);
-                break;
-            case tabType.settings:
-                // Add tab model representation
-                tabsModel.add(uid);
-                // Add reference to the tab model object
-                data.properties["tab"] = tabsModel.byUID(uid);
-                // Create page
-                page = settingsPageComponent.createObject(tabContentView.container, data.properties);
-                // Create an action manager for this tab
-                page.actionManager = actionManagerComponent.createObject(page, {});
-                page.actionManager.internal.tabController = tabController;
-                page.actionManager.internal.uid = uid;
-                // Register page to content view
-                tabContentView.registerPage(uid, page);
-                break;
-        }
+
+        if (!("properties" in data))
+            data["properties"] = {};
+
+        // Add tab model representation
+        tabsModel.add(uid);
+
+        // Create page
+        page = tabPageComponent.createObject(tabContentView.container, {
+            profile: profile,
+            tab: tabsModel.byUID(uid),
+            webengine: webengine
+        });
+
+        // Load page
+        page.load(type, data);
+
+        // Create an action manager for this tab
+        page.actionManager = actionManagerComponent.createObject(page, {});
+        page.actionManager.internal.tabController = tabController;
+        page.actionManager.internal.uid = uid;
+        // Register page to content view
+        tabContentView.registerPage(uid, page);
+
         // Set the page active if wanted
         if (!data.background) {
             tabsModel.setActive(uid);

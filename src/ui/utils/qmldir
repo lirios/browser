@@ -1,0 +1,3 @@
+module utils
+singleton ColorUtils 1.0 ColorUtils.qml
+singleton UrlUtils 1.0 UrlUtils.qml
