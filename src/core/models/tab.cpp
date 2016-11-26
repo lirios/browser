@@ -126,3 +126,24 @@ bool Tab::valid() const
 {
     return m_valid;
 }
+
+bool Tab::hasThemeColor() const
+{
+    return m_hasThemeColor;
+}
+
+void Tab::setHasThemeColor(bool hasThemeColor)
+{
+    hasThemeColorChanged(m_hasThemeColor = hasThemeColor);
+}
+
+QColor Tab::themeColor() const
+{
+    return m_themeColor;
+}
+
+void Tab::setThemeColor(QColor themeColor)
+{
+    themeColorChanged(m_themeColor = themeColor);
+}
+

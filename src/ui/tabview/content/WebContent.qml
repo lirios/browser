@@ -34,6 +34,9 @@ TabContent {
     property alias request: webview.request
     property int webengine
 
+    property bool hasThemeColor: false
+    property color themeColor
+
     WebView {
         id: webview
         engine: webengine
@@ -43,6 +46,31 @@ TabContent {
         }
         onCloseRequested: {
             actionManager.closeRequested();
+        }
+        onLoadStatusChanged: {
+            if (loadStatus === LoadStatus.LoadSucceeded) {
+                // Search for theme color
+                runJavaScript("
+                    function getThemeColor () {
+                        var metaTags = document.getElementsByTagName('meta');
+                        for (i=0; i<metaTags.length; i++) {
+                            if (metaTags[i].getAttribute('name') === 'theme-color') {
+                                return metaTags[i].getAttribute('content');
+                            }
+                        }
+                        return '';
+                    }
+                    getThemeColor();
+                ", function callback(content){
+                    if (content) {
+                        themeColor = content;
+                        hasThemeColor = true;
+                    }
+                    else {
+                        hasThemeColor = false;
+                    }
+                });
+            }
         }
     }
 
@@ -93,6 +121,18 @@ TabContent {
         target: page.tab
         property: "loadProgress"
         value: webview.loadProgress
+    }
+
+    Binding {
+        target: page.tab
+        property: "hasThemeColor"
+        value: hasThemeColor
+    }
+
+    Binding {
+        target: page.tab
+        property: "themeColor"
+        value: themeColor
     }
 
     Connections {

@@ -24,20 +24,21 @@
 import QtQuick 2.7
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.0
+import QtQuick.Controls.Material 2.0
+import Fluid.Core 1.0
 import Fluid.Controls 1.0
 import core 1.0
 
-Rectangle {
+Item {
     id: tabBar
-    height: tabHeight
-    color: "white"
 
     property var tabController
     property TabsModel tabsModel
     property int tabWidth: 200
     property int tabHeight: 38
     property bool dragActive: false
-    property color indicatorColor: "#2196f3"
+    property color indicatorColor: Material.accent
+    property color backgroundColor: Material.background
     property url newTabUrl
 
     // Using flick might not be the best solution
@@ -78,6 +79,8 @@ Rectangle {
     }
 
     signal tabCloseRequested(int uid)
+
+    height: tabHeight
 
     RowLayout {
         id: rowLayout

@@ -25,6 +25,7 @@ import QtQuick 2.7
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.0
 import QtQuick.Controls.Material 2.0
+import Fluid.Core 1.0
 import Fluid.Controls 1.0
 import Fluid.Material 1.0
 import SlimeEngine 0.2
@@ -40,6 +41,7 @@ FluidWindow {
     property url startUrl: Settings.startConfig.startUrl
     property string searchUrl: Settings.searchConfig.searchUrl
     property bool openStartUrl: true
+    property bool themeColorEnabled: true
     property TabsModel tabsModel: TabsModel {}
     property DownloadsModel downloadsModel
 
@@ -100,11 +102,29 @@ FluidWindow {
         ToolBar {
             id: toolbarContainer
 
-            Layout.fillWidth: true
-            Material.primary: "white"
-            Material.elevation: 0
+            property color backgroundColor: {
+                if (!tabsModel.active.invalid && tabsModel.active.hasThemeColor && themeColorEnabled) {
+                    return tabsModel.active.themeColor;
+                }
+                else {
+                    return "white";
+                }
+            }
+            property color foregroundColor: Utils.lightDark(backgroundColor, "#212121", "white")
+            property color accentColor: Utils.lightDark(backgroundColor, defaultAccentColor, "white")
+            property color defaultAccentColor: Material.color(Material.Pink)
 
+            Layout.fillWidth: true
+            Material.elevation: 0
+            Material.primary: backgroundColor
+            Material.background: backgroundColor
+            Material.foreground: foregroundColor
+            Material.accent: accentColor
             z: 5
+
+            Behavior on backgroundColor {
+                ColorAnimation { duration: 100 }
+            }
 
             ColumnLayout {
                 id: headColumn
