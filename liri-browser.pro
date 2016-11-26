@@ -36,6 +36,3 @@ include(src/3rdparty/3rdparty.pri)
 include(src/core/core.pri)
 include(src/main/main.pri)
 include(src/ui/ui.pri)
-
-# Include default rules for deployment
-include(deployment/deployment.pri)
