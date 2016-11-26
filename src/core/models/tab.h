@@ -89,6 +89,8 @@ public:
     QColor themeColor() const;
     void setThemeColor(QColor themeColor);
 
+    bool invalid() const;
+
 signals:
     void uidChanged(unsigned int uid);
     void urlChanged(QUrl url);

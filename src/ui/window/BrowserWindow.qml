@@ -61,7 +61,6 @@ ApplicationWindow {
         }
         return false;
     }
-
     property TabsModel tabsModel: TabsModel {}
     property DownloadsModel downloadsModel
 
