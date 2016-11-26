@@ -32,6 +32,7 @@ Settings::Settings(QObject *parent) : QObject(parent)
 {
     // Create exposed configuration objects
     startConfigChanged(m_startConfig = new StartConfig(this));
+    searchConfigChanged(m_searchConfig = new SearchConfig(this));
 
     // Check for settings directory
     if (!QDir(APP_CONFIG_LOCATION).exists()) {
@@ -76,6 +77,21 @@ void Settings::load()
     QJsonObject data = root["data"].toObject();
     QJsonObject dataStart = data["start"].toObject();
     m_startConfig->setStartUrl(QUrl(dataStart["url"].toString()));
+    QJsonObject dataSearch = data["search"].toObject();
+    QString searchEngineString = dataSearch["engine"].toString();
+    SearchConfig::SearchEngine searchEngine;
+    if (searchEngineString == "duckduckgo")
+        searchEngine = SearchConfig::SearchEngine::DuckDuckGo;
+    else if (searchEngineString == "google")
+        searchEngine = SearchConfig::SearchEngine::Google;
+    else if (searchEngineString == "bing")
+        searchEngine = SearchConfig::SearchEngine::Bing;
+    else if (searchEngineString == "yahoo")
+        searchEngine = SearchConfig::SearchEngine::Yahoo;
+    else
+        searchEngine = SearchConfig::SearchEngine::Custom;
+    m_searchConfig->setSearchEngine(searchEngine);
+    m_searchConfig->setCustomSearchUrl(QUrl(dataSearch["custom_url"].toString()));
     setDirty(false);
 }
 
@@ -99,8 +115,13 @@ QByteArray Settings::defaultJSON()
     QJsonObject dataStart {
         {"url", m_startConfig->defaultStartUrl().toString()},
     };
+    QJsonObject dataSearch {
+        {"engine", "duckduckgo"},
+        {"custom_url", ""}
+    };
     QJsonObject data {
-        {"start", dataStart}
+        {"start", dataStart},
+        {"search", dataSearch}
     };
     QJsonObject root {
         {"meta", meta},
@@ -118,8 +139,31 @@ QByteArray Settings::json()
     QJsonObject dataStart {
         {"url", m_startConfig->startUrl().toString()},
     };
+    QString searchEngineString;
+    switch (m_searchConfig->searchEngine()) {
+        case SearchConfig::SearchEngine::DuckDuckGo:
+            searchEngineString = "duckduckgo";
+            break;
+        case SearchConfig::SearchEngine::Google:
+            searchEngineString = "google";
+            break;
+        case SearchConfig::SearchEngine::Bing:
+            searchEngineString = "bing";
+            break;
+        case SearchConfig::SearchEngine::Yahoo:
+            searchEngineString = "yahoo";
+            break;
+        default:
+            searchEngineString = "custom";
+            break;
+    }
+    QJsonObject dataSearch {
+        {"engine", searchEngineString},
+        {"custom_url", m_searchConfig->customSearchUrl().toString()}
+    };
     QJsonObject data {
-        {"start", dataStart}
+        {"start", dataStart},
+        {"search", dataSearch}
     };
     QJsonObject root {
         {"meta", meta},

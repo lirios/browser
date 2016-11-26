@@ -26,6 +26,7 @@ import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.0
 import Fluid.Core 1.0
 import Fluid.Controls 1.0
+import core 1.0
 import "../.."
 
 TabContent {
@@ -79,6 +80,84 @@ TabContent {
                     }
 
                     Item { Layout.fillWidth: true } // Spacer
+                }
+
+                TitleLabel {
+                    text: "Search"
+                }
+
+                ColumnLayout {
+                    RadioButton {
+                        text: "DuckDuckGo"
+                        checked: Settings.searchConfig.searchEngine == SearchConfig.DuckDuckGo
+                        onClicked: {
+                            if (Settings.searchConfig.searchEngine != SearchConfig.DuckDuckGo) {
+                                Settings.searchConfig.searchEngine = SearchConfig.DuckDuckGo;
+                                Settings.dirty = true;
+                            }
+                        }
+                    }
+
+                    RadioButton {
+                        text: "Google"
+                        checked: Settings.searchConfig.searchEngine == SearchConfig.Google
+                        onClicked: {
+                            if (Settings.searchConfig.searchEngine != SearchConfig.Google) {
+                                Settings.searchConfig.searchEngine = SearchConfig.Google;
+                                Settings.dirty = true;
+                            }
+                        }
+                    }
+
+                    RadioButton {
+                        text: "Bing"
+                        checked: Settings.searchConfig.searchEngine == SearchConfig.Bing
+                        onClicked: {
+                            if (Settings.searchConfig.searchEngine != SearchConfig.Bing) {
+                                Settings.searchConfig.searchEngine = SearchConfig.Bing;
+                                Settings.dirty = true;
+                            }
+                        }
+                    }
+
+                    RadioButton {
+                        text: "Yahoo"
+                        checked: Settings.searchConfig.searchEngine == SearchConfig.Yahoo
+                        onClicked: {
+                            if (Settings.searchConfig.searchEngine != SearchConfig.Yahoo) {
+                                Settings.searchConfig.searchEngine = SearchConfig.Yahoo;
+                                Settings.dirty = true;
+                            }
+                        }
+                    }
+
+                    ColumnLayout {
+                        RowLayout {
+                            RadioButton {
+                                text: "Custom"
+                                checked: Settings.searchConfig.searchEngine == SearchConfig.Custom
+                                onClicked: {
+                                    if (Settings.searchConfig.searchEngine != SearchConfig.Custom) {
+                                        Settings.searchConfig.searchEngine = SearchConfig.Custom;
+                                        Settings.dirty = true;
+                                    }
+                                }
+                            }
+
+                            TextField {
+                                Layout.minimumWidth: 256
+                                enabled: Settings.searchConfig.searchEngine == SearchConfig.Custom
+                                text: Settings.searchConfig.customSearchUrl
+                                placeholderText: "e.g https://example.com/?q="
+                                onEditingFinished: {
+                                    if (Settings.searchConfig.customSearchUrl != text) {
+                                        Settings.searchConfig.customSearchUrl = text;
+                                        Settings.dirty = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
