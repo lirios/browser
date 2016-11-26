@@ -48,12 +48,12 @@ Rectangle {
         spacing: 8
 
         Image {
+            Layout.preferredHeight: 16
+            Layout.preferredWidth: 16
             source: iconSource
             clip: true
-            width: 16
-            height: 16
-            sourceSize.width: width
-            sourceSize.height: height
+            sourceSize.width: 16
+            sourceSize.height: 16
         }
 
         Label {
