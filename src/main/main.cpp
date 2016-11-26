@@ -60,6 +60,8 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
 
     // register core types
+    qmlRegisterUncreatableType<SearchConfig>("core", 1, 0, "SearchConfig", "SearchConfig (from module core) may not be created directly.");
+
     qmlRegisterUncreatableType<Tab>("core", 1, 0, "Tab", "Tab (from module core) may not be created directly.");
     qmlRegisterType<TabsModel>("core", 1, 0, "TabsModel");
 

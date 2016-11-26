@@ -4,7 +4,8 @@ HEADERS += \
     $$PWD/models/downloadsmodel.h \
     $$PWD/models/webdownload.h \
     $$PWD/settings/settings.h \
-    $$PWD/settings/startconfig.h
+    $$PWD/settings/startconfig.h \
+    $$PWD/settings/searchconfig.h
 
 SOURCES += \
     $$PWD/models/tabsmodel.cpp \
@@ -12,4 +13,5 @@ SOURCES += \
     $$PWD/models/downloadsmodel.cpp \
     $$PWD/models/webdownload.cpp \
     $$PWD/settings/settings.cpp \
-    $$PWD/settings/startconfig.cpp
+    $$PWD/settings/startconfig.cpp \
+    $$PWD/settings/searchconfig.cpp

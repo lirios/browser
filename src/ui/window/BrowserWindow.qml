@@ -38,7 +38,7 @@ FluidWindow {
     property WebProfile profile
     property bool incognito: profile.incognito
     property url startUrl: Settings.startConfig.startUrl
-    property string searchUrl: "https://duckduckgo.com/?q=%1"
+    property string searchUrl: Settings.searchConfig.searchUrl
     property bool openStartUrl: true
     property TabsModel tabsModel: TabsModel {}
     property DownloadsModel downloadsModel
