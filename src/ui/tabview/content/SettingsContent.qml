@@ -201,7 +201,6 @@ TabContent {
                     text: "Theme"
                 }
 
-
                 ButtonGroup {
                     buttons: [
                         radioButtonLightTheme,

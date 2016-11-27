@@ -33,9 +33,6 @@
 #include "searchconfig.h"
 #include "themeconfig.h"
 
-const QString APP_CONFIG_LOCATION = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + "/liri-browser/";
-const QString SETTINGS_FILENAME = APP_CONFIG_LOCATION + "settings.json";
-
 class Settings : public QObject
 {
     Q_OBJECT
