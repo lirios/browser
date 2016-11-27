@@ -79,7 +79,8 @@ void Settings::load()
     }
     QJsonObject data = root["data"].toObject();
     QJsonObject dataStart = data["start"].toObject();
-    m_startConfig->setStartUrl(QUrl(dataStart["url"].toString()));
+    m_startConfig->setPrimaryStartUrl(QUrl(dataStart["primary_url"].toString()));
+    m_startConfig->setIncognitoStartUrl(QUrl(dataStart["incognito_url"].toString()));
     QJsonObject dataSearch = data["search"].toObject();
     QString searchEngineString = dataSearch["engine"].toString();
     SearchConfig::SearchEngine searchEngine;
@@ -120,7 +121,8 @@ QByteArray Settings::defaultJSON()
         {"schema", "0.1"}
     };
     QJsonObject dataStart {
-        {"url", m_startConfig->defaultStartUrl().toString()},
+        {"primary_url", m_startConfig->defaultPrimaryStartUrl().toString()},
+        {"incognito_url", m_startConfig->defaultIncognitoStartUrl().toString()}
     };
     QJsonObject dataSearch {
         {"engine", "duckduckgo"},
@@ -148,7 +150,8 @@ QByteArray Settings::json()
         {"schema", "0.1"}
     };
     QJsonObject dataStart {
-        {"url", m_startConfig->startUrl().toString()},
+        {"primary_url", m_startConfig->primaryStartUrl().toString()},
+        {"incognito_url", m_startConfig->incognitoStartUrl().toString()},
     };
     QString searchEngineString;
     switch (m_searchConfig->searchEngine()) {

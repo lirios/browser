@@ -38,7 +38,8 @@ FluidWindow {
     property var root
     property WebProfile profile
     property bool incognito: profile.incognito
-    property url startUrl: Settings.startConfig.startUrl
+    property url startUrl: incognito ? Settings.startConfig.incognitoStartUrl
+                                     : Settings.startConfig.primaryStartUrl
     property string searchUrl: Settings.searchConfig.searchUrl
     property bool openStartUrl: true
     property bool themeColorEnabled: Settings.themeConfig.themeColorEnabled

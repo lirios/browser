@@ -60,26 +60,44 @@ TabContent {
                     text: "Start"
                 }
 
-                RowLayout {
-                    width: parent.width
-                    spacing: 2 * Units.smallSpacing
+                Label {
+                    text: "Start url"
+                    font.pixelSize: 16
+                }
+
+                GridLayout {
+                    columns: 2
+                    columnSpacing: 16
 
                     Label {
-                        text: "Start url"
+                        text: "Primary"
                     }
 
                     TextField {
                         Layout.minimumWidth: 256
-                        text: Settings.startConfig.startUrl
+                        text: Settings.startConfig.primaryStartUrl
                         onEditingFinished: {
-                            if (Settings.startConfig.startUrl != text) {
-                                Settings.startConfig.startUrl = text;
+                            if (Settings.startConfig.primaryStartUrl != text) {
+                                Settings.startConfig.primaryStartUrl = text;
                                 Settings.dirty = true;
                             }
                         }
                     }
 
-                    Item { Layout.fillWidth: true } // Spacer
+                    Label {
+                        text: "Incognito"
+                    }
+
+                    TextField {
+                        Layout.minimumWidth: 256
+                        text: Settings.startConfig.incognitoStartUrl
+                        onEditingFinished: {
+                            if (Settings.startConfig.incognitoStartUrl != text) {
+                                Settings.startConfig.incognitoStartUrl = text;
+                                Settings.dirty = true;
+                            }
+                        }
+                    }
                 }
 
                 TitleLabel {
