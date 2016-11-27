@@ -25,12 +25,16 @@ import QtQuick 2.7
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.0
 import QtQuick.Controls.Material 2.0
+import QtGraphicalEffects 1.0
+import Fluid.Core 1.0
 import Fluid.Controls 1.0
 import ".."
 
 Rectangle {
     property string title
     property url iconSource
+    property color iconColor: "transparent"
+    property bool adaptIconColor: false
     property bool active: false
     property color foregroundColor: Material.foreground
     property color backgroundColor: Material.background
@@ -50,12 +54,27 @@ Rectangle {
         spacing: Units.smallSpacing
 
         Image {
+            id: icon
             Layout.preferredHeight: Units.iconSizes.small
             Layout.preferredWidth: Units.iconSizes.small
             source: iconSource
             clip: true
-            sourceSize.width: 16
-            sourceSize.height: 16
+            sourceSize.width: Units.iconSizes.small
+            sourceSize.height: Units.iconSizes.small
+
+            ColorOverlay {
+                anchors.fill: icon
+                visible: iconColor != "transparent" || adaptIconColor
+                source: icon
+                color: {
+                    if (adaptIconColor) {
+                        return Utils.lightDark(backgroundColor, "transparent", "white");
+                    }
+                    else {
+                        return iconColor;
+                    }
+                }
+            }
         }
 
         Label {

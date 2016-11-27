@@ -192,6 +192,12 @@ TabContent {
 
     Binding {
         target: content.tab
+        property: "adaptIconColor"
+        value: true
+    }
+
+    Binding {
+        target: content.tab
         property: "canGoBack"
         value: false
     }

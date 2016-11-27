@@ -176,6 +176,8 @@ Item {
                         active: delegateMouseArea.active
                         title: tabsModel.byUID(uid).title
                         iconSource: tabsModel.byUID(uid).iconUrl
+                        iconColor: tabsModel.byUID(uid).iconColor
+                        adaptIconColor: tabsModel.byUID(uid).adaptIconColor
                         onCloseRequested: {
                             tabCloseRequested(uid);
                         }

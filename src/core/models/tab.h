@@ -35,6 +35,8 @@ class Tab : public QObject
     Q_PROPERTY(QUrl url READ url WRITE setUrl NOTIFY urlChanged)
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     Q_PROPERTY(QUrl iconUrl READ iconUrl WRITE setIconUrl NOTIFY iconUrlChanged)
+    Q_PROPERTY(QColor iconColor READ iconColor WRITE setIconColor NOTIFY iconColorChanged)
+    Q_PROPERTY(bool adaptIconColor READ adaptIconColor WRITE setAdaptIconColor NOTIFY adaptIconColorChanged)
     Q_PROPERTY(bool canGoBack READ canGoBack  WRITE setCanGoBack  NOTIFY canGoBackChanged)
     Q_PROPERTY(bool canGoForward READ canGoForward WRITE setCanGoForward NOTIFY canGoForwardChanged)
     Q_PROPERTY(bool canReload READ canReload WRITE setCanReload NOTIFY canReloadChanged)
@@ -57,6 +59,12 @@ public:
 
     QUrl iconUrl() const;
     void setIconUrl(QUrl iconUrl);
+
+    QColor iconColor() const;
+    void setIconColor(QColor iconColor);
+
+    bool adaptIconColor() const;
+    void setAdaptIconColor(bool adaptIconColor);
 
     bool canGoBack() const;
     void setCanGoBack(bool canGoBack);
@@ -86,6 +94,8 @@ signals:
     void urlChanged(QUrl url);
     void titleChanged(QString title);
     void iconUrlChanged(QUrl iconUrl);
+    void iconColorChanged(QColor iconColor);
+    void adaptIconColorChanged(bool adaptIconColor);
     void canGoBackChanged(bool canGoBack);
     void canGoForwardChanged(bool canGoForward);
     void canReloadChanged(bool canReload);
@@ -108,6 +118,8 @@ private:
     QUrl m_url;
     QString m_title;
     QUrl m_iconUrl;
+    QColor m_iconColor;
+    bool m_adaptIconColor;
     bool m_canGoBack;
     bool m_canGoForward;
     bool m_canReload;
