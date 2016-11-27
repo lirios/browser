@@ -10,11 +10,6 @@ TabController 1.0 tabview/TabController.qml
 TabContentView 1.0 tabview/TabContentView.qml
 TabContentPage 1.0 tabview/TabContentPage.qml
 
-# dockcanvas
-DockCanvas 1.0 dockcanvas/DockCanvas.qml
-DockContainer 1.0 dockcanvas/DockContainer.qml
-DockElement 1.0 dockcanvas/DockElement.qml
-
 # omnibox
 Omnibox 1.0 omnibox/Omnibox.qml
 

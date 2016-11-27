@@ -5,9 +5,6 @@
         <file>tabview/TabDelegate.qml</file>
         <file>tabview/TabIndicator.qml</file>
         <file>qmldir</file>
-        <file>dockcanvas/DockCanvas.qml</file>
-        <file>dockcanvas/DockContainer.qml</file>
-        <file>dockcanvas/DockElement.qml</file>
         <file>utils/ColorUtils.qml</file>
         <file>tabview/TabBarActionBar.qml</file>
         <file>tabview/TabController.qml</file>
