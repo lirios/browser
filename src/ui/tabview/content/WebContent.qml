@@ -26,7 +26,7 @@ import SlimeEngine 0.2
 import "../.."
 
 TabContent {
-    id: page
+    id: content
 
     property var webview: webview
     property alias url: webview.url
@@ -75,13 +75,13 @@ TabContent {
     }
 
     Binding {
-        target: page.tab
+        target: content.tab
         property: "title"
         value: webview.title
     }
 
     Binding {
-        target: page.tab
+        target: content.tab
         property: "iconUrl"
         // Workaround: it looks like QtWebEngine's icon provider (image://favicon/)
         // is not 100% reliable
@@ -94,49 +94,61 @@ TabContent {
     }
 
     Binding {
-        target: page.tab
+        target: content.tab
+        property: "adaptIconColor"
+        value: false
+    }
+
+    Binding {
+        target: content.tab
         property: "url"
         value: webview.url
     }
 
     Binding {
-        target: page.tab
+        target: content.tab
         property: "canGoBack"
         value: webview.canGoBack
     }
 
     Binding {
-        target: page.tab
+        target: content.tab
         property: "canGoForward"
         value: webview.canGoForward
     }
 
     Binding {
-        target: page.tab
+        target: content.tab
         property: "loading"
         value: page.tab && page.tab.url.toString().length > 0 && webview.loadProgress < 100
     }
 
     Binding {
-        target: page.tab
+        target: content.tab
         property: "loadProgress"
         value: webview.loadProgress
     }
 
     Binding {
-        target: page.tab
+        target: content.tab
         property: "hasThemeColor"
         value: hasThemeColor
     }
 
     Binding {
-        target: page.tab
+        target: content.tab
         property: "themeColor"
         value: themeColor
     }
 
+    Binding {
+        target: content.tab
+        property: "canReload"
+        value: true
+    }
+
     Connections {
-        target: page.tab
+        target: content.tab
         onGoBack: {
             webview.goBack()
         }

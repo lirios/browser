@@ -104,6 +104,18 @@ QtObject {
         }
     }
 
+    property Binding darkStartTimeBinding: Binding {
+        target: DarkThemeTimer
+        property: "startTime"
+        value: Settings.themeConfig.darkThemeStartTime
+    }
+
+    property Binding darkEndTimeBinding: Binding {
+        target: DarkThemeTimer
+        property: "endTime"
+        value: Settings.themeConfig.darkThemeEndTime
+    }
+
     function openWindowRequest(request) {
         var window = newWindow(false, false);
         window.openRequest(request);
@@ -128,6 +140,8 @@ QtObject {
         defaultProfile = webProfileComponent.createObject(null, {});
         // Create an incognito profile
         incognitoProfile = webProfileComponent.createObject(null, {incognito: true});
+        // Update dark theme timer
+        DarkThemeTimer.update();
         // Create the first window and show it
         newWindow().showNormal();
     }

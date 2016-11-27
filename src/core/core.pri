@@ -8,6 +8,7 @@ HEADERS += \
     $$PWD/settings/searchconfig.h \
     $$PWD/settings/themeconfig.h \
     $$PWD/global/paths.h \
+    $$PWD/utils/darkthemetimer.h \
 
 SOURCES += \
     $$PWD/models/tabsmodel.cpp \
@@ -18,3 +19,4 @@ SOURCES += \
     $$PWD/settings/startconfig.cpp \
     $$PWD/settings/searchconfig.cpp \
     $$PWD/settings/themeconfig.cpp \
+    $$PWD/utils/darkthemetimer.cpp \

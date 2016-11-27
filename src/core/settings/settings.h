@@ -27,9 +27,10 @@
 #include <QObject>
 #include <QStandardPaths>
 
+#include "../global/paths.h"
+
 #include "startconfig.h"
 #include "searchconfig.h"
-#include "../global/paths.h"
 #include "themeconfig.h"
 
 const QString APP_CONFIG_LOCATION = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + "/liri-browser/";

@@ -26,6 +26,7 @@
 StartConfig::StartConfig(QObject *parent)
     : QObject(parent)
 {
-    defaultPrimaryStartUrlChanged(m_defaultPrimaryStartUrl = QUrl("https://duckduckgo.com"));
-    defaultIncognitoStartUrlChanged(m_defaultIncognitoStartUrl = QUrl("https://duckduckgo.com/?kae=d"));
+    m_defaultPrimaryStartUrl = QUrl("https://duckduckgo.com");
+    m_defaultDarkStartUrl = QUrl("https://duckduckgo.com/?kae=#303030");
+    m_defaultIncognitoStartUrl = QUrl("https://duckduckgo.com/?kae=#37474f");
 }
