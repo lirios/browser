@@ -41,7 +41,7 @@ FluidWindow {
     property url startUrl: Settings.startConfig.startUrl
     property string searchUrl: Settings.searchConfig.searchUrl
     property bool openStartUrl: true
-    property bool themeColorEnabled: true
+    property bool themeColorEnabled: Settings.themeConfig.themeColorEnabled
     property TabsModel tabsModel: TabsModel {}
     property DownloadsModel downloadsModel
 

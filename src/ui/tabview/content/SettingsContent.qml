@@ -159,6 +159,21 @@ TabContent {
                         }
                     }
                 }
+
+                TitleLabel {
+                    text: "Theme"
+                }
+
+                CheckBox {
+                    text: "Adapt to website theme colors"
+                    checked: Settings.themeConfig.themeColorEnabled
+                    onClicked: {
+                        if (Settings.themeConfig.themeColorEnabled != checked) {
+                            Settings.themeConfig.themeColorEnabled = checked;
+                            Settings.dirty = true;
+                        }
+                    }
+                }
             }
         }
     }

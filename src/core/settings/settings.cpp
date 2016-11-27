@@ -34,6 +34,7 @@ Settings::Settings(QObject *parent)
     // Create exposed configuration objects
     startConfigChanged(m_startConfig = new StartConfig(this));
     searchConfigChanged(m_searchConfig = new SearchConfig(this));
+    themeConfigChanged(m_themeConfig = new ThemeConfig(this));
 
     // Check for settings directory
     if (!QDir(Paths::ConfigLocation).exists()) {
@@ -94,6 +95,8 @@ void Settings::load()
         searchEngine = SearchConfig::SearchEngine::Custom;
     m_searchConfig->setSearchEngine(searchEngine);
     m_searchConfig->setCustomSearchUrl(QUrl(dataSearch["custom_url"].toString()));
+    QJsonObject dataTheme = data["theme"].toObject();
+    m_themeConfig->setThemeColorEnabled(dataTheme["adapt_website_theme"].toBool());
     setDirty(false);
     file.close();
 }
@@ -123,9 +126,13 @@ QByteArray Settings::defaultJSON()
         {"engine", "duckduckgo"},
         {"custom_url", ""}
     };
+    QJsonObject dataTheme {
+        {"adapt_website_theme", true}
+    };
     QJsonObject data {
         {"start", dataStart},
-        {"search", dataSearch}
+        {"search", dataSearch},
+        {"theme", dataTheme}
     };
     QJsonObject root {
         {"meta", meta},
@@ -165,9 +172,13 @@ QByteArray Settings::json()
         {"engine", searchEngineString},
         {"custom_url", m_searchConfig->customSearchUrl().toString()}
     };
+    QJsonObject dataTheme {
+        {"adapt_website_theme", m_themeConfig->themeColorEnabled()}
+    };
     QJsonObject data {
         {"start", dataStart},
-        {"search", dataSearch}
+        {"search", dataSearch},
+        {"theme", dataTheme}
     };
     QJsonObject root {
         {"meta", meta},
