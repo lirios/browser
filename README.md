@@ -5,7 +5,7 @@ Liri Browser
 [![GitHub release](https://img.shields.io/github/release/lirios/browser.svg)](https://github.com/lirios/browser)
 [![Build Status](https://travis-ci.org/lirios/browser.svg?branch=master)](https://travis-ci.org/lirios/browser)
 [![GitHub issues](https://img.shields.io/github/issues/lirios/browser.svg)](https://github.com/lirios/browser/issues)
-[![Maintained](https://img.shields.io/maintenance/yes/2016.svg)](https://github.com/lirios/browser/commits/master)
+[![Maintained](https://img.shields.io/maintenance/yes/2016.svg)](https://github.com/lirios/browser/commits/develop)
 
 A cross-platform material design web browser
 
@@ -35,7 +35,7 @@ qmake .. CONFIG+=QTWEBENGINE_ENABLED
 ```
 
 Use `make distclean` from inside your `build` directory to clean up.
-You need to do this before rerunning `qmake` with different options. 
+You need to do this before rerunning `qmake` with different options.
 
 ## Install
 
