@@ -102,8 +102,13 @@ FluidWindow {
         ToolBar {
             id: toolbarContainer
 
+            property color incognitoColor: "#212121"
+
             property color backgroundColor: {
-                if (!tabsModel.active.invalid && tabsModel.active.hasThemeColor && themeColorEnabled) {
+                if (incognito) {
+                    return incognitoColor;
+                }
+                else if (!tabsModel.active.invalid && tabsModel.active.hasThemeColor && themeColorEnabled) {
                     return tabsModel.active.themeColor;
                 }
                 else {
