@@ -52,6 +52,7 @@ Settings::Settings(QObject *parent) : QObject(parent)
             QTextStream stream(&file);
             stream << defaultJSON();
             qDebug() << "Default settings file created.";
+            file.close();
         }
     }
 }
@@ -93,6 +94,7 @@ void Settings::load()
     m_searchConfig->setSearchEngine(searchEngine);
     m_searchConfig->setCustomSearchUrl(QUrl(dataSearch["custom_url"].toString()));
     setDirty(false);
+    file.close();
 }
 
 void Settings::save()
@@ -105,6 +107,7 @@ void Settings::save()
     QTextStream stream(&file);
     stream << json();
     setDirty(false);
+    file.close();
 }
 
 QByteArray Settings::defaultJSON()
