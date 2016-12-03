@@ -71,7 +71,7 @@ TabContent {
 
                 GridLayout {
                     columns: 2
-                    columnSpacing: 16
+                    columnSpacing: 2 * Units.smallSpacing
 
                     Label {
                         text: "Primary"
