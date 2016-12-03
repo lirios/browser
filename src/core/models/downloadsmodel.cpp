@@ -19,7 +19,8 @@
 
 #include "downloadsmodel.h"
 
-DownloadsModel::DownloadsModel(QObject* parent) : QAbstractListModel(parent)
+DownloadsModel::DownloadsModel(QObject* parent)
+    : QAbstractListModel(parent)
 {
     m_invalid_download = new WebDownload(this);
     m_invalid_download->setInvalid(true);

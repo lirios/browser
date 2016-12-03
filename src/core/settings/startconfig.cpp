@@ -23,7 +23,8 @@
 
 #include "startconfig.h"
 
-StartConfig::StartConfig(QObject *parent) : QObject(parent)
+StartConfig::StartConfig(QObject *parent)
+    : QObject(parent)
 {
     defaultStartUrlChanged(m_defaultStartUrl = QUrl("https://duckduckgo.com"));
 }

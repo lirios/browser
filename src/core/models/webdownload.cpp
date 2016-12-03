@@ -19,7 +19,8 @@
 
 #include "webdownload.h"
 
-WebDownload::WebDownload(QObject *parent) : QObject(parent)
+WebDownload::WebDownload(QObject *parent)
+    : QObject(parent)
 {
     m_finished = false;
 }
