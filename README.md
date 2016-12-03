@@ -24,7 +24,6 @@ The following modules and their dependencies are required:
 
 From the root of the repository, run:
 ```sh
-cd liri-browser
 mkdir build && cd build
 qmake ..
 make
