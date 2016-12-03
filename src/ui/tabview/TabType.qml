@@ -34,8 +34,7 @@ QtObject {
         if (UrlUtils.isLiriUrl(url)) {
             if (url == "liri://settings")
                 return settings;
-        }
-        else {
+        } else {
             return webview;
         }
         return unknown;

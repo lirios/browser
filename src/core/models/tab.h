@@ -41,7 +41,7 @@ class Tab : public QObject
     Q_PROPERTY(unsigned int loadProgress READ loadProgress WRITE setLoadProgress NOTIFY loadProgressChanged)
     Q_PROPERTY(bool invalid READ invalid NOTIFY invalidChanged)
 public:
-    explicit Tab(QObject *parent = nullptr, bool invalid=false);
+    explicit Tab(QObject *parent = nullptr, bool invalid = false);
 
     unsigned int uid() const;
     void setUid(int uid);
