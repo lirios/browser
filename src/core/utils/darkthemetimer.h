@@ -12,7 +12,7 @@ class DarkThemeTimer : public QObject
     Q_PROPERTY(QTime endTime READ endTime WRITE setEndTime NOTIFY endTimeChanged)
     Q_PROPERTY(bool isActiveTime MEMBER m_isActiveTime NOTIFY isActiveTimeChanged)
 public:
-    explicit DarkThemeTimer(QObject *parent = 0);
+    explicit DarkThemeTimer(QObject *parent = nullptr);
 
     QTime startTime() const { return m_startTime; }
     void setStartTime(QTime startTime) { startTimeChanged(m_startTime = startTime); }

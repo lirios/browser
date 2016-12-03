@@ -12,7 +12,7 @@ class ThemeConfig : public QObject
     Q_PROPERTY(QTime darkThemeStartTime READ darkThemeStartTime WRITE setDarkThemeStartTime NOTIFY darkThemeStartTimeChanged)
     Q_PROPERTY(QTime darkThemeEndTime READ darkThemeEndTime WRITE setDarkThemeEndTime NOTIFY darkThemeEndTimeChanged)
 public:
-    explicit ThemeConfig(QObject *parent = 0);
+    explicit ThemeConfig(QObject *parent = nullptr);
 
     bool themeColorEnabled() const { return m_themeColorEnabled; }
     void setThemeColorEnabled(bool themeColorEnabled) { themeColorEnabledChanged(m_themeColorEnabled = themeColorEnabled); }
