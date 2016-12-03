@@ -22,6 +22,7 @@
 */
 
 import QtQuick 2.7
+import Fluid.Controls 1.0
 
 Item {
     id: expansionBar
@@ -63,8 +64,8 @@ Item {
             id: contentLoader
             anchors {
                 fill: parent
-                leftMargin: 16
-                rightMargin: 16
+                leftMargin: 2 * Units.smallSpacing
+                rightMargin: 2 * Units.smallSpacing
             }
             sourceComponent: currentContentIndex >= 0 ? contentComponents[currentContentIndex] : null
         }
@@ -74,7 +75,7 @@ Item {
         id: showAnimation
         target: expansionBar
         property: "implicitHeight"
-        duration: 200
+        duration: Units.mediumDuration
         easing.type: Easing.InOutQuad
         to: 56
         onStopped: opened()
@@ -84,7 +85,7 @@ Item {
         id: closeAnimation
         target: expansionBar
         property: "implicitHeight"
-        duration: 200
+        duration: Units.mediumDuration
         easing.type: Easing.InOutQuad
         to: 0
         onStopped: closed()

@@ -45,7 +45,7 @@ Rectangle {
     RowLayout {
         anchors {
             fill: parent
-            rightMargin: 16
+            rightMargin: 2 * Units.smallSpacing
         }
 
         Layout.alignment: Qt.AlignLeft | Qt.AlignHCenter

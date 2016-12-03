@@ -42,14 +42,14 @@ Rectangle {
     RowLayout {
         anchors {
             fill: parent
-            leftMargin: 8
+            leftMargin: Units.smallSpacing
         }
 
-        spacing: 8
+        spacing: Units.smallSpacing
 
         Image {
-            Layout.preferredHeight: 16
-            Layout.preferredWidth: 16
+            Layout.preferredHeight: Units.iconSizes.small
+            Layout.preferredWidth: Units.iconSizes.small
             source: iconSource
             clip: true
             sourceSize.width: 16
@@ -64,7 +64,7 @@ Rectangle {
 
             Behavior on color {
                 ColorAnimation {
-                    duration: 200
+                    duration: Units.mediumDuration
                     easing.type: Easing.InOutQuad
                 }
             }
@@ -80,7 +80,7 @@ Rectangle {
 
             Behavior on iconColor {
                 ColorAnimation {
-                    duration: 200
+                    duration: Units.mediumDuration
                     easing.type: Easing.InOutQuad
                 }
             }

@@ -44,10 +44,10 @@ Drawer {
     ColumnLayout {
         anchors {
             fill: parent
-            margins: 16
+            margins: 2 * Units.smallSpacing
         }
 
-        spacing: 16
+        spacing: 2 * Units.smallSpacing
 
         TitleLabel {
             text: contentLoader.item ? contentLoader.item.title : ""

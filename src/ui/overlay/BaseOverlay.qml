@@ -22,6 +22,7 @@
 */
 
 import QtQuick 2.7
+import Fluid.Controls 1.0
 import Fluid.Material 1.0
 
 Rectangle {
@@ -56,7 +57,7 @@ Rectangle {
         property: "height"
         from: 0
         to: 48
-        duration: 200
+        duration: Units.mediumDuration
         easing.type: Easing.InOutQuad
         onStopped: opened()
     }
@@ -67,7 +68,7 @@ Rectangle {
         property: "height"
         from: 48
         to: 0
-        duration: 200
+        duration: Units.mediumDuration
         easing.type: Easing.InOutQuad
         onStopped: closed()
     }
