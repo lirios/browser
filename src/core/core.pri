@@ -6,6 +6,8 @@ HEADERS += \
     $$PWD/settings/settings.h \
     $$PWD/settings/startconfig.h \
     $$PWD/settings/searchconfig.h \
+    $$PWD/global/paths.h \
+
 
 SOURCES += \
     $$PWD/models/tabsmodel.cpp \
