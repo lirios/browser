@@ -1,6 +1,7 @@
 #include "darkthemetimer.h"
 
-DarkThemeTimer::DarkThemeTimer(QObject *parent) : QObject(parent)
+DarkThemeTimer::DarkThemeTimer(QObject *parent)
+    : QObject(parent)
 {
     m_timer = new QTimer(this);
     m_timer->setInterval(60000);
