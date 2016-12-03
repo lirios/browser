@@ -33,7 +33,7 @@ class StartConfig : public QObject
     Q_PROPERTY(QUrl startUrl READ startUrl WRITE setStartUrl NOTIFY startUrlChanged)
     Q_PROPERTY(QUrl defaultStartUrl MEMBER m_defaultStartUrl NOTIFY defaultStartUrlChanged)
 public:
-    explicit StartConfig(QObject *parent = 0);
+    explicit StartConfig(QObject *parent = nullptr);
 
     QUrl startUrl() const { return m_startUrl; }
     void setStartUrl(QUrl url) { startUrlChanged(m_startUrl = url); }

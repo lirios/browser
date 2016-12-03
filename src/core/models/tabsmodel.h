@@ -35,7 +35,7 @@ class TabsModel : public QAbstractListModel
     Q_PROPERTY(Tab* active READ active NOTIFY activeChanged)
     Q_PROPERTY(int activeIndex READ activeIndex NOTIFY activeIndexChanged)
 public:
-    explicit TabsModel(QObject *parent = 0);
+    explicit TabsModel(QObject *parent = nullptr);
 
     enum TabRoles {
         Uid,

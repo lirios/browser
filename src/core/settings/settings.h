@@ -40,7 +40,7 @@ class Settings : public QObject
     Q_PROPERTY(SearchConfig* searchConfig MEMBER m_searchConfig NOTIFY searchConfigChanged)
     Q_PROPERTY(bool dirty READ dirty WRITE setDirty NOTIFY dirtyChanged)
 public:
-    explicit Settings(QObject *parent = 0);
+    explicit Settings(QObject *parent = nullptr);
 
     bool dirty() const { return m_dirty; }
     void setDirty(bool dirty) { dirtyChanged(m_dirty = dirty); }

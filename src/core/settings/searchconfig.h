@@ -36,7 +36,7 @@ class SearchConfig : public QObject
     Q_PROPERTY(QUrl customSearchUrl READ customSearchUrl WRITE setCustomSearchUrl NOTIFY customSearchUrlChanged)
     Q_ENUMS(SearchEngine)
 public:
-    explicit SearchConfig(QObject *parent = 0);
+    explicit SearchConfig(QObject *parent = nullptr);
 
     enum SearchEngine {
         DuckDuckGo,

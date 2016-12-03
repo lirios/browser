@@ -31,7 +31,7 @@ class WebDownload : public QObject
     Q_PROPERTY(bool finished READ finished WRITE setFinished NOTIFY finishedChanged)
     Q_PROPERTY(bool invalid READ invalid WRITE setInvalid NOTIFY invalidChanged)
 public:
-    explicit WebDownload(QObject *parent = 0);
+    explicit WebDownload(QObject *parent = nullptr);
 
     void setPath(QString path);
     QString path() const;
