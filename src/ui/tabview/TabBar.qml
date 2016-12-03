@@ -187,7 +187,7 @@ Rectangle {
                     property: "y"
                     from: tabBar.height
                     to: 0
-                    duration: 150
+                    duration: Units.mediumDuration
                     easing.type: Easing.InOutQuad
                 }
             }
@@ -195,7 +195,7 @@ Rectangle {
             displaced: Transition {
                 NumberAnimation {
                     property: "x"
-                    duration: 200
+                    duration: Units.mediumDuration
                     easing.type: Easing.InOutQuad
                 }
             }
@@ -204,7 +204,7 @@ Rectangle {
                 NumberAnimation {
                     property: "y"
                     to: tabBar.height
-                    duration: 150
+                    duration: Units.shortDuration
                     easing.type: Easing.InOutQuad
                 }
             }
@@ -222,14 +222,14 @@ Rectangle {
 
                 Behavior on x {
                     NumberAnimation {
-                        duration: 200
+                        duration: Units.mediumDuration
                         easing.type: Easing.InOutQuad
                     }
                 }
 
                 Behavior on anchors.bottomMargin {
                     NumberAnimation {
-                        duration: 200
+                        duration: Units.mediumDuration
                         easing.type: Easing.InOutQuad
                     }
                 }

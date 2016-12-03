@@ -36,11 +36,11 @@ BaseListItem {
     RowLayout {
         anchors {
             fill: parent
-            topMargin: 8
-            bottomMargin: 8
+            topMargin: Units.smallSpacing
+            bottomMargin: Units.smallSpacing
         }
 
-        spacing: 8
+        spacing: Units.smallSpacing
 
         Icon {
             name: "file/file_download"
@@ -49,7 +49,7 @@ BaseListItem {
         ColumnLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            spacing: 8
+            spacing: Units.smallSpacing
 
             Label {
                 Layout.fillWidth: true

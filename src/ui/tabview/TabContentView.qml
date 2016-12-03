@@ -58,10 +58,6 @@ Item {
         return true;
     }
 
-    function activatePage(uid) {
-
-    }
-
     function pageByUID(uid) {
         for (var i=0; i<pages.count; i++) {
             if (pages.get(i).uid === uid)

@@ -24,6 +24,7 @@
 import QtQuick 2.7
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.0
+import Fluid.Controls 1.0
 import Fluid.Material 1.0
 import dperini.regexweburl 1.0
 import core 1.0
@@ -53,8 +54,8 @@ Item {
         RowLayout {
             anchors {
                 fill: parent
-                leftMargin: 8
-                rightMargin: 8
+                leftMargin: Units.smallSpacing
+                rightMargin: Units.smallSpacing
             }
 
             TextField {
@@ -65,7 +66,7 @@ Item {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
 
-                bottomPadding: 8
+                bottomPadding: Units.smallSpacing
                 background: Item {}
                 font.pixelSize: 14
                 readOnly: true
@@ -84,7 +85,7 @@ Item {
                     anchors.fill: parent
                     visible: showUrlField.editActive
 
-                    bottomPadding: 8
+                    bottomPadding: Units.smallSpacing
                     background: Rectangle {}
                     font.pixelSize: 14
 

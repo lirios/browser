@@ -30,7 +30,7 @@ Rectangle {
     property list<Action> actions
     property color foregroundColor: "#212121"
     property bool animationsEnabled: true
-    property int iconSize: 24
+    property int iconSize: Units.iconSizes.smallMedium
 
     function itemAt(index) {
         return actionRepeater.itemAt(index);
@@ -57,7 +57,7 @@ Rectangle {
                 Behavior on iconColor {
                     enabled: animationsEnabled
                     ColorAnimation {
-                        duration: 200
+                        duration: Units.mediumDuration
                     }
                 }
             }

@@ -35,7 +35,7 @@ TabContent {
     Flickable {
         anchors {
             fill: parent
-            margins: 16
+            margins: 2 * Units.smallSpacing
         }
 
         ScrollBar.vertical: ScrollBar {}
@@ -50,7 +50,7 @@ TabContent {
 
             Column {
                 width: parent.width
-                spacing: 16
+                spacing: 2 * Units.smallSpacing
 
                 HeadlineLabel {
                     text: "Settings"
@@ -62,7 +62,7 @@ TabContent {
 
                 RowLayout {
                     width: parent.width
-                    spacing: 16
+                    spacing: 2 * Units.smallSpacing
 
                     Label {
                         text: "Start url"
