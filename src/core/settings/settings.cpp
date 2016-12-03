@@ -35,16 +35,16 @@ Settings::Settings(QObject *parent) : QObject(parent)
     searchConfigChanged(m_searchConfig = new SearchConfig(this));
 
     // Check for settings directory
-    if (!QDir(APP_CONFIG_LOCATION).exists()) {
+    if (!QDir(Paths::ConfigLocation).exists()) {
         qDebug() << "Settings path doesn't exist.";
-        qDebug() << "Creating" << APP_CONFIG_LOCATION << "...";
-        QDir().mkpath(APP_CONFIG_LOCATION);
+        qDebug() << "Creating" << Paths::ConfigLocation << "...";
+        QDir().mkpath(Paths::ConfigLocation);
     }
     // Check for settings file
-    if (!QFile(SETTINGS_FILENAME).exists()) {
+    if (!QFile(Paths::SettingsFile).exists()) {
         qDebug() << "Settings file doesn't exist.";
-        qDebug() << "Creating" << SETTINGS_FILENAME << "...";
-        QFile file(SETTINGS_FILENAME);
+        qDebug() << "Creating" << Paths::SettingsFile << "...";
+        QFile file(Paths::SettingsFile);
         if (!file.open(QIODevice::WriteOnly)) {
             qWarning("Couldn't open settings file for write!");
         }
@@ -59,7 +59,7 @@ Settings::Settings(QObject *parent) : QObject(parent)
 
 void Settings::load()
 {
-    QFile file(SETTINGS_FILENAME);
+    QFile file(Paths::SettingsFile);
     if (!file.open(QIODevice::ReadOnly)) {
         qWarning("Couldn't open settings file for read!");
         return;
@@ -99,7 +99,7 @@ void Settings::load()
 
 void Settings::save()
 {
-    QFile file(SETTINGS_FILENAME);
+    QFile file(Paths::SettingsFile);
     if (!file.open(QIODevice::WriteOnly)) {
         qWarning("Couldn't open settings file for write!");
         return;
