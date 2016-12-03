@@ -28,7 +28,7 @@ class DownloadsModel : public QAbstractListModel
     Q_OBJECT
     Q_PROPERTY(int count READ count NOTIFY countChanged)
 public:
-    explicit DownloadsModel(QObject* parent = 0);
+    explicit DownloadsModel(QObject* parent = nullptr);
 
     enum DownloadRoles {
         Path,
