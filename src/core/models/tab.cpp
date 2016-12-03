@@ -24,7 +24,8 @@
 
 #include "tab.h"
 
-Tab::Tab(QObject *parent, bool invalid) : QObject(parent)
+Tab::Tab(QObject *parent, bool invalid)
+    : QObject(parent)
 {
     m_uid = -1;
     m_canReload = true;

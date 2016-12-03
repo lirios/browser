@@ -28,7 +28,8 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
-Settings::Settings(QObject *parent) : QObject(parent)
+Settings::Settings(QObject *parent)
+    : QObject(parent)
 {
     // Create exposed configuration objects
     startConfigChanged(m_startConfig = new StartConfig(this));

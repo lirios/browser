@@ -23,7 +23,8 @@
 
 #include "searchconfig.h"
 
-SearchConfig::SearchConfig(QObject *parent) : QObject(parent)
+SearchConfig::SearchConfig(QObject *parent)
+    : QObject(parent)
 {
     defaultSearchEngineChanged(m_defaultSearchEngine = SearchEngine::DuckDuckGo);
 }

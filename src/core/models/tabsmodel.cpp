@@ -24,7 +24,8 @@
 #include "tabsmodel.h"
 #include "tab.h"
 
-TabsModel::TabsModel(QObject *parent) : QAbstractListModel(parent)
+TabsModel::TabsModel(QObject *parent)
+    : QAbstractListModel(parent)
 {
     m_invalid_tab = new Tab(this, true);
     m_active_tab = m_invalid_tab;
