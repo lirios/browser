@@ -113,8 +113,8 @@ QtObject {
     function newWindow(incognito, openStartUrl) {
         var properties = {root: root}
         if (incognito)
-            properties["profile"] = incognitoProfile;
-        properties["openStartUrl"] = openStartUrl;
+            properties.profile = incognitoProfile;
+        properties.openStartUrl = openStartUrl;
         var window = browserWindowComponent.createObject(root, properties);
         return window;
     }

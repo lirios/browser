@@ -271,6 +271,13 @@ FluidWindow {
             }
         }
 
+        MenuItem {
+            text: "Dev Tools"
+            onClicked: {
+                devToolsWindow.open();
+            }
+        }
+
         Connections {
             target: tabController.tabsModel
             onEmptyChanged: {
@@ -298,6 +305,10 @@ FluidWindow {
             if (tabsModel.count === 1)
                 window.close();
         }
+    }
+
+    DevToolsWindow {
+        id: devToolsWindow
     }
 
     Component.onCompleted: {

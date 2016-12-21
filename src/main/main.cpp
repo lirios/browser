@@ -42,6 +42,9 @@ int main(int argc, char *argv[])
     // Set Material Design QtQuick Controls 2 style
     qputenv("QT_QUICK_CONTROLS_STYLE", "material");
 
+    // Set the port for DevTools
+    qputenv("QTWEBENGINE_REMOTE_DEBUGGING", "0.0.0.0:9992");
+
     #if defined(ENABLE_HIGH_DPI_SCALING)
         QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     #endif
