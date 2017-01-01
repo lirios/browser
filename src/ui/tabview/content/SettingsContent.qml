@@ -211,6 +211,17 @@ TabContent {
                 }
 
                 ColumnLayout {
+                    CheckBox {
+                        text: "Adapt to website theme colors"
+                        checked: Settings.themeConfig.themeColorEnabled
+                        onClicked: {
+                            if (Settings.themeConfig.themeColorEnabled !== checked) {
+                                Settings.themeConfig.themeColorEnabled = checked;
+                                Settings.dirty = true;
+                            }
+                        }
+                    }
+
                     RadioButton {
                         id: radioButtonLightTheme
                         text: "Light theme"
@@ -219,22 +230,6 @@ TabContent {
                             if (Settings.themeConfig.darkThemeEnabled === checked) {
                                 Settings.themeConfig.darkThemeEnabled = !checked;
                                 Settings.dirty = true;
-                            }
-                        }
-                    }
-
-                    RowLayout {
-                        Item { implicitWidth: 16 }  // Spacer
-
-                        CheckBox {
-                            text: "Adapt to website theme colors"
-                            enabled: radioButtonLightTheme.checked
-                            checked: Settings.themeConfig.themeColorEnabled
-                            onClicked: {
-                                if (Settings.themeConfig.themeColorEnabled !== checked) {
-                                    Settings.themeConfig.themeColorEnabled = checked;
-                                    Settings.dirty = true;
-                                }
                             }
                         }
                     }
