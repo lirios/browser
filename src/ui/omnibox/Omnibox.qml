@@ -1,7 +1,7 @@
 /*
  * This file is part of Liri Browser
  *
- * Copyright (C) 2016 Tim Süberkrüb <tim.sueberkrueb@web.de>
+ * Copyright (C) 2017 Tim Süberkrüb <tim.sueberkrueb@web.de>
  *
  * $BEGIN_LICENSE:GPL3+$
  *
@@ -103,8 +103,10 @@ Item {
                         showUrlField.editActive = false;
                     }
 
-                    onEditingFinished: {
-                        showUrlField.editActive = false;
+                    onActiveFocusChanged: {
+                        if (!activeFocus) {
+                            showUrlField.editActive = false;
+                        }
                     }
                 }
             }
