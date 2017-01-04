@@ -30,7 +30,7 @@ Tab::Tab(QObject *parent, bool valid)
     m_uid = -1;
     m_canReload = true;
     validChanged(m_valid = valid);
-    m_iconColor = QColor("transparent");
+    m_iconColor = Qt::transparent;
 }
 
 unsigned int Tab::uid() const
