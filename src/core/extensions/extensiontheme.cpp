@@ -21,11 +21,26 @@
  * $END_LICENSE$
 */
 
-#include "themeconfig.h"
+#include "extensiontheme.h"
 
-ThemeConfig::ThemeConfig(QObject *parent)
-    : QObject(parent)
+ExtensionTheme::ExtensionTheme(QObject *parent) : QObject(parent)
 {
-    m_secondaryStartTime = QTime(21, 0);
-    m_secondaryEndTime = QTime(7, 0);
+    m_valid = true;
+}
+
+ExtensionTheme *ExtensionTheme::clone(QObject *parent)
+{
+    ExtensionTheme* newTheme = new ExtensionTheme(parent);
+    newTheme->setExtensionName(extensionName());
+    newTheme->setName(name());
+    newTheme->setTitle(title());
+    newTheme->setSummary(summary());
+    newTheme->setDescription(description());
+    newTheme->setDark(dark());
+    newTheme->setAdaptWebsiteTheme(adaptWebsiteTheme());
+    newTheme->setAccent(accent());
+    newTheme->setPrimary(primary());
+    newTheme->setForeground(foreground());
+    newTheme->setBackground(background());
+    return newTheme;
 }

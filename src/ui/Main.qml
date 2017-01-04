@@ -104,16 +104,30 @@ QtObject {
         }
     }
 
-    property Binding darkStartTimeBinding: Binding {
-        target: DarkThemeTimer
+    property Binding secondaryStartTimeBinding: Binding {
+        target: SecondaryThemeTimer
         property: "startTime"
-        value: Settings.themeConfig.darkThemeStartTime
+        value: Settings.themeConfig.secondaryStartTime
     }
 
-    property Binding darkEndTimeBinding: Binding {
-        target: DarkThemeTimer
+    property Binding secondaryEndTimeBinding: Binding {
+        target: SecondaryThemeTimer
         property: "endTime"
-        value: Settings.themeConfig.darkThemeEndTime
+        value: Settings.themeConfig.secondaryEndTime
+    }
+
+    property Binding currentThemeBinding: Binding {
+        target: Theme
+        property: "name"
+        value: Settings.themeConfig.secondaryEnabled && SecondaryThemeTimer.isActiveTime
+               ? Settings.themeConfig.secondary
+               : Settings.themeConfig.primary
+    }
+
+    property Binding incognitoThemeBinding: Binding {
+        target: IncognitoTheme
+        property: "name"
+        value: Settings.themeConfig.incognito
     }
 
     function openWindowRequest(request) {
@@ -141,7 +155,7 @@ QtObject {
         // Create an incognito profile
         incognitoProfile = webProfileComponent.createObject(null, {incognito: true});
         // Update dark theme timer
-        DarkThemeTimer.update();
+        SecondaryThemeTimer.update();
         // Create the first window and show it
         newWindow().showNormal();
     }

@@ -1,7 +1,7 @@
 /*
  * This file is part of Liri Browser
  *
- * Copyright (C) 2016 Tim Süberkrüb <tim.sueberkrueb@web.de>
+ * Copyright (C) 2017 Tim Süberkrüb <tim.sueberkrueb@web.de>
  *
  * $BEGIN_LICENSE:GPL3+$
  *
@@ -22,20 +22,27 @@
 */
 
 #include <QtGlobal>
-#include <QGuiApplication>
-#include <QIcon>
+#include <QSysInfo>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QtQuickControls2/QQuickStyle>
 #include <QQmlContext>
 #include <QDebug>
 #include <QIcon>
 
+#include "../core/global/version.h"
 #include "../core/models/tabsmodel.h"
 #include "../core/models/tab.h"
 #include "../core/models/downloadsmodel.h"
 #include "../core/models/webdownload.h"
 #include "../core/settings/settings.h"
-#include "../core/utils/darkthemetimer.h"
+#include "../core/extensions/extensionsmanager.h"
+#include "../core/extensions/extensionsmodel.h"
+#include "../core/extensions/extensiontheme.h"
+#include "../core/extensions/extensionthemesmodel.h"
+#include "../core/extensions/extension.h"
+#include "../core/utils/secondarythemetimer.h"
+#include "../core/utils/themeprovider.h"
 
 #ifdef Q_OS_MACOS
     #include "mac/MacOsEventListener.h"
@@ -48,9 +55,17 @@
 
 int main(int argc, char *argv[])
 {
+    qDebug() << "Liri Browser" << Version::fullString;
+
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
+
+    // Set application info
+    QCoreApplication::setOrganizationName("liri-project");
+    QCoreApplication::setOrganizationDomain("liri.io");
+    QCoreApplication::setApplicationName("io.liri.browser");
+    QCoreApplication::setApplicationVersion(Version::fullString);
 
     #ifdef Q_OS_MACOS
         MacOsEventListener evListener;
@@ -69,14 +84,24 @@ int main(int argc, char *argv[])
     Settings settings;
     settings.load();
 
-    // Create and start dark theme time
-    DarkThemeTimer darkThemeTimer;
-    darkThemeTimer.start();
+    // Create extensions manager
+    ExtensionsManager extensionsManager;
 
-    // create qml app engine
+    // Create and start secondary theme time
+    SecondaryThemeTimer secondaryThemeTimer;
+    secondaryThemeTimer.start();
+
+    // Create and configure theme provider
+    ThemeProvider themeProvider;
+    themeProvider.setModel(extensionsManager.themesModel());
+
+    ThemeProvider incognitoThemeProvider;
+    incognitoThemeProvider.setModel(extensionsManager.themesModel());
+
+    // Create qml app engine
     QQmlApplicationEngine engine;
 
-    // register core types
+    // Register core types
     qmlRegisterUncreatableType<SearchConfig>("core", 1, 0, "SearchConfig", "SearchConfig (from module core) may not be created directly.");
 
     qmlRegisterUncreatableType<Tab>("core", 1, 0, "Tab", "Tab (from module core) may not be created directly.");
@@ -85,9 +110,21 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<WebDownload>("core", 1, 0, "WebDownload", "WebDownload (from module core) may not be created directly.");
     qmlRegisterType<DownloadsModel>("core", 1, 0, "DownloadsModel");
 
+    qmlRegisterUncreatableType<Extension>("core", 1, 0, "Extension", "Extension (from module core) may not be created directly.");
+    qmlRegisterUncreatableType<ExtensionsModel>("core", 1, 0, "ExtensionsModel", "ExtensionsModel (from module core) may not be created directly.");
+    qmlRegisterUncreatableType<ExtensionTheme>("core", 1, 0, "ExtensionTheme", "ExtensionTheme (from module core) may not be created directly.");
+    qmlRegisterUncreatableType<ExtensionThemesModel>("core", 1, 0, "ExtensionThemesModel", "ExtensionThemesModel (from module core) may not be created directly.");
+
     // Register context properties
+    engine.rootContext()->setContextProperty("ApplicationVersion", Version::fullString);
+    engine.rootContext()->setContextProperty("QtVersion", QT_VERSION_STR);
+    engine.rootContext()->setContextProperty("SystemInformation", QSysInfo::prettyProductName());
     engine.rootContext()->setContextProperty("Settings", &settings);
-    engine.rootContext()->setContextProperty("DarkThemeTimer", &darkThemeTimer);
+    engine.rootContext()->setContextProperty("SecondaryThemeTimer", &secondaryThemeTimer);
+    engine.rootContext()->setContextProperty("Extensions", &extensionsManager);
+    engine.rootContext()->setContextProperty("Theme", &themeProvider);
+    engine.rootContext()->setContextProperty("IncognitoTheme", &incognitoThemeProvider);
+
     #ifdef Q_OS_MACOS
         engine.rootContext()->setContextProperty("MacEvents", &evListener);
     #endif

@@ -4,7 +4,7 @@ TEMPLATE = app
 TARGET = liri-browser
 
 CONFIG += c++11
-QT += qml quick quickcontrols2
+QT += qml quick quickcontrols2 widgets
 
 
 unix:!android {
@@ -33,6 +33,13 @@ unix:!android {
 
     INSTALLS += target desktop
 }
+
+# Load QuaZIP library
+linux:LIBS += -L/usr/local/lib -lquazip
+
+# Show useful files in QtCreator
+OTHER_FILES += README.md \
+               LICENSE*
 
 # Specify CONFIG+=QTWEBENGINE_ENABLED when running qmake.
 # Otherwise, Liri Browser expects the Oxide web engine.

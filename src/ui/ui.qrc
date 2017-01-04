@@ -31,5 +31,8 @@
         <file>tabview/content/SettingsContent.qml</file>
         <file>utils/qmldir</file>
         <file>window/ShortcutManager.qml</file>
+        <file>tabview/content/ExtensionsContent.qml</file>
+        <file>tabview/content/AboutContent.qml</file>
+        <file>components/ThemeSelection.qml</file>
     </qresource>
 </RCC>

@@ -25,6 +25,86 @@ import QtQuick 2.7
 import core 1.0
 
 Item {
+    id: content
+
     property var tab
     property var actionManager
+
+    property url iconUrl
+    property bool adaptIconColor
+    property url url
+    property bool canGoBack
+    property bool canGoForward
+    property bool canReload
+    property bool loading
+    property int loadProgress
+    property bool hasThemeColor
+    property color themeColor
+    property string title
+
+    Binding {
+        target: content.tab
+        property: "title"
+        value: title
+    }
+
+    Binding {
+        target: content.tab
+        property: "iconUrl"
+        value: iconUrl
+    }
+
+    Binding {
+        target: content.tab
+        property: "adaptIconColor"
+        value: adaptIconColor
+    }
+
+    Binding {
+        target: content.tab
+        property: "url"
+        value: url
+    }
+
+    Binding {
+        target: content.tab
+        property: "canGoBack"
+        value: canGoBack
+    }
+
+    Binding {
+        target: content.tab
+        property: "canGoForward"
+        value: canGoForward
+    }
+
+    Binding {
+        target: content.tab
+        property: "loading"
+        value: loading
+    }
+
+    Binding {
+        target: content.tab
+        property: "loadProgress"
+        value: loadProgress
+    }
+
+    Binding {
+        target: content.tab
+        property: "hasThemeColor"
+        value: hasThemeColor
+    }
+
+    Binding {
+        target: content.tab
+        property: "themeColor"
+        value: themeColor
+    }
+
+    Binding {
+        target: content.tab
+        property: "canReload"
+        value: canReload
+    }
 }

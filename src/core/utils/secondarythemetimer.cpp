@@ -21,11 +21,35 @@
  * $END_LICENSE$
 */
 
-#include "themeconfig.h"
+#include "secondarythemetimer.h"
 
-ThemeConfig::ThemeConfig(QObject *parent)
+SecondaryThemeTimer::SecondaryThemeTimer(QObject *parent)
     : QObject(parent)
 {
-    m_secondaryStartTime = QTime(21, 0);
-    m_secondaryEndTime = QTime(7, 0);
+    m_timer = new QTimer(this);
+    m_timer->setInterval(60000);
+    connect(m_timer, &QTimer::timeout, this, &SecondaryThemeTimer::update);
+}
+
+void SecondaryThemeTimer::start()
+{
+    m_timer->start();
+}
+
+void SecondaryThemeTimer::stop()
+{
+    m_timer->stop();
+}
+
+void SecondaryThemeTimer::update()
+{
+    bool isDark = false;
+    QTime now = QTime::currentTime();
+    if (m_endTime > m_startTime) {
+        isDark = (now > m_startTime && now < m_endTime);
+    }
+    else {
+        isDark = (now > m_startTime || now < m_endTime );
+    }
+    isActiveTimeChanged(m_isActiveTime = isDark);
 }

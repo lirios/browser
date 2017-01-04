@@ -21,11 +21,11 @@
  * $END_LICENSE$
 */
 
-#include "themeconfig.h"
+#include "extension.h"
 
-ThemeConfig::ThemeConfig(QObject *parent)
-    : QObject(parent)
+#include <QDebug>
+
+Extension::Extension(QObject *parent) : QObject(parent)
 {
-    m_secondaryStartTime = QTime(21, 0);
-    m_secondaryEndTime = QTime(7, 0);
+    m_valid = true;
 }

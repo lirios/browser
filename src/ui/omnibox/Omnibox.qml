@@ -71,7 +71,6 @@ Item {
                 Layout.fillWidth: true
 
                 Material.foreground: "#212121"
-                Material.accent: Material.color(Material.Pink)
 
                 bottomPadding: Units.smallSpacing
 
@@ -131,7 +130,7 @@ Item {
 
             height: 2
             width: parent.width * (tabsModel.active.loadProgress / 100)
-            color: "red"
+            color: Material.accent
 
             Behavior on width {
                 enabled: tabsModel.active.loading

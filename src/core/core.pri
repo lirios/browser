@@ -8,7 +8,15 @@ HEADERS += \
     $$PWD/settings/searchconfig.h \
     $$PWD/settings/themeconfig.h \
     $$PWD/global/paths.h \
-    $$PWD/utils/darkthemetimer.h \
+    $$PWD/extensions/extensionsmanager.h \
+    $$PWD/extensions/extension.h \
+    $$PWD/extensions/extensiontheme.h \
+    $$PWD/extensions/extensionsmodel.h \
+    $$PWD/extensions/extensionthemesmodel.h \
+    $$PWD/global/version.h \
+    $$PWD/utils/secondarythemetimer.h \
+    $$PWD/utils/themeprovider.h \
+    $$PWD/extensions/extensionparser.h \
 
 SOURCES += \
     $$PWD/models/tabsmodel.cpp \
@@ -19,4 +27,11 @@ SOURCES += \
     $$PWD/settings/startconfig.cpp \
     $$PWD/settings/searchconfig.cpp \
     $$PWD/settings/themeconfig.cpp \
-    $$PWD/utils/darkthemetimer.cpp \
+    $$PWD/extensions/extensionsmanager.cpp \
+    $$PWD/extensions/extension.cpp \
+    $$PWD/extensions/extensiontheme.cpp \
+    $$PWD/extensions/extensionsmodel.cpp \
+    $$PWD/extensions/extensionthemesmodel.cpp \
+    $$PWD/utils/secondarythemetimer.cpp \
+    $$PWD/utils/themeprovider.cpp \
+    $$PWD/extensions/extensionparser.cpp \

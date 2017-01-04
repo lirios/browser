@@ -29,13 +29,19 @@ TabContent {
     id: content
 
     property var webview: webview
-    property alias url: webview.url
     property alias profile: webview.profile
     property alias request: webview.request
     property int webengine
 
-    property bool hasThemeColor: false
-    property color themeColor
+    canReload: true
+    canGoBack: webview.canGoBack
+    canGoForward: webview.canGoForward
+    loading: webview.loadProgress < 100
+    loadProgress: webview.loadProgress
+    iconUrl: webview.icon
+    adaptIconColor: false
+    title: webview.title
+    hasThemeColor: false
 
     WebView {
         id: webview
@@ -76,79 +82,13 @@ TabContent {
                 });
             }
         }
-    }
 
-    Binding {
-        target: content.tab
-        property: "title"
-        value: webview.title
-    }
-
-    Binding {
-        target: content.tab
-        property: "iconUrl"
-        // Workaround: it looks like QtWebEngine's icon provider (image://favicon/)
-        // is not 100% reliable
-        value: {
-            var s = webview.icon.toString();
-            if (s.indexOf("image://favicon/") === 0)
-                return Qt.resolvedUrl(s.slice(16));
-            else return webview.icon;
+        // WebView url needs to be handled this way
+        // to prevent a binding loop.
+        onUrlChanged: {
+            if (url != "about:blank" && url != content.url)
+                content.url = url;
         }
-    }
-
-    Binding {
-        target: content.tab
-        property: "adaptIconColor"
-        value: false
-    }
-
-    Binding {
-        target: content.tab
-        property: "url"
-        value: webview.url
-    }
-
-    Binding {
-        target: content.tab
-        property: "canGoBack"
-        value: webview.canGoBack
-    }
-
-    Binding {
-        target: content.tab
-        property: "canGoForward"
-        value: webview.canGoForward
-    }
-
-    Binding {
-        target: content.tab
-        property: "loading"
-        value: content.tab && content.tab.url.toString().length > 0 && webview.loadProgress < 100
-    }
-
-    Binding {
-        target: content.tab
-        property: "loadProgress"
-        value: webview.loadProgress
-    }
-
-    Binding {
-        target: content.tab
-        property: "hasThemeColor"
-        value: hasThemeColor
-    }
-
-    Binding {
-        target: content.tab
-        property: "themeColor"
-        value: themeColor
-    }
-
-    Binding {
-        target: content.tab
-        property: "canReload"
-        value: true
     }
 
     Connections {

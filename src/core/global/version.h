@@ -21,11 +21,19 @@
  * $END_LICENSE$
 */
 
-#include "themeconfig.h"
+#ifndef VERSION_H
+#define VERSION_H
 
-ThemeConfig::ThemeConfig(QObject *parent)
-    : QObject(parent)
-{
-    m_secondaryStartTime = QTime(21, 0);
-    m_secondaryEndTime = QTime(7, 0);
+#include <QVersionNumber>
+#include <QString>
+
+namespace Version {
+    const int major = 0;
+    const int minor = 4;
+    const int update = 0;
+    const bool isRelease = false;
+    const QString fullString = QString("v%1.%2.%3-%4").arg(major).arg(minor).arg(update).arg(isRelease ? "release" : "devel");
+    const QVersionNumber version = QVersionNumber(major, minor, update);
 }
+
+#endif // VERSION_H

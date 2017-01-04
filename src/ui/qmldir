@@ -2,6 +2,7 @@ module ui
 
 # components
 ActionBar 1.0 components/ActionBar.qml
+ThemeSelection 1.0 components/ThemeSelection.qml
 
 # tabview
 TabView 1.0 tabview/TabView.qml
@@ -14,6 +15,8 @@ singleton TabType 1.0 tabview/TabType.qml
 # content
 WebContent 1.0 tabview/content/WebContent.qml
 SettingsContent 1.0 tabview/content/SettingsContent.qml
+ExtensionsContent 1.0 tabview/content/ExtensionsContent.qml
+AboutContent 1.0 tabview/content/AboutContent.qml
 
 # omnibox
 Omnibox 1.0 omnibox/Omnibox.qml

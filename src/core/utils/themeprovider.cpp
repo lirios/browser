@@ -21,11 +21,25 @@
  * $END_LICENSE$
 */
 
-#include "themeconfig.h"
+#include "themeprovider.h"
 
-ThemeConfig::ThemeConfig(QObject *parent)
-    : QObject(parent)
+#include <QDebug>
+
+ThemeProvider::ThemeProvider(QObject *parent) : QObject(parent)
 {
-    m_secondaryStartTime = QTime(21, 0);
-    m_secondaryEndTime = QTime(7, 0);
+    connect(this, &ThemeProvider::nameChanged,
+            this, &ThemeProvider::update);
+}
+
+void ThemeProvider::setModel(ExtensionThemesModel *model)
+{
+    modelChanged(m_model = model);
+    connect(m_model, &ExtensionThemesModel::countChanged,
+            this, &ThemeProvider::update);
+}
+
+void ThemeProvider::update()
+{
+    // Get theme by name
+    currentChanged(m_current = m_model->get(m_name));
 }
