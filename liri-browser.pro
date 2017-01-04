@@ -2,7 +2,7 @@ TEMPLATE = app
 TARGET = liri-browser
 
 CONFIG += c++11
-QT += qml quick
+QT += qml quick quickcontrols2
 
 # Install to /usr/local by default
 # Set the PREFIX environment variable to define
