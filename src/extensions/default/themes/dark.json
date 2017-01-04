@@ -1,0 +1,20 @@
+{
+    "schema":{
+        "type":"lbx/theme",
+        "version":"0.1.0"
+    },
+    "meta":{
+        "name":"default.dark",
+        "title":"Default Dark",
+        "summary":"A dark theme",
+        "description":"Default dark theme for Liri Browser"
+    },
+    "palette":{
+        "dark":true,
+        "adapt_website_theme":false,
+        "accent":"#03A9F4",
+        "primary":"#2196F3",
+        "foreground":"white",
+        "background":"#212121"
+    }
+}
