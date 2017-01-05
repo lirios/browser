@@ -30,54 +30,74 @@ ExtensionParser::ExtensionParser(QObject *parent) : QObject(parent)
 
 }
 
-bool ExtensionParser::open(QString filePath)
+bool ExtensionParser::open(const QUrl url, ExtensionType type)
 {
-    // Zip file name without extension
-    m_filePath = filePath;
-    m_pureFileName = filePath.section("/", -1).section(".", 0, 0);
+    m_type = type;
+    m_url = url;
+    m_filePath = url.toString();
+    if (m_filePath.startsWith("qrc://"))
+        m_filePath = m_filePath.mid(6);
+    qDebug() << m_filePath;
+    m_pureFileName = m_filePath.section("/", -1).section(".", 0, 0);
 
-    // Create QuaZip and QuaZipFile
-    m_zip = new QuaZip(filePath);
-    m_zipFile = new QuaZipFile(m_zip);
+    if (type == ExtensionType::LBX) {
+        // Create QuaZip and QuaZipFile
+        m_zip = new QuaZip(m_filePath);
+        m_zipFile = new QuaZipFile(m_zip);
 
-    // Attempt to open QuaZip
-    if (!m_zip->open(QuaZip::mdUnzip)) {
-        qWarning() << "Error: Could not open file" << filePath << "for read.";
-        return false;
+        // Attempt to open QuaZip
+        if (!m_zip->open(QuaZip::mdUnzip)) {
+            qWarning() << "Error: Could not open file" << m_filePath << "for read.";
+            return false;
+        }
     }
     return true;
 }
 
 void ExtensionParser::close()
 {
-    m_zip->close();
-    m_zipFile->close();
-    delete m_zip;
-    delete m_zipFile;
+    if (m_type == ExtensionType::LBX) {
+        m_zip->close();
+        m_zipFile->close();
+        delete m_zip;
+        delete m_zipFile;
+    }
 }
 
-QByteArray ExtensionParser::readResource(QString resource)
+QByteArray ExtensionParser::readResource(const QString resource)
 {
-    // Get file list
-    QStringList fileList = m_zip->getFileNameList();
-
     QString resourceFileName = fromResourceName(resource);
+    QByteArray data;
 
-    if (!fileList.contains(resourceFileName) && fileList.contains(m_pureFileName + "/" + resourceFileName)) {
-        resourceFileName = m_pureFileName + "/" + resourceFileName;
-    } else {
-        qWarning() << "Error: Could not find resource" << resource << "in" << m_filePath;
-        throw ResourceError();
+    if (m_type == ExtensionType::LBX) {
+        // Get file list
+        QStringList fileList = m_zip->getFileNameList();
+
+        if (!fileList.contains(resourceFileName) && fileList.contains(m_pureFileName + "/" + resourceFileName)) {
+            resourceFileName = m_pureFileName + "/" + resourceFileName;
+        } else {
+            qWarning() << "Error: Could not find resource" << resource << "in" << m_filePath;
+            throw ResourceError();
+        }
+
+        m_zip->setCurrentFile(resourceFileName);
+        if (!m_zipFile->open(QIODevice::ReadOnly)) {
+            qCritical() << "Could not open resource" << resource << "in" << m_filePath << "for read.";
+            throw ResourceError();
+        }
+
+        data = m_zipFile->readAll();
+        m_zipFile->close();
+    } else if (m_type == ExtensionType::QRC) {
+        qDebug() << m_filePath + "/" + resourceFileName;
+        QFile file(":/" + m_filePath + "/" + resourceFileName);
+        if (!file.open(QIODevice::ReadOnly)) {
+            qCritical() << "Could not open resource" << resource << "in" << m_filePath << "for read.";
+            throw ResourceError();
+        }
+        data = file.readAll();
+        file.close();
     }
-
-    m_zip->setCurrentFile(resourceFileName);
-    if (!m_zipFile->open(QIODevice::ReadOnly)) {
-        qCritical() << "Could not open resource" << resource << "in" << m_filePath << "for read.";
-        throw ResourceError();
-    }
-
-    QByteArray data = m_zipFile->readAll();
-    m_zipFile->close();
     return data;
 }
 
@@ -108,7 +128,7 @@ bool ExtensionParser::load()
     return true;
 }
 
-bool ExtensionParser::parseMeta(QByteArray jsonData)
+bool ExtensionParser::parseMeta(const QByteArray jsonData)
 {
     try {
         QJsonDocument doc(QJsonDocument::fromJson(jsonData));
@@ -200,7 +220,7 @@ bool ExtensionParser::parseMeta(QByteArray jsonData)
     return true;
 }
 
-bool ExtensionParser::loadTheme(QString resourceName)
+bool ExtensionParser::loadTheme(const QString resourceName)
 {
     try {
         QByteArray themeData = readResource(resourceName);
@@ -216,7 +236,7 @@ bool ExtensionParser::loadTheme(QString resourceName)
     return true;
 }
 
-bool ExtensionParser::parseTheme(QByteArray jsonData)
+bool ExtensionParser::parseTheme(const QByteArray jsonData)
 {
     try {
         QJsonDocument doc(QJsonDocument::fromJson(jsonData));

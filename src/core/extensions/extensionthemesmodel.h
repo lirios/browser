@@ -56,7 +56,7 @@ public:
     void add(ExtensionTheme* theme);
     void remove(const int index);
     void remove(ExtensionTheme* theme);
-    void removeFromExtension(const QString extensionName);
+    void removeFromExtensionName(const QString extensionName);
     Q_INVOKABLE ExtensionTheme* get(const int index) const;
     Q_INVOKABLE ExtensionTheme* get(const QString name) const;
 

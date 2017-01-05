@@ -46,6 +46,14 @@ class ExtensionsManager : public QObject
 public:
     explicit ExtensionsManager(QObject *parent = nullptr);
 
+    void loadBuiltins();
+    void startWatching();
+    void scan();
+
+    void addExtension(Extension* extension);
+    void removeExtension(Extension* extension);
+    Extension* extensionByName(const QString name);
+
     void loadFile(const QString filePath);
     void unloadFile(const QString filePath);
 
@@ -62,16 +70,14 @@ private:
 
     bool m_loaded;
 
-    void findFiles();
-
     QList<QString> m_files;
     QDir m_dir;
 
 
 private slots:
-    void directoryChanged(QString path);
-    void fileAdded(QString filename);
-    void fileRemoved(QString filename);
+    void directoryChanged(const QString path);
+    void fileAdded(const QString filename);
+    void fileRemoved(const QString filename);
 };
 
 #endif // EXTENSIONSMANAGER_H

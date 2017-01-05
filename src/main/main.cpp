@@ -84,8 +84,11 @@ int main(int argc, char *argv[])
     Settings settings;
     settings.load();
 
-    // Create extensions manager
+    // Create extensions manager and load
     ExtensionsManager extensionsManager;
+    extensionsManager.loadBuiltins();
+    extensionsManager.startWatching();
+    extensionsManager.scan();
 
     // Create and start secondary theme time
     SecondaryThemeTimer secondaryThemeTimer;

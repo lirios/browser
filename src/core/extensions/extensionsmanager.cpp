@@ -30,19 +30,12 @@ ExtensionsManager::ExtensionsManager(QObject *parent) : QObject(parent)
 {
     m_dir = QDir(Paths::ExtensionsLocation);
 
-    // Only load once
-    m_loaded = false;
     // Check for paths
     if (!QDir(m_dir).exists()) {
         qDebug() << "Extensions location doesn't exist.";
         qDebug() << "Creating" << Paths::ExtensionsLocation << "...";
         QDir().mkpath(Paths::ExtensionsLocation);
     }
-    // Create watcher
-    m_watcher = new QFileSystemWatcher(this);
-    connect(m_watcher, &QFileSystemWatcher::directoryChanged,
-            this, &ExtensionsManager::directoryChanged);
-    m_watcher->addPath(Paths::ExtensionsLocation);
 
     // Create models
     m_extensionsModel = new ExtensionsModel(this);
@@ -50,21 +43,17 @@ ExtensionsManager::ExtensionsManager(QObject *parent) : QObject(parent)
     m_extensionThemesModel = new ExtensionThemesModel(this);
     extensionThemesModelChanged(m_extensionThemesModel);
 
-    // Find files
-    findFiles();
+    // Create watcher
+    m_watcher = new QFileSystemWatcher(this);
 }
 
-void ExtensionsManager::loadFile(const QString filePath)
+void ExtensionsManager::loadBuiltins()
 {
-    qDebug() << "Loading extension file" << filePath << "...";
-
     Extension* extension = new Extension(this);
-
     ExtensionParser parser;
     parser.setExtension(extension);
-    if(!parser.open(filePath)) {
+    if (!parser.open(QUrl("qrc://extensions/default"), ExtensionType::QRC))
         return;
-    }
     if (!parser.load()) {
         extension->deleteLater();
         parser.close();
@@ -72,26 +61,17 @@ void ExtensionsManager::loadFile(const QString filePath)
     }
     parser.close();
     parser.deleteLater();
-    // Add extension themes to theme model
-    for (ExtensionTheme* theme : extension->themes()) {
-        m_extensionThemesModel->add(theme->clone(this));
-    }
-    m_extensionsModel->add(extension);
+    addExtension(extension);
 }
 
-void ExtensionsManager::unloadFile(const QString filePath)
+void ExtensionsManager::startWatching()
 {
-    qDebug() << "Unloading extension file" << filePath << "...";
-    QString name = filePath.section("/", -1).section(".", 0, 0);
-    Extension* extension = m_extensionsModel->get(name);
-    m_extensionsModel->remove(extension);
-    // Remove themes from theme model
-    m_extensionThemesModel->removeFromExtension(name);
-    extension->deleteLater();
-    qDebug() << "Extension unloaded.";
+    connect(m_watcher, &QFileSystemWatcher::directoryChanged,
+            this, &ExtensionsManager::directoryChanged);
+    m_watcher->addPath(Paths::ExtensionsLocation);
 }
 
-void ExtensionsManager::findFiles()
+void ExtensionsManager::scan()
 {
     QStringList nameFilters;
     nameFilters << "*.zip";
@@ -111,20 +91,82 @@ void ExtensionsManager::findFiles()
     }
 }
 
-void ExtensionsManager::directoryChanged(QString path)
+void ExtensionsManager::addExtension(Extension *extension)
 {
-    Q_UNUSED(path)
-    findFiles();
+    // Add extension themes to theme model
+    for (ExtensionTheme* theme : extension->themes()) {
+        m_extensionThemesModel->add(theme->clone(this));
+    }
+    m_extensionsModel->add(extension);
 }
 
-void ExtensionsManager::fileAdded(QString filename)
+void ExtensionsManager::removeExtension(Extension *extension)
+{
+    // Remove from model
+    m_extensionsModel->remove(extension);
+    // Remove themes from theme model
+    m_extensionThemesModel->removeFromExtensionName(extension->name());
+    // Delete object
+    extension->deleteLater();
+    qDebug() << "Extension unloaded.";
+}
+
+Extension *ExtensionsManager::extensionByName(const QString name)
+{
+    return m_extensionsModel->get(name);
+}
+
+void ExtensionsManager::loadFile(const QString filePath)
+{
+    qDebug() << "Loading extension file" << filePath << "...";
+
+    // Check for duplicate name
+    QString name = filePath.section("/", -1).section(".", 0, 0);
+    if (m_extensionsModel->hasName(name)) {
+        qWarning() << "There is already an extension with name" << name << "registered.";
+        qWarning() << "Stopped loading extension.";
+        return;
+    }
+
+    Extension* extension = new Extension(this);
+
+    ExtensionParser parser;
+    parser.setExtension(extension);
+    if(!parser.open(QUrl(filePath), ExtensionType::LBX)) {
+        return;
+    }
+    if (!parser.load()) {
+        extension->deleteLater();
+        parser.close();
+        return;
+    }
+    parser.close();
+    parser.deleteLater();
+    addExtension(extension);
+}
+
+void ExtensionsManager::unloadFile(const QString filePath)
+{
+    qDebug() << "Unloading extension file" << filePath << "...";
+    QString name = filePath.section("/", -1).section(".", 0, 0);
+    Extension* extension = m_extensionsModel->get(name);
+    removeExtension(extension);
+}
+
+void ExtensionsManager::directoryChanged(const QString path)
+{
+    Q_UNUSED(path)
+    scan();
+}
+
+void ExtensionsManager::fileAdded(const QString filename)
 {
     qDebug() << "Extension file" << filename << "added.";
     m_files.append(filename);
     loadFile(Paths::ExtensionsLocation + filename);
 }
 
-void ExtensionsManager::fileRemoved(QString filename)
+void ExtensionsManager::fileRemoved(const QString filename)
 {
     qDebug() << "Extension file" << filename << "removed.";
     m_files.removeAll(filename);

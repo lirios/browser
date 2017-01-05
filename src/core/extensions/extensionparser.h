@@ -32,6 +32,7 @@
 #include <QJsonArray>
 #include <QColor>
 #include <QException>
+#include <QUrl>
 
 #include <quazip/quazip.h>
 #include <quazip/quazipfile.h>
@@ -62,6 +63,11 @@ public:
     ParseError *clone() const { return new ParseError(*this); }
 };
 
+enum ExtensionType {
+    LBX,
+    QRC
+};
+
 class ExtensionParser : public QObject
 {
     Q_OBJECT
@@ -75,18 +81,17 @@ public:
         Empty
     };
 
-
-    bool open(QString filePath);
+    bool open(const QUrl url, ExtensionType type=ExtensionType::LBX);
     void close();
 
     bool load();
 
-    QByteArray readResource(QString resourceName);
+    QByteArray readResource(const QString resourceName);
     QString fromResourceName(QString resourceName);
 
-    bool parseMeta(QByteArray jsonData);
-    bool loadTheme(QString resourceName);
-    bool parseTheme(QByteArray jsonData);
+    bool parseMeta(const QByteArray jsonData);
+    bool loadTheme(const QString resourceName);
+    bool parseTheme(const QByteArray jsonData);
 
     Extension* extension() const { return m_extension; }
     void setExtension(Extension* extension) { extensionChanged(m_extension = extension); }
@@ -100,6 +105,8 @@ private:
 
     Extension* m_extension;
 
+    ExtensionType m_type;
+    QUrl m_url;
     QString m_filePath;
     QString m_pureFileName;
 

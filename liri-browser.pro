@@ -41,6 +41,8 @@ linux:LIBS += -L/usr/local/lib -lquazip
 OTHER_FILES += README.md \
                LICENSE*
 
+RESOURCES += res/icons/icons.qrc
+
 # Specify CONFIG+=QTWEBENGINE_ENABLED when running qmake.
 # Otherwise, Liri Browser expects the Oxide web engine.
 contains(CONFIG, QTWEBENGINE_ENABLED) {
@@ -55,5 +57,4 @@ include(src/3rdparty/3rdparty.pri)
 include(src/core/core.pri)
 include(src/main/main.pri)
 include(src/ui/ui.pri)
-
-RESOURCES += res/icons/icons.qrc
+include(src/extensions/extensions.pri)

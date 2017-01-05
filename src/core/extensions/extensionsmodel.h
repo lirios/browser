@@ -54,6 +54,7 @@ public:
     void remove(Extension* extension);
     Q_INVOKABLE Extension *get(const int index) const;
     Q_INVOKABLE Extension *get(const QString name) const;
+    bool hasName(const QString name) const;
 
 signals:
     void countChanged(int count);

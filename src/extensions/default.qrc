@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/extensions">
+        <file>default/meta/package.json</file>
+        <file>default/themes/bluegrey.json</file>
+        <file>default/themes/dark.json</file>
+        <file>default/themes/light.json</file>
+    </qresource>
+</RCC>

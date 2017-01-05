@@ -106,7 +106,7 @@ void ExtensionThemesModel::remove(ExtensionTheme* theme)
         remove(row);
 }
 
-void ExtensionThemesModel::removeFromExtension(const QString extensionName)
+void ExtensionThemesModel::removeFromExtensionName(const QString extensionName)
 {
     for (ExtensionTheme* theme : m_themes) {
         if (theme->extensionName() == extensionName) {

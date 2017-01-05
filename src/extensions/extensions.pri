@@ -1,0 +1,1 @@
+RESOURCES += $$PWD/default.qrc

@@ -115,3 +115,12 @@ Extension *ExtensionsModel::get(const QString name) const
     }
     return m_invalidExtension;
 }
+
+bool ExtensionsModel::hasName(const QString name) const
+{
+    for (Extension* extension : m_extensions) {
+        if (extension->name() == name)
+            return true;
+    }
+    return false;
+}
