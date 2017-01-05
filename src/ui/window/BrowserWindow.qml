@@ -67,6 +67,13 @@ FluidWindow {
                                                                     : tabsModel.active.title || "New tab")
                                  .arg(incognito ? "(Private mode)" : "")
 
+
+    ShortcutManager {
+        tabBar: tabBar
+        toolbar: toolbar
+        tabsModel: window.tabsModel
+    }
+
     Drawer {
         id: rightDrawer
 

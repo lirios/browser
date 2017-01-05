@@ -39,6 +39,11 @@ Item {
     implicitHeight: 40
     implicitWidth: 256
 
+    function focusUrlField() {
+        showUrlField.forceActiveFocus();
+        textField.selectAll();
+    }
+
     Rectangle {
         anchors.fill: parent
 

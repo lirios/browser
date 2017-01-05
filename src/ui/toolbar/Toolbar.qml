@@ -32,6 +32,7 @@ Rectangle {
     property TabController tabController
     property TabsModel tabsModel
     property string searchUrl
+    property alias omnibox: omnibox
 
     property list<Action> leftActions
     property list<Action> rightActions
@@ -56,6 +57,7 @@ Rectangle {
         }
 
         Omnibox {
+            id: omnibox
             Layout.fillWidth: true
             tabsModel: toolbar.tabsModel
             tabController: toolbar.tabController

@@ -72,6 +72,7 @@ public:
     Q_INVOKABLE void setInactive();
 
     Q_INVOKABLE bool setPreviousTabActive();
+    Q_INVOKABLE bool setNextTabActive();
 
 signals:
     void countChanged(int count);
@@ -82,11 +83,19 @@ signals:
 
 public slots:
 
-private:
+private: // methods
+    bool activateTabRelativeToCurrent(int offset);
+    bool moveByHistory(int offset);
+    void appendToHistory(Tab* tab);
+    bool setActive(Tab* tab, bool recordToHistory);
+
+private: // members
     QList<Tab*> m_tabs_list;
+    // TODO: consider to circular buffer
     QList<Tab*> m_active_tab_history;
     Tab* m_active_tab;
     Tab* m_invalid_tab;
+    int m_history_offset;
 };
 
 #endif // TABSMODEL_H

@@ -67,10 +67,15 @@ Rectangle {
         Action {
             iconName: "content/add"
             onTriggered: {
-                tabController.openUrl(newTabUrl)
+                newTab();
             }
         }
     ]
+
+    function newTab()
+    {
+        tabController.openUrl(newTabUrl);
+    }
 
     signal tabCloseRequested(int uid)
 

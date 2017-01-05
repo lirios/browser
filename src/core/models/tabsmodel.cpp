@@ -23,12 +23,14 @@
 
 #include "tabsmodel.h"
 #include "tab.h"
+#include <QDebug>
 
 TabsModel::TabsModel(QObject *parent)
     : QAbstractListModel(parent)
 {
     m_invalid_tab = new Tab(this, true);
     m_active_tab = m_invalid_tab;
+    m_history_offset = 0;
 }
 
 int TabsModel::rowCount(const QModelIndex &parent) const
@@ -136,6 +138,15 @@ bool TabsModel::remove(Tab *tab)
     if (index == -1)
         return false;
 
+    int activeIdx = activeIndex();
+    // Removed last tab
+    bool switchToPrev = index > 0 && activeIdx >= index && m_tabs_list.length() > 1;
+    if (switchToPrev)
+    {
+        // Change to previous if we can
+        activateTabRelativeToCurrent(-1);
+    }
+
     // Call signal before removing and deleting tab
     beforeTabRemoved(tab);
 
@@ -156,6 +167,16 @@ bool TabsModel::remove(Tab *tab)
     }
 
     endRemoveRows();
+
+    if (activeIdx == 0 && !empty()) {
+        setActive(get(0));
+    } else if (!switchToPrev) {
+        return setActive(active(), false);
+    }
+
+    m_active_tab_history.removeAll(tab);
+    m_history_offset = 0;
+
     return true;
 }
 
@@ -180,18 +201,7 @@ bool TabsModel::setActive(unsigned int uid)
 
 bool TabsModel::setActive(Tab *tab)
 {
-    if (tab->invalid())
-        return false;
-
-    m_active_tab = tab;
-
-    // Add tab to active tab history
-    if (m_active_tab_history.lastIndexOf(tab) != m_active_tab_history.length())
-        m_active_tab_history.append(tab);
-
-    activeChanged(tab);
-    activeIndexChanged(activeIndex());
-    return true;
+    return setActive(tab, true);
 }
 
 Tab *TabsModel::active() const
@@ -217,15 +227,100 @@ void TabsModel::setInactive()
 
 bool TabsModel::setPreviousTabActive()
 {
+    return moveByHistory(1);
+}
+
+bool TabsModel::setNextTabActive()
+{
+    return moveByHistory(-1);
+}
+
+//bool TabsModel::setNextTabActive()
+//{
+//    return moveByHistory(1);
+//}
+
+bool TabsModel::activateTabRelativeToCurrent(int offset)
+{
+    if (m_tabs_list.length() == 0) {
+        activeChanged(m_active_tab = m_invalid_tab);
+        activeIndexChanged(activeIndex());
+        return false;
+    }
+
+    int currIndex = activeIndex();
+    if (currIndex == -1)
+    {
+        setActive(m_tabs_list.last(), false);
+        return true;
+    }
+
+    int newIndex = currIndex + offset;
+    if (newIndex < 0 || newIndex >= m_tabs_list.length())
+    {
+        return false;
+    }
+
+    return setActive(m_tabs_list.at(newIndex), false);
+}
+
+bool TabsModel::moveByHistory(int offset)
+{
     if (m_tabs_list.length() == 0) {
         activeChanged(m_active_tab = m_invalid_tab);
         activeIndexChanged(activeIndex());
         return false;
     }
     if (m_active_tab_history.length() == 0) {
-        setActive(m_tabs_list.first());
+        setActive(m_tabs_list.first(), false);
         return true;
     }
-    setActive(m_active_tab_history.last());
+
+    int historyIndex = m_active_tab_history.length() + m_history_offset + offset - 1;
+    if (historyIndex < 0 || historyIndex >= m_active_tab_history.length())
+    {
+        return false;
+    }
+
+    auto tab = m_active_tab_history.at(historyIndex);
+
+    m_history_offset += offset;
+    return setActive(tab, false);
+}
+
+void TabsModel::appendToHistory(Tab *tab)
+{
+    m_active_tab_history.append(tab);
+    if (m_history_offset == 0)
+    {
+        return;
+    }
+
+
+    auto len = m_active_tab_history.length();
+    auto lastIndex = std::max(0, len - 1 + m_history_offset);
+    for(int i = len - 1; i >= lastIndex; --i)
+    {
+        m_active_tab_history.removeAt(i);
+    }
+
+    m_history_offset = 0;
+}
+
+bool TabsModel::setActive(Tab *tab, bool recordToHistory)
+{
+    if (tab->invalid())
+        return false;
+
+    m_active_tab = tab;
+
+    // Add tab to active tab history
+    if (recordToHistory)
+    {
+        appendToHistory(tab);
+    }
+
+    activeChanged(tab);
+    activeIndexChanged(activeIndex());
     return true;
 }
