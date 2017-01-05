@@ -34,6 +34,7 @@ class ExtensionTheme : public QObject
     Q_PROPERTY(QString extensionName READ extensionName WRITE setExtensionName NOTIFY extensionNameChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
+    Q_PROPERTY(QString summary READ summary WRITE setSummary NOTIFY summaryChanged)
     Q_PROPERTY(QString description READ description WRITE setDescription NOTIFY descriptionChanged)
     Q_PROPERTY(bool dark READ dark WRITE setDark NOTIFY darkChanged)
     Q_PROPERTY(bool adaptWebsiteTheme READ adaptWebsiteTheme WRITE setAdaptWebsiteTheme NOTIFY adaptWebsiteThemeChanged)
