@@ -235,11 +235,6 @@ bool TabsModel::setNextTabActive()
     return moveByHistory(-1);
 }
 
-//bool TabsModel::setNextTabActive()
-//{
-//    return moveByHistory(1);
-//}
-
 bool TabsModel::activateTabRelativeToCurrent(int offset)
 {
     if (m_tabs_list.length() == 0) {
