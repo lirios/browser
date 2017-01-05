@@ -139,8 +139,9 @@ bool TabsModel::remove(Tab *tab)
         return false;
 
     int activeIdx = activeIndex();
-    // Removed last tab
-    bool switchToPrev = index > 0 && activeIdx >= index && m_tabs_list.length() > 1;
+    // Removed the active tab
+    // which assumes changing the active tab to previous one
+    bool switchToPrev = index > 0 && activeIdx == index && m_tabs_list.length() > 1;
     if (switchToPrev)
     {
         // Change to previous if we can
@@ -168,7 +169,7 @@ bool TabsModel::remove(Tab *tab)
 
     endRemoveRows();
 
-    if (activeIdx == 0 && !empty()) {
+    if (index == 0 && activeIdx == 0 && !empty()) {
         setActive(get(0));
     } else if (!switchToPrev) {
         return setActive(active(), false);
