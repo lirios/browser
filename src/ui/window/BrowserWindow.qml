@@ -67,6 +67,13 @@ FluidWindow {
                                                                     : tabsModel.active.title || "New tab")
                                  .arg(incognito ? "(Private mode)" : "")
 
+
+    ShortcutManager {
+        tabBar: tabBar
+        toolbar: toolbar
+        tabsModel: window.tabsModel
+    }
+
     Drawer {
         id: rightDrawer
 
@@ -123,18 +130,18 @@ FluidWindow {
                     leftActions: [
                         Action {
                             iconName: "navigation/arrow_back"
-                            enabled: !tabsModel.active.invalid && tabsModel.active.canGoBack
+                            enabled: tabsModel.active.valid && tabsModel.active.canGoBack
                             onTriggered: tabsModel.active.goBack()
                         },
                         Action {
                             iconName: "navigation/arrow_forward"
-                            enabled: !tabsModel.active.invalid && tabsModel.active.canGoForward
+                            enabled: tabsModel.active.valid && tabsModel.active.canGoForward
                             onTriggered: tabsModel.active.goForward()
                         }
                     ]
                     rightActions: [
                         Action {
-                            enabled: !tabsModel.active.invalid && tabsModel.active.canReload
+                            enabled: tabsModel.active.valid && tabsModel.active.canReload
                             iconName: tabsModel.active.loading ? "navigation/close" : "navigation/refresh"
                             onTriggered: {
                                 if (tabsModel.active.loading)

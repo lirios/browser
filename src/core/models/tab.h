@@ -39,9 +39,9 @@ class Tab : public QObject
     Q_PROPERTY(bool canReload READ canReload WRITE setCanReload NOTIFY canReloadChanged)
     Q_PROPERTY(bool loading READ loading WRITE setLoading NOTIFY loadingChanged)
     Q_PROPERTY(unsigned int loadProgress READ loadProgress WRITE setLoadProgress NOTIFY loadProgressChanged)
-    Q_PROPERTY(bool invalid READ invalid NOTIFY invalidChanged)
+    Q_PROPERTY(bool valid READ valid NOTIFY validChanged)
 public:
-    explicit Tab(QObject *parent = nullptr, bool invalid = false);
+    explicit Tab(QObject *parent = nullptr, bool valid = true);
 
     unsigned int uid() const;
     void setUid(int uid);
@@ -70,7 +70,7 @@ public:
     unsigned int loadProgress() const;
     void setLoadProgress(unsigned int loadProgress);
 
-    bool invalid() const;
+    bool valid() const;
 
 signals:
     void uidChanged(unsigned int uid);
@@ -80,7 +80,7 @@ signals:
     void canGoBackChanged(bool canGoBack);
     void canGoForwardChanged(bool canGoForward);
     void canReloadChanged(bool canReload);
-    void invalidChanged(bool invalid);
+    void validChanged(bool valid);
     void loadingChanged(bool loading);
     void loadProgressChanged(unsigned int loadProgress);
 
@@ -103,7 +103,7 @@ private:
     bool m_loading;
     int m_loadProgress;
 
-    bool m_invalid;
+    bool m_valid;
 };
 
 #endif // TAB_H

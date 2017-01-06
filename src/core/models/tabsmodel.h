@@ -46,7 +46,7 @@ public:
         CanGoForward,
         Loading,
         LoadProgress,
-        Invalid
+        Valid
     };
 
     int rowCount(const QModelIndex &parent=QModelIndex()) const;
@@ -72,6 +72,7 @@ public:
     Q_INVOKABLE void setInactive();
 
     Q_INVOKABLE bool setPreviousTabActive();
+    Q_INVOKABLE bool setNextTabActive();
 
 signals:
     void countChanged(int count);
@@ -82,11 +83,15 @@ signals:
 
 public slots:
 
-private:
-    QList<Tab*> m_tabs_list;
-    QList<Tab*> m_active_tab_history;
-    Tab* m_active_tab;
-    Tab* m_invalid_tab;
+private: // methods
+    bool activateTabRelativeToCurrent(int offset);
+    bool setActive(Tab* tab, bool recordToHistory);
+
+private: // members
+    QList<Tab*> m_tabsList;
+    QList<Tab*> m_activeTabHistory;
+    Tab* m_activeTab;
+    Tab* m_invalidTab;
 };
 
 #endif // TABSMODEL_H

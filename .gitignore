@@ -42,3 +42,6 @@ QuotaManager
 QuotaManager-journal
 TransportSecurity
 databases/
+
+#GitEye
+/.project

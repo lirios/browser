@@ -67,10 +67,15 @@ Rectangle {
         Action {
             iconName: "content/add"
             onTriggered: {
-                tabController.openUrl(newTabUrl)
+                newTab();
             }
         }
     ]
+
+    function newTab()
+    {
+        tabController.openUrl(newTabUrl);
+    }
 
     signal tabCloseRequested(int uid)
 
@@ -244,11 +249,11 @@ Rectangle {
     }
 
     Connections {
-        enabled: !tabsModel.active.invalid
+        enabled: tabsModel.active.valid
         target: tabsModel
         onActiveChanged: {
             // Ensure the active tab is fully visible
-            if (!tab.invalid) {
+            if (tab.valid) {
                 if (tabsModel.activeIndex !== -1) {
                     tabsListView.positionViewAtIndex(tabsModel.activeIndex, ListView.Contain);
                 }

@@ -23,18 +23,19 @@
 
 #include "tabsmodel.h"
 #include "tab.h"
+#include <QDebug>
 
 TabsModel::TabsModel(QObject *parent)
     : QAbstractListModel(parent)
 {
-    m_invalid_tab = new Tab(this, true);
-    m_active_tab = m_invalid_tab;
+    m_invalidTab = new Tab(this, false);
+    m_activeTab = m_invalidTab;
 }
 
 int TabsModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
-    return m_tabs_list.length();
+    return m_tabsList.length();
 }
 
 QVariant TabsModel::data(const QModelIndex &index, int role) const
@@ -57,8 +58,8 @@ QVariant TabsModel::data(const QModelIndex &index, int role) const
             return QVariant(tab->loading());
         case LoadProgress:
             return QVariant(tab->loadProgress());
-        case Invalid:
-            return QVariant(tab->invalid());
+        case Valid:
+            return QVariant(tab->valid());
     }
     return QVariant();
 }
@@ -74,16 +75,16 @@ QHash<int, QByteArray> TabsModel::roleNames() const
     roles[CanGoForward] = "canGoForward";
     roles[Loading] = "loading";
     roles[LoadProgress] = "loadProgress";
-    roles[Invalid] = "invalid";
+    roles[Valid] = "valid";
     return roles;
 }
 
 Tab* TabsModel::get(const int index) const
 {
     if (index < 0 || index > rowCount()) {
-        return m_invalid_tab;
+        return m_invalidTab;
     }
-    return m_tabs_list.at(index);
+    return m_tabsList.at(index);
 }
 
 void TabsModel::add(unsigned int uid)
@@ -91,7 +92,7 @@ void TabsModel::add(unsigned int uid)
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
     Tab* tab = new Tab(this);
     tab->setUid(uid);
-    m_tabs_list.append(tab);
+    m_tabsList.append(tab);
     countChanged(count());
     emptyChanged(false);
     endInsertRows();
@@ -111,7 +112,7 @@ bool TabsModel::move(int fromRow, int toRow)
     int newToRow = toRow > fromRow ? toRow + 1 : toRow;
 
     beginMoveRows(QModelIndex(), fromRow, fromRow, QModelIndex(), newToRow);
-    m_tabs_list.move(fromRow, toRow);
+    m_tabsList.move(fromRow, toRow);
 
     // Update active index
     activeIndexChanged(activeIndex());
@@ -132,18 +133,20 @@ bool TabsModel::remove(unsigned int uid)
 
 bool TabsModel::remove(Tab *tab)
 {
-    int index = m_tabs_list.indexOf(tab);
+    int index = m_tabsList.indexOf(tab);
     if (index == -1)
         return false;
+
+    int activeIdx = activeIndex();
 
     // Call signal before removing and deleting tab
     beforeTabRemoved(tab);
 
     beginRemoveRows(QModelIndex(), index, index);
-    m_tabs_list.removeAt(index);
+    m_tabsList.removeAt(index);
 
     // Remove tab from active tab history
-    m_active_tab_history.removeAll(tab);
+    m_activeTabHistory.removeAll(tab);
     tab->deleteLater();
 
     // Update count and empty
@@ -152,10 +155,22 @@ bool TabsModel::remove(Tab *tab)
 
     // Active tab is replaced by invalid dummy tab
     if (empty()) {
-        m_active_tab = m_invalid_tab;
+        m_activeTab = m_invalidTab;
     }
 
     endRemoveRows();
+
+    if (index == activeIdx) {
+        setActive(!m_activeTabHistory.empty()
+                        ? m_activeTabHistory.last()
+                        : m_tabsList.first(),
+                  false);
+    } else if (index < activeIdx) {
+        return setActive(active(), false);
+    }
+
+    m_activeTabHistory.removeAll(tab);
+
     return true;
 }
 
@@ -166,11 +181,11 @@ bool TabsModel::empty() const
 
 Tab *TabsModel::byUID(unsigned int uid)
 {
-    for (Tab* tab: m_tabs_list) {
+    for (Tab* tab: m_tabsList) {
         if (tab->uid() == uid)
             return tab;
     }
-    return m_invalid_tab;
+    return m_invalidTab;
 }
 
 bool TabsModel::setActive(unsigned int uid)
@@ -180,52 +195,83 @@ bool TabsModel::setActive(unsigned int uid)
 
 bool TabsModel::setActive(Tab *tab)
 {
-    if (tab->invalid())
-        return false;
-
-    m_active_tab = tab;
-
-    // Add tab to active tab history
-    if (m_active_tab_history.lastIndexOf(tab) != m_active_tab_history.length())
-        m_active_tab_history.append(tab);
-
-    activeChanged(tab);
-    activeIndexChanged(activeIndex());
-    return true;
+    return setActive(tab, true);
 }
 
 Tab *TabsModel::active() const
 {
-    return m_active_tab;
+    return m_activeTab;
 }
 
 int TabsModel::activeIndex() const
 {
-    return m_tabs_list.indexOf(m_active_tab);
+    return m_tabsList.indexOf(m_activeTab);
 }
 
 void TabsModel::setInactive(Tab *tab)
 {
-    if (m_active_tab == tab)
+    if (m_activeTab == tab)
         setInactive(tab);
 }
 
 void TabsModel::setInactive()
 {
-    setInactive(m_active_tab);
+    setInactive(m_activeTab);
 }
 
 bool TabsModel::setPreviousTabActive()
 {
-    if (m_tabs_list.length() == 0) {
-        activeChanged(m_active_tab = m_invalid_tab);
+    if (m_activeTab == m_tabsList.first() && m_tabsList.length() > 1) {
+        return setActive(m_tabsList.last(), true);
+    }
+    return activateTabRelativeToCurrent(-1);
+}
+
+bool TabsModel::setNextTabActive()
+{
+    if (m_activeTab == m_tabsList.last() && m_tabsList.length() > 1) {
+        return setActive(m_tabsList.first(), true);
+    }
+    return activateTabRelativeToCurrent(1);
+}
+
+bool TabsModel::activateTabRelativeToCurrent(int offset)
+{
+    if (m_tabsList.length() == 0) {
+        activeChanged(m_activeTab = m_invalidTab);
         activeIndexChanged(activeIndex());
         return false;
     }
-    if (m_active_tab_history.length() == 0) {
-        setActive(m_tabs_list.first());
+
+    int currIndex = activeIndex();
+    if (currIndex == -1) {
+        setActive(m_tabsList.last(), true);
         return true;
     }
-    setActive(m_active_tab_history.last());
+
+    int newIndex = currIndex + offset;
+    if (newIndex < 0 || newIndex >= m_tabsList.length()) {
+        return false;
+    }
+
+    return setActive(m_tabsList.at(newIndex), true);
+}
+
+bool TabsModel::setActive(Tab *tab, bool recordToHistory)
+{
+    if (!tab->valid())
+        return false;
+
+    // Adding previously active tab to history
+    // so currently active tab is not a last member of history
+    if (recordToHistory) {
+        m_activeTabHistory.append(m_activeTab);
+    }
+
+    m_activeTab = tab;
+
+
+    activeChanged(tab);
+    activeIndexChanged(activeIndex());
     return true;
 }

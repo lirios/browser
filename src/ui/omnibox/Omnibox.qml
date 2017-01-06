@@ -35,9 +35,16 @@ Item {
     property TabController tabController
     property TabsModel tabsModel
     property string searchUrl
+    property alias editingUrl: showUrlField.editActive
+
+    function focusUrlField() {
+        showUrlField.forceActiveFocus();
+        textField.selectAll();
+    }
 
     implicitHeight: 40
     implicitWidth: 256
+
 
     Rectangle {
         anchors.fill: parent
@@ -91,7 +98,7 @@ Item {
 
                     onAccepted: {
                         var url = UrlUtils.validUrl(text, searchUrl);
-                        if (tabsModel.active.invalid) {
+                        if (!tabsModel.active.valid) {
                             tabController.openUrl(url);
                         }
                         else {
@@ -113,7 +120,7 @@ Item {
         }
 
         Rectangle {
-            visible: !tabsModel.active.invalid && width < parent.width
+            visible: tabsModel.active.valid && width < parent.width
             anchors {
                 bottom: parent.bottom
                 left: parent.left
@@ -133,7 +140,7 @@ Item {
         }
 
         Binding {
-            when: !tabsModel.active.invalid
+            when: tabsModel.active.valid
             target: showUrlField
             property: "text"
             value: tabsModel.active.url
@@ -161,7 +168,7 @@ Item {
         }
 
         Connections {
-            enabled: !tabsModel.active.invalid
+            enabled: tabsModel.active.valid
             target: tabsModel
             onActiveChanged: {
                 showUrlField.editActive = false;
