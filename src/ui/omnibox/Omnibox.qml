@@ -35,6 +35,7 @@ Item {
     property TabController tabController
     property TabsModel tabsModel
     property string searchUrl
+    property alias editingUrl: showUrlField.editActive
 
     function focusUrlField() {
         showUrlField.forceActiveFocus();

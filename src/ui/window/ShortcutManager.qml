@@ -163,4 +163,16 @@ Item {
             setActiveTabByIndex(tabsModel.count - 1);
         }
     }
+
+    Shortcut {
+        autoRepeat: false
+        sequence: "Esc"
+        onActivated: {
+            if (toolbar.omnibox.editingUrl) {
+                toolbar.forceActiveFocus();
+            } else if (tabsModel.active.loading) {
+                tabsModel.active.stop();
+            }
+        }
+    }
 }
