@@ -27,12 +27,11 @@
 #include <QObject>
 #include <QColor>
 
-class ExtensionTheme : public QObject
+#include "extensionelement.h"
+
+class ExtensionTheme : public ExtensionElement
 {
     Q_OBJECT
-    Q_PROPERTY(bool valid READ valid WRITE setValid NOTIFY validChanged)
-    Q_PROPERTY(QString extensionName READ extensionName WRITE setExtensionName NOTIFY extensionNameChanged)
-    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     Q_PROPERTY(QString summary READ summary WRITE setSummary NOTIFY summaryChanged)
     Q_PROPERTY(QString description READ description WRITE setDescription NOTIFY descriptionChanged)
@@ -46,15 +45,6 @@ public:
     explicit ExtensionTheme(QObject *parent = nullptr);
 
     ExtensionTheme* clone(QObject* parent = nullptr);
-
-    bool valid() const { return m_valid; }
-    void setValid(bool valid) { validChanged(m_valid=valid); }
-
-    QString extensionName() const { return m_extensionName; }
-    void setExtensionName(QString extensionName) { extensionNameChanged(m_extensionName = extensionName); }
-
-    QString name() const { return m_name; }
-    void setName(QString name) { nameChanged(m_name = name); }
 
     QString title() const { return m_title; }
     void setTitle(QString title) { titleChanged(m_title = title); }
@@ -84,9 +74,6 @@ public:
     void setBackground(QColor background) { backgroundChanged(m_background = background); }
 
 signals:
-    void validChanged(bool valid);
-
-    void extensionNameChanged(QString extensionName);
     void nameChanged(QString name);
     void titleChanged(QString title);
     void summaryChanged(QString summary);
@@ -100,10 +87,6 @@ signals:
     void backgroundChanged(QColor background);
 
 private:
-    bool m_valid;
-
-    QString m_extensionName;
-    QString m_name;
     QString m_title;
     QString m_summary;
     QString m_description;

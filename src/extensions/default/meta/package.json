@@ -18,6 +18,9 @@
                 "res://themes/light.json",
                 "res://themes/dark.json",
                 "res://themes/bluegrey.json"
+            ],
+            "search": [
+                "res://search/duckduckgo.json"
             ]
         }
     }

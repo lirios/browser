@@ -42,6 +42,8 @@ ExtensionsManager::ExtensionsManager(QObject *parent) : QObject(parent)
     extensionsModelChanged(m_extensionsModel);
     m_extensionThemesModel = new ExtensionThemesModel(this);
     extensionThemesModelChanged(m_extensionThemesModel);
+    m_extensionSearchEnginesModel = new ExtensionSearchEnginesModel(this);
+    extensionSearchEnginesModelChanged(m_extensionSearchEnginesModel);
 
     // Create watcher
     m_watcher = new QFileSystemWatcher(this);
@@ -97,6 +99,13 @@ void ExtensionsManager::addExtension(Extension *extension)
     for (ExtensionTheme* theme : extension->themes()) {
         m_extensionThemesModel->add(theme->clone(this));
     }
+
+    // Add search engines to search engines model
+    for (ExtensionSearchEngine* searchEngine : extension->searchEngines()) {
+        m_extensionSearchEnginesModel->add(searchEngine->clone(this));
+    }
+
+    // Add extension to extensions model
     m_extensionsModel->add(extension);
 }
 
@@ -156,6 +165,7 @@ void ExtensionsManager::unloadFile(const QString filePath)
 void ExtensionsManager::directoryChanged(const QString path)
 {
     Q_UNUSED(path)
+    Q_ASSERT(path == Paths::ExtensionsLocation);
     scan();
 }
 

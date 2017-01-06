@@ -23,14 +23,15 @@
 
 #include "extensiontheme.h"
 
-ExtensionTheme::ExtensionTheme(QObject *parent) : QObject(parent)
+ExtensionTheme::ExtensionTheme(QObject *parent) : ExtensionElement(parent)
 {
-    m_valid = true;
+
 }
 
 ExtensionTheme *ExtensionTheme::clone(QObject *parent)
 {
     ExtensionTheme* newTheme = new ExtensionTheme(parent);
+    newTheme->setValid(valid());
     newTheme->setExtensionName(extensionName());
     newTheme->setName(name());
     newTheme->setTitle(title());

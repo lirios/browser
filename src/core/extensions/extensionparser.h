@@ -39,6 +39,7 @@
 
 #include "extension.h"
 #include "extensiontheme.h"
+#include "extensionsearchengine.h"
 
 using Type = QJsonValue::Type;
 
@@ -92,6 +93,8 @@ public:
     bool parseMeta(const QByteArray jsonData);
     bool loadTheme(const QString resourceName);
     bool parseTheme(const QByteArray jsonData);
+    bool loadSearchEngine(const QString resourceName);
+    bool parseSearchEngine(const QByteArray jsonData);
 
     Extension* extension() const { return m_extension; }
     void setExtension(Extension* extension) { extensionChanged(m_extension = extension); }

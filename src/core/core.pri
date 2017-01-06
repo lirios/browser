@@ -17,6 +17,10 @@ HEADERS += \
     $$PWD/utils/secondarythemetimer.h \
     $$PWD/utils/themeprovider.h \
     $$PWD/extensions/extensionparser.h \
+    $$PWD/extensions/extensionsearchengine.h \
+    $$PWD/extensions/extensionsearchengineparameter.h \
+    $$PWD/extensions/extensionsearchenginesmodel.h \
+    $$PWD/extensions/extensionelement.h \
 
 SOURCES += \
     $$PWD/models/tabsmodel.cpp \
@@ -35,3 +39,7 @@ SOURCES += \
     $$PWD/utils/secondarythemetimer.cpp \
     $$PWD/utils/themeprovider.cpp \
     $$PWD/extensions/extensionparser.cpp \
+    $$PWD/extensions/extensionsearchengine.cpp \
+    $$PWD/extensions/extensionsearchengineparameter.cpp \
+    $$PWD/extensions/extensionsearchenginesmodel.cpp \
+    $$PWD/extensions/extensionelement.cpp \

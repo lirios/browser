@@ -37,12 +37,14 @@
 #include "extensionparser.h"
 #include "extensionsmodel.h"
 #include "extensionthemesmodel.h"
+#include "extensionsearchenginesmodel.h"
 
 class ExtensionsManager : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(ExtensionsModel* extensionsModel MEMBER m_extensionsModel NOTIFY extensionsModelChanged)
     Q_PROPERTY(ExtensionThemesModel* themesModel MEMBER m_extensionThemesModel NOTIFY extensionThemesModelChanged)
+    Q_PROPERTY(ExtensionSearchEnginesModel* searchEnginesModel MEMBER m_extensionSearchEnginesModel NOTIFY extensionSearchEnginesModelChanged)
 public:
     explicit ExtensionsManager(QObject *parent = nullptr);
 
@@ -62,10 +64,12 @@ public:
 signals:
     void extensionsModelChanged(ExtensionsModel* model);
     void extensionThemesModelChanged(ExtensionThemesModel* model);
+    void extensionSearchEnginesModelChanged(ExtensionSearchEnginesModel* model);
 
 private:
     ExtensionsModel* m_extensionsModel;
     ExtensionThemesModel* m_extensionThemesModel;
+    ExtensionSearchEnginesModel* m_extensionSearchEnginesModel;
     QFileSystemWatcher* m_watcher;
 
     bool m_loaded;

@@ -117,7 +117,7 @@ void ExtensionThemesModel::removeFromExtensionName(const QString extensionName)
 
 ExtensionTheme *ExtensionThemesModel::get(const int row) const
 {
-    if (row < 0 || row > count()) {
+    if (row < 0 || row >= count()) {
         return m_invalidTheme;
     }
     return m_themes.at(row);

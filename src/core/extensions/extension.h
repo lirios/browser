@@ -28,6 +28,7 @@
 #include <QColor>
 
 #include "extensiontheme.h"
+#include "extensionsearchengine.h"
 
 class Extension : public QObject
 {
@@ -72,6 +73,7 @@ public:
     void setEmail(QString email) { emailChanged(m_email = email); }
 
     QList<ExtensionTheme*> themes() const { return m_extensionThemes; }
+    QList<ExtensionSearchEngine*> searchEngines() const { return m_extensionSearchEngines; }
 
 signals:
     void validChanged(bool valid);
@@ -95,6 +97,7 @@ private:
     QString m_email;
 
     QList<ExtensionTheme*> m_extensionThemes;
+    QList<ExtensionSearchEngine*> m_extensionSearchEngines;
 };
 
 #endif // EXTENSION_H

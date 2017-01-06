@@ -170,6 +170,31 @@ TabContent {
                         }
                     }
 
+                    TitleLabel {
+                        text: "Search Engines"
+                    }
+
+                    ListView {
+                        width: parent.width
+                        height: 256
+
+                        clip: true
+
+                        model: SortFilterProxyModel {
+                            sourceModel: Extensions.searchEnginesModel
+                            filterRoleName: "extensionName"
+                            filterValue: propertiesPanel.extension ? propertiesPanel.extension.name : ""
+                            sortRoleName: "title"
+                        }
+
+                        delegate: ListItem {
+                            width: parent.width
+                            text: title
+                            subText: summary
+                            iconName: "action/search"
+                        }
+                    }
+
                     Item {
                         Layout.fillHeight: true
                         Layout.preferredWidth: 1

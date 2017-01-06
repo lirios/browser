@@ -35,7 +35,7 @@ class ExtensionThemesModel : public QAbstractListModel
 public:
     explicit ExtensionThemesModel(QObject *parent = nullptr);
 
-    enum ExtensionRoles {
+    enum Roles {
         Name = Qt::UserRole + 1,
         ExtensionName,
         Title,

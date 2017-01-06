@@ -37,7 +37,6 @@ bool ExtensionParser::open(const QUrl url, ExtensionType type)
     m_filePath = url.toString();
     if (m_filePath.startsWith("qrc://"))
         m_filePath = m_filePath.mid(6);
-    qDebug() << m_filePath;
     m_pureFileName = m_filePath.section("/", -1).section(".", 0, 0);
 
     if (type == ExtensionType::LBX) {
@@ -89,7 +88,6 @@ QByteArray ExtensionParser::readResource(const QString resource)
         data = m_zipFile->readAll();
         m_zipFile->close();
     } else if (m_type == ExtensionType::QRC) {
-        qDebug() << m_filePath + "/" + resourceFileName;
         QFile file(":/" + m_filePath + "/" + resourceFileName);
         if (!file.open(QIODevice::ReadOnly)) {
             qCritical() << "Could not open resource" << resource << "in" << m_filePath << "for read.";
@@ -213,6 +211,24 @@ bool ExtensionParser::parseMeta(const QByteArray jsonData)
                     }
                 }
             }
+
+            // Parse search engines
+            if (contentStatic.contains("search")) {
+                assertField(contentStatic, "search", Type::Array);
+                QJsonArray searchEngines = contentStatic["search"].toArray();
+                qDebug() << "Extension contains search engines.";
+                for (QJsonValue value: searchEngines) {
+                    if (!value.isString()) {
+                        qDebug() << "Error: Field \"search\" must be an array of resource names!";
+                        throw ParseError();
+                    }
+                    if (!loadSearchEngine(value.toString())) {
+                        qCritical() << "Failed to parse search engine data.";
+                        qCritical() << "Stopped loading extension.";
+                        throw ParseError();
+                    }
+                }
+            }
         }
     } catch (ParseError &e) {
         return false;
@@ -272,7 +288,7 @@ bool ExtensionParser::parseTheme(const QByteArray jsonData)
         QString themeName = meta["name"].toString();
         if (!themeName.startsWith(m_extension->name() + ".")) {
             qWarning() << "Error: Theme name" << themeName << "doesn't match package name.";
-            return false;
+            throw ParseError();
         }
 
         assertField(meta, "title", Type::String);
@@ -307,7 +323,7 @@ bool ExtensionParser::parseTheme(const QByteArray jsonData)
         QColor paletteBackground(palette["background"].toString());
 
         // Create instance and store
-        ExtensionTheme* theme = new ExtensionTheme(this);
+        ExtensionTheme* theme = new ExtensionTheme(this->extension());
         theme->setExtensionName(m_extension->name());
         theme->setName(themeName);
         theme->setTitle(themeTitle);
@@ -320,6 +336,142 @@ bool ExtensionParser::parseTheme(const QByteArray jsonData)
         theme->setForeground(paletteForeground);
         theme->setBackground(paletteBackground);
         m_extension->m_extensionThemes.append(theme);
+    }
+    catch(ParseError &e) {
+        return false;
+    }
+    return true;
+}
+
+bool ExtensionParser::loadSearchEngine(const QString resourceName)
+{
+    try {
+        QByteArray data = readResource(resourceName);
+        if(!parseSearchEngine(data)) {
+            return false;
+        }
+    }
+    catch (ResourceError &e) {
+        return false;
+    }
+
+    qDebug() << "Search engine" << resourceName << "loaded.";
+    return true;
+}
+
+bool ExtensionParser::parseSearchEngine(const QByteArray jsonData)
+{
+    try {
+        QJsonDocument doc(QJsonDocument::fromJson(jsonData));
+        if (doc.isEmpty()) {
+            qWarning() << "Error: Invalid JSON document.";
+            throw ParseError();
+        }
+        QJsonObject root = doc.object();
+
+        // Parse schema
+        assertField(root, "schema", Type::Object);
+        QJsonObject schema = root["schema"].toObject();
+
+        assertField(schema, "type", Type::String);
+        QString schemaType = schema["type"].toString();
+        if (schemaType != "lbx/search") {
+            qWarning() << "Error: Invalid schema type" << schemaType << "detected. Expected \"lbx/search\".";
+            throw ParseError();
+        }
+
+        assertField(schema, "version", Type::String);
+        QString schemaVersion = schema["version"].toString();
+        if (schemaVersion != "0.1.0") {
+            qWarning() << "Error: Invalid schema version" << schemaVersion << "detected.";
+            throw ParseError();
+        }
+
+        // Parse meta
+        assertField(root, "meta", Type::Object);
+        QJsonObject meta = root["meta"].toObject();
+
+        assertField(meta, "name", Type::String);
+        QString searchName = meta["name"].toString();
+        if (!searchName.startsWith(m_extension->name() + ".")) {
+            qWarning() << "Error: search name" << searchName << "doesn't match package name.";
+            throw ParseError();
+        }
+
+        assertField(meta, "title", Type::String);
+        QString searchTitle = meta["title"].toString();
+
+        assertField(meta, "summary", Type::String);
+        QString searchSummary = meta["summary"].toString();
+
+        assertField(meta, "description", Type::String);
+        QString searchDescription = meta["description"].toString();
+
+        // Parse url
+        assertField(root, "url", Type::Object);
+        QJsonObject urlObject = root["url"].toObject();
+
+        assertField(urlObject, "base", Type::String);
+        QString urlBase = urlObject["base"].toString();
+
+        assertField(urlObject, "params", Type::Array);
+        QJsonArray params = urlObject["params"].toArray();
+
+        // Create instance
+        ExtensionSearchEngine* searchEngine = new ExtensionSearchEngine(this->extension());
+        searchEngine->setExtensionName(m_extension->name());
+        searchEngine->setName(searchName);
+        searchEngine->setTitle(searchTitle);
+        searchEngine->setSummary(searchSummary);
+        searchEngine->setDescription(searchDescription);
+
+        QList<ExtensionSearchEngineParameter*> searchParameters;
+
+        for (QJsonValue value : params) {
+            if (!value.isObject()) {
+                qWarning() << "Error: Field \"params\" must be an array of objects";
+                searchEngine->deleteLater();
+                throw ParseError();
+            }
+            QJsonObject paramObject = value.toObject();
+
+            assertField(paramObject, "name", Type::String);
+            QString paramName = paramObject["name"].toString();
+
+            assertField(paramObject, "value", Type::String);
+            QString paramValue = paramObject["value"].toString();
+
+            assertField(paramObject, "context", Type::Array);
+            QJsonArray contextArray = paramObject["context"].toArray();
+
+            ExtensionSearchEngineParameter::ContextFlag paramContext;
+
+            for (QJsonValue contextValue: contextArray) {
+                if (!contextValue.isString()) {
+                    qWarning() << "Error: Field \"context\" must be an array of strings";
+                    searchEngine->deleteLater();
+                    throw ParseError();
+                }
+                QString contextString = contextValue.toString();
+
+                if (contextString == "search")
+                    paramContext |= ExtensionSearchEngineParameter::Search;
+                else if (contextString == "homepage")
+                    paramContext |= ExtensionSearchEngineParameter::Homepage;
+                else {
+                    qWarning() << "Error: Unknown context value" << contextString << "detected.";
+                    searchEngine->deleteLater();
+                    throw ParseError();
+                }
+            }
+
+            ExtensionSearchEngineParameter* searchParameter = new ExtensionSearchEngineParameter(searchEngine);
+            searchParameter->setName(paramName);
+            searchParameter->setValue(paramValue);
+            searchParameter->setContext(paramContext);
+            searchParameters.append(searchParameter);
+        }
+        m_extension->m_extensionSearchEngines.append(searchEngine);
     }
     catch(ParseError &e) {
         return false;

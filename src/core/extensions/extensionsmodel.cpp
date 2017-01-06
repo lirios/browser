@@ -101,7 +101,7 @@ void ExtensionsModel::remove(Extension *extension)
 
 Extension *ExtensionsModel::get(const int row) const
 {
-    if (row < 0 || row > count()) {
+    if (row < 0 || row >= count()) {
         return m_invalidExtension;
     }
     return m_extensions.at(row);
