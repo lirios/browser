@@ -12,10 +12,7 @@ Item {
             return;
         }
 
-        var tab = tabsModel.get(idx);
-        if (tab) {
-            tabsModel.setActive(tab);
-        }
+        tabsModel.setActive(tabsModel.get(idx));
     }
 
     Shortcut {
@@ -69,8 +66,8 @@ Item {
     Shortcut {
         autoRepeat: false
         // it's a hack since StandardKey.PreviousChild not working for current Qt 5.7
-        // TODO: for mac it should be forced to Ctrl+Shift+Tab somehow
-        sequence: "Ctrl+Shift+Tab"
+        // TODO: for mac it should be forced to Ctrl+Shift+Tab
+        sequence: Qt.platform.os == "mac" ? "Meta+Shift+Tab" : "Ctrl+Shift+Tab"
         onActivated: {
             tabsModel.setPreviousTabActive();
         }

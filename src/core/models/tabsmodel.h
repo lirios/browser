@@ -46,7 +46,7 @@ public:
         CanGoForward,
         Loading,
         LoadProgress,
-        Invalid
+        Valid
     };
 
     int rowCount(const QModelIndex &parent=QModelIndex()) const;
@@ -88,10 +88,10 @@ private: // methods
     bool setActive(Tab* tab, bool recordToHistory);
 
 private: // members
-    QList<Tab*> m_tabs_list;
-    QList<Tab*> m_active_tab_history;
-    Tab* m_active_tab;
-    Tab* m_invalid_tab;
+    QList<Tab*> m_tabsList;
+    QList<Tab*> m_activeTabHistory;
+    Tab* m_activeTab;
+    Tab* m_invalidTab;
 };
 
 #endif // TABSMODEL_H

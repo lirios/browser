@@ -24,12 +24,12 @@
 
 #include "tab.h"
 
-Tab::Tab(QObject *parent, bool invalid)
+Tab::Tab(QObject *parent, bool valid)
     : QObject(parent)
 {
     m_uid = -1;
     m_canReload = true;
-    invalidChanged(m_invalid = invalid);
+    validChanged(m_valid = valid);
 }
 
 unsigned int Tab::uid() const
@@ -122,7 +122,7 @@ void Tab::setLoadProgress(unsigned int loadProgress)
     loadProgressChanged(m_loadProgress = loadProgress);
 }
 
-bool Tab::invalid() const
+bool Tab::valid() const
 {
-    return m_invalid;
+    return m_valid;
 }
