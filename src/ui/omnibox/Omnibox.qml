@@ -36,13 +36,14 @@ Item {
     property TabsModel tabsModel
     property string searchUrl
 
-    implicitHeight: 40
-    implicitWidth: 256
-
     function focusUrlField() {
         showUrlField.forceActiveFocus();
         textField.selectAll();
     }
+
+    implicitHeight: 40
+    implicitWidth: 256
+
 
     Rectangle {
         anchors.fill: parent

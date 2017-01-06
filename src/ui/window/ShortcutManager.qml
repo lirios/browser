@@ -3,12 +3,23 @@ import core 1.0
 import ".."
 
 Item {
-    property TabsModel tabsModel;
-    property Toolbar toolbar;
-    property TabBar tabBar;
+    property TabsModel tabsModel
+    property Toolbar toolbar
+    property TabBar tabBar
+
+    function setActiveTabByIndex(idx) {
+        if (idx < 0 || idx >= tabsModel.count) {
+            return;
+        }
+
+        var tab = tabsModel.get(idx);
+        if (tab) {
+            tabsModel.setActive(tab);
+        }
+    }
 
     Shortcut {
-        autoRepeat: false;
+        autoRepeat: false
         sequence: StandardKey.Back
         onActivated: {
             tabsModel.active.goBack();
@@ -16,7 +27,7 @@ Item {
     }
 
     Shortcut {
-        autoRepeat: false;
+        autoRepeat: false
         sequence: StandardKey.Forward
         onActivated: {
             tabsModel.active.goForward();
@@ -24,7 +35,7 @@ Item {
     }
 
     Shortcut {
-        autoRepeat: false;
+        autoRepeat: false
         sequence: StandardKey.Close
         onActivated: {
             tabBar.tabCloseRequested(tabsModel.active.uid);
@@ -32,7 +43,7 @@ Item {
     }
 
     Shortcut {
-        autoRepeat: false;
+        autoRepeat: false
         sequence: "Ctrl+l"
         onActivated: {
             toolbar.omnibox.focusUrlField();
@@ -40,7 +51,7 @@ Item {
     }
 
     Shortcut {
-        autoRepeat: false;
+        autoRepeat: false
         sequence: StandardKey.Refresh
         onActivated: {
             tabsModel.active.reload();
@@ -48,7 +59,7 @@ Item {
     }
 
     Shortcut {
-        autoRepeat: false;
+        autoRepeat: false
         sequence: StandardKey.AddTab
         onActivated: {
             tabBar.newTab();
@@ -56,7 +67,9 @@ Item {
     }
 
     Shortcut {
-        autoRepeat: false;
+        autoRepeat: false
+        // it's a hack since StandardKey.PreviousChild not working for current Qt 5.7
+        // TODO: for mac it should be forced to Ctrl+Shift+Tab somehow
         sequence: "Ctrl+Shift+Tab"
         onActivated: {
             tabsModel.setPreviousTabActive();
@@ -64,28 +77,15 @@ Item {
     }
 
     Shortcut {
-        autoRepeat: false;
+        autoRepeat: false
         sequence: StandardKey.NextChild
         onActivated: {
             tabsModel.setNextTabActive();
         }
     }
 
-    function setActiveTabByIndex(idx) {
-        if (idx < 0 || idx >= tabsModel.count)
-        {
-            return;
-        }
-
-        var tab = tabsModel.get(idx)
-        if (tab)
-        {
-            tabsModel.setActive(tab);
-        }
-    }
-
     Shortcut {
-        autoRepeat: false;
+        autoRepeat: false
         sequence: "Alt+1"
         onActivated: {
             setActiveTabByIndex(0);
@@ -93,7 +93,7 @@ Item {
     }
 
     Shortcut {
-        autoRepeat: false;
+        autoRepeat: false
         sequence: "Alt+2"
         onActivated: {
             setActiveTabByIndex(1);
@@ -101,7 +101,7 @@ Item {
     }
 
     Shortcut {
-        autoRepeat: false;
+        autoRepeat: false
         sequence: "Alt+3"
         onActivated: {
             setActiveTabByIndex(2);
@@ -109,7 +109,7 @@ Item {
     }
 
     Shortcut {
-        autoRepeat: false;
+        autoRepeat: false
         sequence: "Alt+4"
         onActivated: {
             setActiveTabByIndex(3);
@@ -117,7 +117,7 @@ Item {
     }
 
     Shortcut {
-        autoRepeat: false;
+        autoRepeat: false
         sequence: "Alt+5"
         onActivated: {
             setActiveTabByIndex(4);
@@ -125,7 +125,7 @@ Item {
     }
 
     Shortcut {
-        autoRepeat: false;
+        autoRepeat: false
         sequence: "Alt+6"
         onActivated: {
             setActiveTabByIndex(5);
@@ -133,7 +133,7 @@ Item {
     }
 
     Shortcut {
-        autoRepeat: false;
+        autoRepeat: false
         sequence: "Alt+7"
         onActivated: {
             setActiveTabByIndex(6);
@@ -141,7 +141,7 @@ Item {
     }
 
     Shortcut {
-        autoRepeat: false;
+        autoRepeat: false
         sequence: "Alt+8"
         onActivated: {
             setActiveTabByIndex(7);
@@ -149,7 +149,7 @@ Item {
     }
 
     Shortcut {
-        autoRepeat: false;
+        autoRepeat: false
         sequence: "Alt+9"
         onActivated: {
             setActiveTabByIndex(8);
@@ -157,7 +157,7 @@ Item {
     }
 
     Shortcut {
-        autoRepeat: false;
+        autoRepeat: false
         sequence: "Alt+0"
         onActivated: {
             setActiveTabByIndex(tabsModel.count - 1);
