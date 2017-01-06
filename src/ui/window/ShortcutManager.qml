@@ -67,7 +67,7 @@ Item {
         autoRepeat: false
         // it's a hack since StandardKey.PreviousChild not working for current Qt 5.7
         // TODO: for mac it should be forced to Ctrl+Shift+Tab
-        sequence: Qt.platform.os == "mac" ? "Meta+Shift+Tab" : "Ctrl+Shift+Tab"
+        sequence: Qt.platform.os == "osx" ? "Meta+Shift+Tab" : "Ctrl+Shift+Tab"
         onActivated: {
             tabsModel.setPreviousTabActive();
         }
