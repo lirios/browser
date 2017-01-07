@@ -24,6 +24,7 @@
 #include <QtGlobal>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QtQuickControls2/QQuickStyle>
 #include <QDebug>
 
 #include "../core/models/tabsmodel.h"
@@ -39,14 +40,13 @@
 
 int main(int argc, char *argv[])
 {
-    // Set Material Design QtQuick Controls 2 style
-    qputenv("QT_QUICK_CONTROLS_STYLE", "material");
-
     #if defined(ENABLE_HIGH_DPI_SCALING)
         QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     #endif
 
     QGuiApplication app(argc, argv);
+
+    QQuickStyle::setStyle(QLatin1String("Material"));
 
     #if IS_QTWEBENGINE_ENABLED == 1
         QtWebEngine::initialize();
