@@ -3,9 +3,19 @@ import core 1.0
 import ".."
 
 Item {
+    id: shortcutManager
+
+    property var root
     property TabsModel tabsModel
     property Toolbar toolbar
     property TabBar tabBar
+    property SearchOverlay searchOverlay
+
+    // when declaring BrowserWindow as property
+    // application fails to load for some reasons
+    // so find in page shortcut will be shared as a signal
+    // as a workaround
+    signal findInPage
 
     function setActiveTabByIndex(idx) {
         if (idx < 0 || idx >= tabsModel.count) {
@@ -169,7 +179,36 @@ Item {
                 toolbar.forceActiveFocus();
             } else if (tabsModel.active.loading) {
                 tabsModel.active.stop();
+            } else if (searchOverlay.showing) {
+                searchOverlay.close();
             }
         }
     }
+
+    Shortcut {
+        autoRepeat: false
+        sequence: "Ctrl+f"
+        onActivated: {
+            findInPage();
+        }
+    }
+
+    Shortcut {
+        autoRepeat: false
+        sequence: "Ctrl+n"
+        onActivated: {
+            var window = root.newWindow();
+            window.showNormal();
+        }
+    }
+
+    Shortcut {
+        autoRepeat: false
+        sequence: "Ctrl+Shift+n"
+        onActivated: {
+            var window = root.newIncognitoWindow();
+            window.showNormal();
+        }
+    }
+
 }
