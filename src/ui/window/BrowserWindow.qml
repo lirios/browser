@@ -69,9 +69,11 @@ FluidWindow {
 
 
     ShortcutManager {
+        root: window.root
         tabBar: tabBar
         toolbar: toolbar
         tabsModel: window.tabsModel
+        searchOverlay: searchOverlay
     }
 
     Drawer {

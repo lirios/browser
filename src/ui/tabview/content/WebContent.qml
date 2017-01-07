@@ -86,7 +86,7 @@ TabContent {
     Binding {
         target: page.tab
         property: "loading"
-        value: webview.loadProgress < 100
+        value: page.tab && page.tab.url.toString().length > 0 && webview.loadProgress < 100
     }
 
     Binding {

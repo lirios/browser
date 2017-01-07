@@ -3,9 +3,13 @@ import core 1.0
 import ".."
 
 Item {
+    id: shortcutManager
+
+    property var root
     property TabsModel tabsModel
     property Toolbar toolbar
     property TabBar tabBar
+    property SearchOverlay searchOverlay
 
     function setActiveTabByIndex(idx) {
         if (idx < 0 || idx >= tabsModel.count) {
@@ -169,7 +173,36 @@ Item {
                 toolbar.forceActiveFocus();
             } else if (tabsModel.active.loading) {
                 tabsModel.active.stop();
+            } else if (searchOverlay.showing) {
+                searchOverlay.close();
             }
         }
     }
+
+    Shortcut {
+        autoRepeat: false
+        sequence: "Ctrl+f"
+        onActivated: {
+            searchOverlay.open();
+        }
+    }
+
+    Shortcut {
+        autoRepeat: false
+        sequence: "Ctrl+n"
+        onActivated: {
+            var window = root.newWindow();
+            window.showNormal();
+        }
+    }
+
+    Shortcut {
+        autoRepeat: false
+        sequence: "Ctrl+Shift+n"
+        onActivated: {
+            var window = root.newIncognitoWindow();
+            window.showNormal();
+        }
+    }
+
 }
