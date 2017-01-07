@@ -60,10 +60,6 @@ FluidWindow {
         tabController.openNewViewRequest(request);
     }
 
-    function findInPage() {
-        searchOverlay.open();
-    }
-
     width: 1024
     height: 640
 
@@ -78,9 +74,6 @@ FluidWindow {
         toolbar: toolbar
         tabsModel: window.tabsModel
         searchOverlay: searchOverlay
-        onFindInPage: {
-            window.findInPage();
-        }
     }
 
     Drawer {

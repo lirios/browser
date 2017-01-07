@@ -11,12 +11,6 @@ Item {
     property TabBar tabBar
     property SearchOverlay searchOverlay
 
-    // when declaring BrowserWindow as property
-    // application fails to load for some reasons
-    // so find in page shortcut will be shared as a signal
-    // as a workaround
-    signal findInPage
-
     function setActiveTabByIndex(idx) {
         if (idx < 0 || idx >= tabsModel.count) {
             return;
@@ -189,7 +183,7 @@ Item {
         autoRepeat: false
         sequence: "Ctrl+f"
         onActivated: {
-            findInPage();
+            searchOverlay.open();
         }
     }
 
