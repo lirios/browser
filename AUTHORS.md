@@ -23,4 +23,6 @@ a .mailmap file is maintained if committer names and email addresses
 change over time.
 
  * Tim Süberkrüb <tim.sueberkrueb@web.de>
+ * Ivan Fateev <johnny.j.poison@gmail.com>
+ * Pier Luigi Fiorini <pierluigi.fiorini@gmail.com>
 
