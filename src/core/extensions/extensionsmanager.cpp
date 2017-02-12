@@ -26,7 +26,8 @@
 #include <QDebug>
 
 
-ExtensionsManager::ExtensionsManager(QObject *parent) : QObject(parent)
+ExtensionsManager::ExtensionsManager(QObject *parent)
+    : QObject(parent)
 {
     m_dir = QDir(Paths::ExtensionsLocation);
 

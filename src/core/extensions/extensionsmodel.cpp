@@ -25,7 +25,8 @@
 
 #include <QDebug>
 
-ExtensionsModel::ExtensionsModel(QObject *parent) : QAbstractListModel(parent)
+ExtensionsModel::ExtensionsModel(QObject *parent)
+    : QAbstractListModel(parent)
 {
     m_invalidExtension = new Extension();
     m_invalidExtension->setValid(false);

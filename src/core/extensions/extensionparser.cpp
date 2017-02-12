@@ -25,7 +25,8 @@
 
 #include <QDebug>
 
-ExtensionParser::ExtensionParser(QObject *parent) : QObject(parent)
+ExtensionParser::ExtensionParser(QObject *parent)
+    : QObject(parent)
 {
 
 }

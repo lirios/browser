@@ -1,6 +1,7 @@
 #include "extensionelement.h"
 
-ExtensionElement::ExtensionElement(QObject *parent) : QObject(parent)
+ExtensionElement::ExtensionElement(QObject *parent)
+    : QObject(parent)
 {
     m_valid = true;
 }

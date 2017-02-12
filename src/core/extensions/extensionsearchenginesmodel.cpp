@@ -1,6 +1,7 @@
 #include "extensionsearchenginesmodel.h"
 
-ExtensionSearchEnginesModel::ExtensionSearchEnginesModel(QObject *parent) : QAbstractListModel(parent)
+ExtensionSearchEnginesModel::ExtensionSearchEnginesModel(QObject *parent)
+    : QAbstractListModel(parent)
 {
     m_invalidSearchEngine = new ExtensionSearchEngine(this);
     m_invalidSearchEngine->setValid(false);

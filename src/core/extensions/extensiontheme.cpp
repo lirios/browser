@@ -23,7 +23,8 @@
 
 #include "extensiontheme.h"
 
-ExtensionTheme::ExtensionTheme(QObject *parent) : ExtensionElement(parent)
+ExtensionTheme::ExtensionTheme(QObject *parent)
+    : ExtensionElement(parent)
 {
 
 }

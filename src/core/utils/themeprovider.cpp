@@ -25,7 +25,8 @@
 
 #include <QDebug>
 
-ThemeProvider::ThemeProvider(QObject *parent) : QObject(parent)
+ThemeProvider::ThemeProvider(QObject *parent)
+    : QObject(parent)
 {
     connect(this, &ThemeProvider::nameChanged,
             this, &ThemeProvider::update);

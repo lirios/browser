@@ -1,6 +1,7 @@
 #include "extensionsearchengineparameter.h"
 
-ExtensionSearchEngineParameter::ExtensionSearchEngineParameter(QObject *parent) : QObject(parent)
+ExtensionSearchEngineParameter::ExtensionSearchEngineParameter(QObject *parent)
+    : QObject(parent)
 {
 
 }

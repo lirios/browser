@@ -25,7 +25,8 @@
 
 #include <QDebug>
 
-Extension::Extension(QObject *parent) : QObject(parent)
+Extension::Extension(QObject *parent)
+    : QObject(parent)
 {
     m_valid = true;
 }

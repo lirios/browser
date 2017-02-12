@@ -23,7 +23,8 @@
 
 #include "extensionthemesmodel.h"
 
-ExtensionThemesModel::ExtensionThemesModel(QObject *parent) : QAbstractListModel(parent)
+ExtensionThemesModel::ExtensionThemesModel(QObject *parent)
+    : QAbstractListModel(parent)
 {
     m_invalidTheme = new ExtensionTheme(this);
     m_invalidTheme->setValid(false);
