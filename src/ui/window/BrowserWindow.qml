@@ -290,6 +290,7 @@ FluidWindow {
 
         MenuItem {
             text: "New Window"
+            iconName: "action/open_in_new"
             onClicked: {
                 var window = root.newWindow();
                 window.showNormal();
@@ -297,7 +298,8 @@ FluidWindow {
         }
 
         MenuItem {
-            text: "New Private Window"
+            text: "Private Window"
+            iconName: "hardware/security"
             onClicked: {
                 var window = root.newIncognitoWindow();
                 window.showNormal();
@@ -306,6 +308,7 @@ FluidWindow {
 
         MenuItem {
             text: "Find in page"
+            iconName: "action/find_in_page"
             // Disable find in page overlay when there is no open tab
             enabled: !tabController.tabsModel.empty
             onClicked: {
@@ -315,6 +318,7 @@ FluidWindow {
 
         MenuItem {
             text: "Downloads"
+            iconName: "file/file_download"
             onClicked: {
                 rightDrawer.loadContent(rightDrawer.downloads);
                 rightDrawer.open();
@@ -323,6 +327,7 @@ FluidWindow {
 
         MenuItem {
             text: "Settings"
+            iconName: "action/settings"
             onClicked: {
                 tabController.openUrl("liri://settings");
             }
