@@ -1,7 +1,7 @@
 /*
  * This file is part of Liri Browser
  *
- * Copyright (C) 2016 Tim Süberkrüb <tim.sueberkrueb@web.de>
+ * Copyright (C) 2017 Tim Süberkrüb <tim.sueberkrueb@web.de>
  *
  * $BEGIN_LICENSE:GPL3+$
  *
@@ -120,7 +120,7 @@ TabContent {
     Binding {
         target: content.tab
         property: "loading"
-        value: page.tab && page.tab.url.toString().length > 0 && webview.loadProgress < 100
+        value: content.tab && content.tab.url.toString().length > 0 && webview.loadProgress < 100
     }
 
     Binding {
