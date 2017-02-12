@@ -27,7 +27,7 @@ import Fluid.Controls 1.0
 import core 1.0
 import ".."
 
-Rectangle {
+Item {
     id: toolbar
     property TabController tabController
     property TabsModel tabsModel

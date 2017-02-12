@@ -32,6 +32,10 @@ import "../.."
 TabContent {
     id: content
 
+    function timeString(time) {
+        return Qt.formatTime(time, "HH:mm");
+    }
+
     Flickable {
         anchors {
             fill: parent
@@ -60,26 +64,59 @@ TabContent {
                     text: "Start"
                 }
 
-                RowLayout {
-                    width: parent.width
-                    spacing: 2 * Units.smallSpacing
+                Label {
+                    text: "Start url"
+                    font.pixelSize: 16
+                }
+
+                GridLayout {
+                    columns: 2
+                    columnSpacing: 2 * Units.smallSpacing
 
                     Label {
-                        text: "Start url"
+                        text: "Primary"
                     }
 
                     TextField {
                         Layout.minimumWidth: 256
-                        text: Settings.startConfig.startUrl
+                        text: Settings.startConfig.primaryStartUrl
                         onEditingFinished: {
-                            if (Settings.startConfig.startUrl != text) {
-                                Settings.startConfig.startUrl = text;
+                            if (Settings.startConfig.primaryStartUrl != text) {
+                                Settings.startConfig.primaryStartUrl = text;
                                 Settings.dirty = true;
                             }
                         }
                     }
 
-                    Item { Layout.fillWidth: true } // Spacer
+                    Label {
+                        text: "Dark theme"
+                    }
+
+                    TextField {
+                        Layout.minimumWidth: 256
+                        text: Settings.startConfig.darkStartUrl
+                        onEditingFinished: {
+                            if (Settings.startConfig.darkStartUrl != text) {
+                                Settings.startConfig.darkStartUrl = text;
+                                Settings.dirty = true;
+                            }
+                        }
+                    }
+
+                    Label {
+                        text: "Incognito"
+                    }
+
+                    TextField {
+                        Layout.minimumWidth: 256
+                        text: Settings.startConfig.incognitoStartUrl
+                        onEditingFinished: {
+                            if (Settings.startConfig.incognitoStartUrl != text) {
+                                Settings.startConfig.incognitoStartUrl = text;
+                                Settings.dirty = true;
+                            }
+                        }
+                    }
                 }
 
                 TitleLabel {
@@ -159,6 +196,116 @@ TabContent {
                         }
                     }
                 }
+
+                TitleLabel {
+                    text: "Theme"
+                }
+
+
+                ButtonGroup {
+                    buttons: [
+                        radioButtonLightTheme,
+                        radioButtonAlwaysDark,
+                        radioButtonDarkBetween
+                    ]
+                }
+
+                ColumnLayout {
+                    CheckBox {
+                        text: "Adapt to website theme colors"
+                        checked: Settings.themeConfig.themeColorEnabled
+                        onClicked: {
+                            if (Settings.themeConfig.themeColorEnabled !== checked) {
+                                Settings.themeConfig.themeColorEnabled = checked;
+                                Settings.dirty = true;
+                            }
+                        }
+                    }
+
+                    RadioButton {
+                        id: radioButtonLightTheme
+                        text: "Light theme"
+                        checked: !Settings.themeConfig.darkThemeEnabled
+                        onClicked: {
+                            if (Settings.themeConfig.darkThemeEnabled === checked) {
+                                Settings.themeConfig.darkThemeEnabled = !checked;
+                                Settings.dirty = true;
+                            }
+                        }
+                    }
+
+                    RadioButton {
+                        id: radioButtonAlwaysDark
+                        text: "Dark theme (always on)"
+                        checked: Settings.themeConfig.darkThemeEnabled
+                                 && (timeString(Settings.themeConfig.darkThemeStartTime)
+                                 === timeString(Settings.themeConfig.darkThemeEndTime))
+                        onClicked: {
+                            Settings.themeConfig.darkThemeEnabled = true;
+                            Settings.themeConfig.setDarkThemeStartTime("00:00", "HH:mm");
+                            Settings.themeConfig.setDarkThemeEndTime("00:00", "HH:mm");
+                            Settings.dirty = true;
+                        }
+                    }
+
+                    RowLayout {
+                        RadioButton {
+                            id: radioButtonDarkBetween
+                            text: "Dark between"
+                            checked: Settings.themeConfig.darkThemeEnabled
+                                     && (timeString(Settings.themeConfig.darkThemeStartTime)
+                                         !== timeString(Settings.themeConfig.darkThemeEndTime))
+                            onClicked: {
+                                Settings.themeConfig.darkThemeEnabled = true;
+                                if (inputStartTime.text == inputEndTime.text) {
+                                    inputStartTime.text = "21:00";
+                                    inputEndTime.text = "07:00"
+                                }
+                                Settings.themeConfig.setDarkThemeStartTime(inputStartTime.text, "HH:mm");
+                                Settings.themeConfig.setDarkThemeEndTime(inputEndTime.text, "HH:mm");
+                                DarkThemeTimer.update();
+                                Settings.dirty = true;
+                            }
+                        }
+
+                        TextField {
+                            id: inputStartTime
+                            Layout.maximumWidth: 56
+                            text: Qt.formatTime(Settings.themeConfig.darkThemeStartTime, "HH:mm")
+                            enabled: radioButtonDarkBetween.checked
+                            maximumLength: 5
+                            validator: RegExpValidator {
+                                regExp: /^([0-1][0-9]|2[0-3]):([0-5][0-9])/
+                            }
+                            onEditingFinished: {
+                                Settings.themeConfig.setDarkThemeStartTime(text, "HH:mm");
+                                DarkThemeTimer.update();
+                                Settings.dirty = true;
+                            }
+
+                        }
+
+                        Label {
+                            text: "and"
+                        }
+
+                        TextField {
+                            id: inputEndTime
+                            Layout.maximumWidth: 56
+                            text: Qt.formatTime(Settings.themeConfig.darkThemeEndTime, "HH:mm")
+                            enabled: radioButtonDarkBetween.checked
+                            maximumLength: 5
+                            validator: RegExpValidator {
+                                regExp: /^([0-1][0-9]|2[0-3]):([0-5][0-9])/
+                            }
+                            onEditingFinished: {
+                                Settings.themeConfig.setDarkThemeEndTime(text, "HH:mm");
+                                DarkThemeTimer.update();
+                                Settings.dirty = true;
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -173,6 +320,12 @@ TabContent {
         target: content.tab
         property: "iconUrl"
         value: Utils.getSourceForIconName("action/settings")
+    }
+
+    Binding {
+        target: content.tab
+        property: "adaptIconColor"
+        value: true
     }
 
     Binding {
@@ -209,5 +362,11 @@ TabContent {
         target: content.tab
         property: "title"
         value: "Settings"
+    }
+
+    Binding {
+        target: content.tab
+        property: "hasThemeColor"
+        value: false
     }
 }

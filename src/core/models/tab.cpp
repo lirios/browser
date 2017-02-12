@@ -30,6 +30,7 @@ Tab::Tab(QObject *parent, bool valid)
     m_uid = -1;
     m_canReload = true;
     validChanged(m_valid = valid);
+    m_iconColor = Qt::transparent;
 }
 
 unsigned int Tab::uid() const
@@ -70,6 +71,26 @@ QUrl Tab::iconUrl() const
 void Tab::setIconUrl(QUrl iconUrl)
 {
     iconUrlChanged(m_iconUrl = iconUrl);
+}
+
+QColor Tab::iconColor() const
+{
+    return m_iconColor;
+}
+
+void Tab::setIconColor(QColor iconColor)
+{
+    iconColorChanged(m_iconColor = iconColor);
+}
+
+bool Tab::adaptIconColor() const
+{
+    return m_adaptIconColor;
+}
+
+void Tab::setAdaptIconColor(bool adaptIconColor)
+{
+    adaptIconColorChanged(m_adaptIconColor = adaptIconColor);
 }
 
 bool Tab::canGoBack() const
@@ -126,3 +147,24 @@ bool Tab::valid() const
 {
     return m_valid;
 }
+
+bool Tab::hasThemeColor() const
+{
+    return m_hasThemeColor;
+}
+
+void Tab::setHasThemeColor(bool hasThemeColor)
+{
+    hasThemeColorChanged(m_hasThemeColor = hasThemeColor);
+}
+
+QColor Tab::themeColor() const
+{
+    return m_themeColor;
+}
+
+void Tab::setThemeColor(QColor themeColor)
+{
+    themeColorChanged(m_themeColor = themeColor);
+}
+

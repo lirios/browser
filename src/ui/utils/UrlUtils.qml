@@ -38,8 +38,9 @@ QtObject {
 
     function validUrl(url, searchUrl) {
         // Valid web url
-        var httpedUrl = (url.indexOf("http://") === 0 || url.indexOf("https://") === 0) ? url : "http://%1".arg(url);
-        if (isWebUrl(httpedUrl)) {
+        var isHttped = (url.indexOf("http://") === 0 || url.indexOf("https://") === 0);
+        var httpedUrl = isHttped ? url : "http://%1".arg(url);
+        if (isHttped || isWebUrl(httpedUrl)) {
             return httpedUrl;
         }
         // Liri url

@@ -22,13 +22,14 @@
 */
 
 import QtQuick 2.7
+import QtQuick.Controls.Material 2.0
 import Fluid.Controls 1.0
 import ".."
 
-Rectangle {
+Item {
     id: actionBar
     property list<Action> actions
-    property color foregroundColor: "#212121"
+    property color foregroundColor: Material.foreground
     property bool animationsEnabled: true
     property int iconSize: Units.iconSizes.smallMedium
 

@@ -34,6 +34,7 @@ Settings::Settings(QObject *parent)
     // Create exposed configuration objects
     startConfigChanged(m_startConfig = new StartConfig(this));
     searchConfigChanged(m_searchConfig = new SearchConfig(this));
+    themeConfigChanged(m_themeConfig = new ThemeConfig(this));
 
     // Check for settings directory
     if (!QDir(Paths::ConfigLocation).exists()) {
@@ -78,7 +79,9 @@ void Settings::load()
     }
     QJsonObject data = root["data"].toObject();
     QJsonObject dataStart = data["start"].toObject();
-    m_startConfig->setStartUrl(QUrl(dataStart["url"].toString()));
+    m_startConfig->setPrimaryStartUrl(QUrl(dataStart["primary_url"].toString()));
+    m_startConfig->setDarkStartUrl(QUrl(dataStart["dark_theme_url"].toString()));
+    m_startConfig->setIncognitoStartUrl(QUrl(dataStart["incognito_url"].toString()));
     QJsonObject dataSearch = data["search"].toObject();
     QString searchEngineString = dataSearch["engine"].toString();
     SearchConfig::SearchEngine searchEngine;
@@ -94,6 +97,17 @@ void Settings::load()
         searchEngine = SearchConfig::SearchEngine::Custom;
     m_searchConfig->setSearchEngine(searchEngine);
     m_searchConfig->setCustomSearchUrl(QUrl(dataSearch["custom_url"].toString()));
+    QJsonObject dataTheme = data["theme"].toObject();
+    m_themeConfig->setThemeColorEnabled(dataTheme["adapt_website_theme"].toBool());
+    m_themeConfig->setDarkThemeEnabled(dataTheme["dark_theme_enabled"].toBool());
+    m_themeConfig->setDarkThemeStartTime(QTime::fromString(
+        dataTheme["dark_theme_start_time"].toString(),
+        "HH:mm"
+    ));
+    m_themeConfig->setDarkThemeEndTime(QTime::fromString(
+        dataTheme["dark_theme_end_time"].toString(),
+        "HH:mm"
+    ));
     setDirty(false);
     file.close();
 }
@@ -117,15 +131,24 @@ QByteArray Settings::defaultJSON()
         {"schema", "0.1"}
     };
     QJsonObject dataStart {
-        {"url", m_startConfig->defaultStartUrl().toString()},
+        {"primary_url", m_startConfig->defaultPrimaryStartUrl().toString()},
+        {"dark_theme_url", m_startConfig->defaultDarkStartUrl().toString()},
+        {"incognito_url", m_startConfig->defaultIncognitoStartUrl().toString()}
     };
     QJsonObject dataSearch {
         {"engine", "duckduckgo"},
         {"custom_url", ""}
     };
+    QJsonObject dataTheme {
+        {"adapt_website_theme", true},
+        {"dark_theme_enabled", false},
+        {"dark_theme_start_time", "21:00"},
+        {"dark_theme_end_time", "07:00"}
+    };
     QJsonObject data {
         {"start", dataStart},
-        {"search", dataSearch}
+        {"search", dataSearch},
+        {"theme", dataTheme}
     };
     QJsonObject root {
         {"meta", meta},
@@ -141,7 +164,9 @@ QByteArray Settings::json()
         {"schema", "0.1"}
     };
     QJsonObject dataStart {
-        {"url", m_startConfig->startUrl().toString()},
+        {"primary_url", m_startConfig->primaryStartUrl().toString()},
+        {"dark_theme_url", m_startConfig->darkStartUrl().toString()},
+        {"incognito_url", m_startConfig->incognitoStartUrl().toString()},
     };
     QString searchEngineString;
     switch (m_searchConfig->searchEngine()) {
@@ -165,9 +190,16 @@ QByteArray Settings::json()
         {"engine", searchEngineString},
         {"custom_url", m_searchConfig->customSearchUrl().toString()}
     };
+    QJsonObject dataTheme {
+        {"adapt_website_theme", m_themeConfig->themeColorEnabled()},
+        {"dark_theme_enabled", m_themeConfig->darkThemeEnabled()},
+        {"dark_theme_start_time", m_themeConfig->darkThemeStartTime().toString("HH:mm")},
+        {"dark_theme_end_time", m_themeConfig->darkThemeEndTime().toString("HH:mm")}
+    };
     QJsonObject data {
         {"start", dataStart},
-        {"search", dataSearch}
+        {"search", dataSearch},
+        {"theme", dataTheme}
     };
     QJsonObject root {
         {"meta", meta},

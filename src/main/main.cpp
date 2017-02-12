@@ -33,6 +33,7 @@
 #include "../core/models/downloadsmodel.h"
 #include "../core/models/webdownload.h"
 #include "../core/settings/settings.h"
+#include "../core/utils/darkthemetimer.h"
 
 // Include QtWebEngine if enabled (otherwise Oxide is expected)
 #if IS_QTWEBENGINE_ENABLED == 1
@@ -57,6 +58,10 @@ int main(int argc, char *argv[])
     Settings settings;
     settings.load();
 
+    // Create and start dark theme time
+    DarkThemeTimer darkThemeTimer;
+    darkThemeTimer.start();
+
     // create qml app engine
     QQmlApplicationEngine engine;
 
@@ -71,6 +76,7 @@ int main(int argc, char *argv[])
 
     // Register context properties
     engine.rootContext()->setContextProperty("Settings", &settings);
+    engine.rootContext()->setContextProperty("DarkThemeTimer", &darkThemeTimer);
 
     // setup qml imports
     engine.addImportPath("qrc:/");

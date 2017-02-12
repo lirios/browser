@@ -27,15 +27,21 @@
 #include <QObject>
 #include <QStandardPaths>
 
+#include "../global/paths.h"
+
 #include "startconfig.h"
 #include "searchconfig.h"
-#include "../global/paths.h"
+#include "themeconfig.h"
+
+const QString APP_CONFIG_LOCATION = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + "/liri-browser/";
+const QString SETTINGS_FILENAME = APP_CONFIG_LOCATION + "settings.json";
 
 class Settings : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(StartConfig* startConfig MEMBER m_startConfig NOTIFY startConfigChanged)
     Q_PROPERTY(SearchConfig* searchConfig MEMBER m_searchConfig NOTIFY searchConfigChanged)
+    Q_PROPERTY(ThemeConfig* themeConfig MEMBER m_themeConfig NOTIFY themeConfigChanged)
     Q_PROPERTY(bool dirty READ dirty WRITE setDirty NOTIFY dirtyChanged)
 public:
     explicit Settings(QObject *parent = nullptr);
@@ -52,11 +58,13 @@ public:
 private:
     StartConfig* m_startConfig;
     SearchConfig* m_searchConfig;
+    ThemeConfig* m_themeConfig;
     bool m_dirty;
 
 signals:
     void startConfigChanged(StartConfig* startConfig);
     void searchConfigChanged(SearchConfig* searchConfig);
+    void themeConfigChanged(ThemeConfig* themeConfig);
     void dirtyChanged(bool dirty);
 };
 

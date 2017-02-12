@@ -30,23 +30,43 @@
 class StartConfig : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QUrl startUrl READ startUrl WRITE setStartUrl NOTIFY startUrlChanged)
-    Q_PROPERTY(QUrl defaultStartUrl MEMBER m_defaultStartUrl NOTIFY defaultStartUrlChanged)
+    Q_PROPERTY(QUrl primaryStartUrl READ primaryStartUrl WRITE setPrimaryStartUrl NOTIFY primaryStartUrlChanged)
+    Q_PROPERTY(QUrl defaultPrimaryStartUrl MEMBER m_defaultPrimaryStartUrl NOTIFY defaultPrimaryStartUrlChanged)
+    Q_PROPERTY(QUrl darkStartUrl READ darkStartUrl WRITE setDarkStartUrl NOTIFY darkStartUrlChanged)
+    Q_PROPERTY(QUrl defaultDarkStartUrl MEMBER m_defaultDarkStartUrl NOTIFY defaultDarkStartUrlChanged)
+    Q_PROPERTY(QUrl incognitoStartUrl READ incognitoStartUrl WRITE setIncognitoStartUrl NOTIFY incognitoStartUrlChanged)
+    Q_PROPERTY(QUrl defaultIncognitoStartUrl MEMBER m_defaultIncognitoStartUrl NOTIFY defaultIncognitoStartUrlChanged)
 public:
     explicit StartConfig(QObject *parent = nullptr);
 
-    QUrl startUrl() const { return m_startUrl; }
-    void setStartUrl(QUrl url) { startUrlChanged(m_startUrl = url); }
+    QUrl primaryStartUrl() const { return m_primaryStartUrl; }
+    void setPrimaryStartUrl(QUrl url) { primaryStartUrlChanged(m_primaryStartUrl = url); }
 
-    QUrl defaultStartUrl() const { return m_defaultStartUrl; }
+    QUrl darkStartUrl() const { return m_darkStartUrl; }
+    void setDarkStartUrl(QUrl url) { darkStartUrlChanged(m_darkStartUrl = url); }
+
+    QUrl incognitoStartUrl() const { return m_incognitoStartUrl; }
+    void setIncognitoStartUrl(QUrl url) { incognitoStartUrlChanged(m_incognitoStartUrl = url); }
+
+    QUrl defaultPrimaryStartUrl() const { return m_defaultPrimaryStartUrl; }
+    QUrl defaultIncognitoStartUrl() const { return m_defaultIncognitoStartUrl; }
+    QUrl defaultDarkStartUrl() const { return m_defaultDarkStartUrl; }
 
 signals:
-    void startUrlChanged(QUrl url);
-    void defaultStartUrlChanged(QUrl url);
+    void primaryStartUrlChanged(QUrl url);
+    void defaultPrimaryStartUrlChanged(QUrl url);
+    void darkStartUrlChanged(QUrl url);
+    void defaultDarkStartUrlChanged(QUrl url);
+    void incognitoStartUrlChanged(QUrl url);
+    void defaultIncognitoStartUrlChanged(QUrl url);
 
 private:
-    QUrl m_startUrl;
-    QUrl m_defaultStartUrl;
+    QUrl m_primaryStartUrl;
+    QUrl m_defaultPrimaryStartUrl;
+    QUrl m_incognitoStartUrl;
+    QUrl m_defaultIncognitoStartUrl;
+    QUrl m_darkStartUrl;
+    QUrl m_defaultDarkStartUrl;
 
 };
 
