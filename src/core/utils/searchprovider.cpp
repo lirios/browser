@@ -35,14 +35,18 @@ QString SearchProvider::searchUrl(QString query, QString engine, ExtensionTheme*
 {
     ExtensionSearchEngine* searchEngine = m_model->get(engine);
     QList<ExtensionSearchEngineParameter*>* params = searchEngine->parameters();
-    QString urlString = searchEngine->urlBaseSearch() + '?';
+    QString urlString = searchEngine->urlBaseSearch();
     bool first = true;
     for (int i=0; i<params->count(); i++) {
         ExtensionSearchEngineParameter* param = params->at(i);
         if (param->context() & ExtensionSearchEngineParameter::Search) {
             QString name = param->name();
             QString value = param->value();
-            QString paramString = first ? name + '=' : QString('&') + name + '=';
+            QString paramString;
+            if (first)
+                paramString += QString('?') + name + '=';
+            else
+                paramString += QString('&') + name + '=';
             if (value == "search.query") {
                 paramString.append(query);
             }
@@ -63,14 +67,18 @@ QString SearchProvider::homepage(QString engine, ExtensionTheme *theme) const
 {
     ExtensionSearchEngine* searchEngine = m_model->get(engine);
     QList<ExtensionSearchEngineParameter*>* params = searchEngine->parameters();
-    QString urlString = searchEngine->urlBaseHomepage() + '?';
+    QString urlString = searchEngine->urlBaseHomepage();
     bool first = true;
     for (int i=0; i<params->count(); i++) {
         ExtensionSearchEngineParameter* param = params->at(i);
         if (param->context() & ExtensionSearchEngineParameter::Homepage) {
             QString name = param->name();
             QString value = param->value();
-            QString paramString = first ? name + '=' : QString('&') + name + '=';
+            QString paramString;
+            if (first)
+                paramString += QString('?') + name + '=';
+            else
+                paramString += QString('&') + name + '=';
             if (value == "theme.background") {
                 paramString.append(theme->background().name().replace("#", "%23"));
             }
