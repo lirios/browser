@@ -31,7 +31,8 @@ Item {
     id: toolbar
     property TabController tabController
     property TabsModel tabsModel
-    property string searchUrl
+    property string searchEngine
+    property ExtensionTheme currentTheme
     property alias omnibox: omnibox
 
     property list<Action> leftActions
@@ -61,7 +62,8 @@ Item {
             Layout.fillWidth: true
             tabsModel: toolbar.tabsModel
             tabController: toolbar.tabController
-            searchUrl: toolbar.searchUrl
+            searchEngine: toolbar.searchEngine
+            currentTheme: toolbar.currentTheme
         }
 
         ActionBar {

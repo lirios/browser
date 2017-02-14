@@ -71,8 +71,9 @@ TabContent {
                     text: "Settings"
                 }
 
+
                 TitleLabel {
-                    text: "Start"
+                    text: "Homepage"
                 }
 
                 Label {
@@ -80,52 +81,34 @@ TabContent {
                     font.pixelSize: 16
                 }
 
-                GridLayout {
-                    columns: 2
-                    columnSpacing: 2 * Units.smallSpacing
-
-                    Label {
-                        text: "Primary"
-                    }
-
-                    TextField {
-                        Layout.minimumWidth: 256
-                        text: Settings.startConfig.primaryStartUrl
-                        onEditingFinished: {
-                            if (Settings.startConfig.primaryStartUrl != text) {
-                                Settings.startConfig.primaryStartUrl = text;
-                                Settings.dirty = true;
-                            }
+                ColumnLayout {
+                    RadioButton {
+                        checked: !Settings.startConfig.customEnabled
+                        text: "Current search engine"
+                        onClicked: {
+                            Settings.startConfig.customEnabled = false;
+                            Settings.dirty = true;
                         }
                     }
 
-                    Label {
-                        text: "Dark theme"
-                    }
-
-                    TextField {
-                        Layout.minimumWidth: 256
-                        text: Settings.startConfig.darkStartUrl
-                        onEditingFinished: {
-                            if (Settings.startConfig.darkStartUrl != text) {
-                                Settings.startConfig.darkStartUrl = text;
-                                Settings.dirty = true;
-                            }
+                    RadioButton {
+                        checked: Settings.startConfig.customEnabled
+                        text: "Custom"
+                        onClicked: {
+                            Settings.startConfig.customEnabled = true;
+                            Settings.dirty = true;
                         }
                     }
 
-                    Label {
-                        text: "Incognito"
-                    }
-
                     TextField {
                         Layout.minimumWidth: 256
-                        text: Settings.startConfig.incognitoStartUrl
+                        Layout.leftMargin: 32
+                        enabled: Settings.startConfig.customEnabled
+                        placeholderText: "Custom start url"
+                        text: Settings.startConfig.customUrl
                         onEditingFinished: {
-                            if (Settings.startConfig.incognitoStartUrl != text) {
-                                Settings.startConfig.incognitoStartUrl = text;
-                                Settings.dirty = true;
-                            }
+                            Settings.startConfig.customUrl = text;
+                            Settings.dirty = true;
                         }
                     }
                 }
@@ -134,77 +117,13 @@ TabContent {
                     text: "Search"
                 }
 
-                ColumnLayout {
-                    RadioButton {
-                        text: "DuckDuckGo"
-                        checked: Settings.searchConfig.searchEngine == SearchConfig.DuckDuckGo
-                        onClicked: {
-                            if (Settings.searchConfig.searchEngine != SearchConfig.DuckDuckGo) {
-                                Settings.searchConfig.searchEngine = SearchConfig.DuckDuckGo;
-                                Settings.dirty = true;
-                            }
-                        }
-                    }
-
-                    RadioButton {
-                        text: "Google"
-                        checked: Settings.searchConfig.searchEngine == SearchConfig.Google
-                        onClicked: {
-                            if (Settings.searchConfig.searchEngine != SearchConfig.Google) {
-                                Settings.searchConfig.searchEngine = SearchConfig.Google;
-                                Settings.dirty = true;
-                            }
-                        }
-                    }
-
-                    RadioButton {
-                        text: "Bing"
-                        checked: Settings.searchConfig.searchEngine == SearchConfig.Bing
-                        onClicked: {
-                            if (Settings.searchConfig.searchEngine != SearchConfig.Bing) {
-                                Settings.searchConfig.searchEngine = SearchConfig.Bing;
-                                Settings.dirty = true;
-                            }
-                        }
-                    }
-
-                    RadioButton {
-                        text: "Yahoo"
-                        checked: Settings.searchConfig.searchEngine == SearchConfig.Yahoo
-                        onClicked: {
-                            if (Settings.searchConfig.searchEngine != SearchConfig.Yahoo) {
-                                Settings.searchConfig.searchEngine = SearchConfig.Yahoo;
-                                Settings.dirty = true;
-                            }
-                        }
-                    }
-
-                    ColumnLayout {
-                        RowLayout {
-                            RadioButton {
-                                text: "Custom"
-                                checked: Settings.searchConfig.searchEngine == SearchConfig.Custom
-                                onClicked: {
-                                    if (Settings.searchConfig.searchEngine != SearchConfig.Custom) {
-                                        Settings.searchConfig.searchEngine = SearchConfig.Custom;
-                                        Settings.dirty = true;
-                                    }
-                                }
-                            }
-
-                            TextField {
-                                Layout.minimumWidth: 256
-                                enabled: Settings.searchConfig.searchEngine == SearchConfig.Custom
-                                text: Settings.searchConfig.customSearchUrl
-                                placeholderText: "e.g https://example.com/?q="
-                                onEditingFinished: {
-                                    if (Settings.searchConfig.customSearchUrl != text) {
-                                        Settings.searchConfig.customSearchUrl = text;
-                                        Settings.dirty = true;
-                                    }
-                                }
-                            }
-                        }
+                SearchEngineSelection {
+                    title: "Search engine"
+                    width: Math.min(parent.width, 400)
+                    selectedName: Settings.searchConfig.searchEngine
+                    onSelected: {
+                        Settings.searchConfig.searchEngine = selectedName;
+                        Settings.dirty = true;
                     }
                 }
 

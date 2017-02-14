@@ -21,6 +21,7 @@ HEADERS += \
     $$PWD/extensions/extensionsearchengineparameter.h \
     $$PWD/extensions/extensionsearchenginesmodel.h \
     $$PWD/extensions/extensionelement.h \
+    $$PWD/utils/searchprovider.h
 
 SOURCES += \
     $$PWD/models/tabsmodel.cpp \
@@ -43,3 +44,4 @@ SOURCES += \
     $$PWD/extensions/extensionsearchengineparameter.cpp \
     $$PWD/extensions/extensionsearchenginesmodel.cpp \
     $$PWD/extensions/extensionelement.cpp \
+    $$PWD/utils/searchprovider.cpp

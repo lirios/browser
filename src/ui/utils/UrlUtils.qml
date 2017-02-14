@@ -36,7 +36,7 @@ QtObject {
         return url.toString().indexOf("liri://") === 0;
     }
 
-    function validUrl(url, searchUrl) {
+    function validUrl(url, searchEngine, currentTheme) {
         // Valid web url
         var isHttped = (url.indexOf("http://") === 0 || url.indexOf("https://") === 0);
         var httpedUrl = isHttped ? url : "http://%1".arg(url);
@@ -49,7 +49,7 @@ QtObject {
         }
         // Search term
         else {
-            return searchUrl + url;
+            return Search.searchUrl(url, searchEngine, currentTheme);
         }
     }
 }

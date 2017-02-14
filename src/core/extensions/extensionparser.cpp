@@ -425,8 +425,7 @@ bool ExtensionParser::parseSearchEngine(const QByteArray jsonData)
         searchEngine->setTitle(searchTitle);
         searchEngine->setSummary(searchSummary);
         searchEngine->setDescription(searchDescription);
-
-        QList<ExtensionSearchEngineParameter*> searchParameters;
+        searchEngine->setUrlBase(urlBase);
 
         for (QJsonValue value : params) {
             if (!value.isObject()) {
@@ -465,12 +464,11 @@ bool ExtensionParser::parseSearchEngine(const QByteArray jsonData)
                     throw ParseError();
                 }
             }
-
             ExtensionSearchEngineParameter* searchParameter = new ExtensionSearchEngineParameter(searchEngine);
             searchParameter->setName(paramName);
             searchParameter->setValue(paramValue);
             searchParameter->setContext(paramContext);
-            searchParameters.append(searchParameter);
+            searchEngine->parameters()->append(searchParameter);
         }
         m_extension->m_extensionSearchEngines.append(searchEngine);
     }

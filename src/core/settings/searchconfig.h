@@ -30,55 +30,25 @@
 class SearchConfig : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(SearchEngine searchEngine READ searchEngine WRITE setSearchEngine NOTIFY searchEngineChanged)
-    Q_PROPERTY(SearchEngine defaultSearchEngine MEMBER m_defaultSearchEngine NOTIFY defaultSearchEngineChanged)
-    Q_PROPERTY(QUrl searchUrl READ searchUrl NOTIFY searchUrlChanged)
+    Q_PROPERTY(QString searchEngine READ searchEngine WRITE setSearchEngine NOTIFY searchEngineChanged)
     Q_PROPERTY(QUrl customSearchUrl READ customSearchUrl WRITE setCustomSearchUrl NOTIFY customSearchUrlChanged)
     Q_ENUMS(SearchEngine)
 public:
     explicit SearchConfig(QObject *parent = nullptr);
 
-    enum SearchEngine {
-        DuckDuckGo,
-        Google,
-        Bing,
-        Yahoo,
-        Custom
-    };
-
-    SearchEngine searchEngine() const { return m_searchEngine; }
-    void setSearchEngine(SearchEngine searchEngine) {
-        searchEngineChanged(m_searchEngine = searchEngine);
-        searchUrlChanged(searchUrl());
-    }
-
-    QUrl searchUrl() const {
-        switch (searchEngine()) {
-            case SearchEngine::DuckDuckGo:
-                return QUrl("https://duckduckgo.com/?q=");
-            case SearchEngine::Google:
-                return QUrl("https://www.google.com/search?q=");
-            case SearchEngine::Bing:
-                return QUrl("https://www.bing.com/search?q=");
-            case SearchEngine::Yahoo:
-                return QUrl("https://search.yahoo.com/search?q=");
-            default:
-                return customSearchUrl();
-        }
-    }
+    QString searchEngine() const { return m_searchEngine; }
+    void setSearchEngine(QString searchEngine) { searchEngineChanged(m_searchEngine = searchEngine); }
 
     QUrl customSearchUrl() const { return m_customSearchUrl; }
     void setCustomSearchUrl(QUrl customSearchUrl) { customSearchUrlChanged(m_customSearchUrl = customSearchUrl); }
 
 signals:
-    void searchEngineChanged(SearchEngine searchEngine);
-    void defaultSearchEngineChanged(SearchEngine defaultSearchEngine);
+    void searchEngineChanged(QString searchEngine);
     void searchUrlChanged(QUrl searchUrl);
     void customSearchUrlChanged(QUrl customSearchUrl);
 
 private:
-    SearchEngine m_searchEngine;
-    SearchEngine m_defaultSearchEngine;
+    QString m_searchEngine;
     QUrl m_searchUrl;
     QUrl m_customSearchUrl;
 };

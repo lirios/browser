@@ -39,8 +39,16 @@ ApplicationWindow {
     property var root
     property WebProfile profile
     property bool incognito: profile.incognito
-    property url startUrl: Settings.startConfig.primaryStartUrl
-    property string searchUrl: Settings.searchConfig.searchUrl
+    property url startUrl: {
+        if (Settings.startConfig.customEnabled)
+            return Settings.startConfig.customUrl;
+        else
+            return Search.homepage(
+                Settings.searchConfig.searchEngine,
+                incognito ? IncognitoTheme.current : Theme.current
+            );
+    }
+    property string searchEngine: Settings.searchConfig.searchEngine
     property bool openStartUrl: true
     property TabsModel tabsModel: TabsModel {}
     property DownloadsModel downloadsModel
@@ -241,7 +249,9 @@ ApplicationWindow {
 
                     tabController: tabController
                     tabsModel: tabController.tabsModel
-                    searchUrl: window.searchUrl
+                    searchEngine: window.searchEngine
+                    currentTheme: incognito ? IncognitoTheme.current : Theme.current
+
                     leftActions: [
                         Action {
                             iconName: "navigation/arrow_back"

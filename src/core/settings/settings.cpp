@@ -86,23 +86,12 @@ void Settings::load()
     }
     QJsonObject data = root["data"].toObject();
     QJsonObject dataStart = data["start"].toObject();
-    m_startConfig->setPrimaryStartUrl(QUrl(dataStart["primary_url"].toString()));
-    m_startConfig->setDarkStartUrl(QUrl(dataStart["dark_theme_url"].toString()));
-    m_startConfig->setIncognitoStartUrl(QUrl(dataStart["incognito_url"].toString()));
+    m_startConfig->setSearchEngine(dataStart["search_engine"].toString());
+    m_startConfig->setCustomUrl(QUrl(dataStart["custom_url"].toString()));
+    m_startConfig->setCustomEnabled(dataStart["custom_enabled"].toBool());
     QJsonObject dataSearch = data["search"].toObject();
-    QString searchEngineString = dataSearch["engine"].toString();
-    SearchConfig::SearchEngine searchEngine;
-    if (searchEngineString == "duckduckgo")
-        searchEngine = SearchConfig::SearchEngine::DuckDuckGo;
-    else if (searchEngineString == "google")
-        searchEngine = SearchConfig::SearchEngine::Google;
-    else if (searchEngineString == "bing")
-        searchEngine = SearchConfig::SearchEngine::Bing;
-    else if (searchEngineString == "yahoo")
-        searchEngine = SearchConfig::SearchEngine::Yahoo;
-    else
-        searchEngine = SearchConfig::SearchEngine::Custom;
-    m_searchConfig->setSearchEngine(searchEngine);
+    QString searchEngineName = dataSearch["engine"].toString();
+    m_searchConfig->setSearchEngine(searchEngineName);
     m_searchConfig->setCustomSearchUrl(QUrl(dataSearch["custom_url"].toString()));
     QJsonObject dataTheme = data["theme"].toObject();
     m_themeConfig->setPrimary(dataTheme["primary"].toString());
@@ -141,12 +130,12 @@ QByteArray Settings::defaultJSON()
         {"version", "0.1.0"}
     };
     QJsonObject dataStart {
-        {"primary_url", m_startConfig->defaultPrimaryStartUrl().toString()},
-        {"dark_theme_url", m_startConfig->defaultDarkStartUrl().toString()},
-        {"incognito_url", m_startConfig->defaultIncognitoStartUrl().toString()}
+        {"search_engine", "default.duckduckgo"},
+        {"custom_url", "https://duckduckgo.com"},
+        {"custom_enabled", false}
     };
     QJsonObject dataSearch {
-        {"engine", "duckduckgo"},
+        {"engine", "default.duckduckgo"},
         {"custom_url", ""}
     };
     QJsonObject dataTheme {
@@ -177,30 +166,12 @@ QByteArray Settings::json()
         {"version", "0.1.0"}
     };
     QJsonObject dataStart {
-        {"primary_url", m_startConfig->primaryStartUrl().toString()},
-        {"dark_theme_url", m_startConfig->darkStartUrl().toString()},
-        {"incognito_url", m_startConfig->incognitoStartUrl().toString()},
+        {"search_engine", m_startConfig->searchEngine()},
+        {"custom_url", m_startConfig->customUrl().toString()},
+        {"custom_enabled", m_startConfig->customEnabled()}
     };
-    QString searchEngineString;
-    switch (m_searchConfig->searchEngine()) {
-        case SearchConfig::SearchEngine::DuckDuckGo:
-            searchEngineString = "duckduckgo";
-            break;
-        case SearchConfig::SearchEngine::Google:
-            searchEngineString = "google";
-            break;
-        case SearchConfig::SearchEngine::Bing:
-            searchEngineString = "bing";
-            break;
-        case SearchConfig::SearchEngine::Yahoo:
-            searchEngineString = "yahoo";
-            break;
-        default:
-            searchEngineString = "custom";
-            break;
-    }
     QJsonObject dataSearch {
-        {"engine", searchEngineString},
+        {"engine", m_searchConfig->searchEngine()},
         {"custom_url", m_searchConfig->customSearchUrl().toString()}
     };
     QJsonObject dataTheme {

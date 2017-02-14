@@ -28,7 +28,7 @@ import Fluid.Controls 1.0
 import Fluid.Core 1.0
 
 Item {
-    property string title: "Select theme"
+    property string title: "Select search engine"
     property string selectedName: ""
 
     signal selected(string name)
@@ -66,7 +66,7 @@ Item {
             ScrollBar.vertical: ScrollBar {}
 
             model: SortFilterProxyModel {
-                sourceModel: Extensions.themesModel
+                sourceModel: Extensions.searchEnginesModel
                 sortRoleName: "title"
                 filterRoleName: "title"
                 filterPattern: "*%1*".arg(searchField.text)
@@ -80,7 +80,7 @@ Item {
                 width: listView.width
                 text: title
                 subText: summary
-                iconName: isSelected ? "navigation/check" : "action/search"
+                iconName: isSelected ? "navigation/check" : "image/color_lens"
                 onClicked: {
                     selected(selectedName = name);
                 }

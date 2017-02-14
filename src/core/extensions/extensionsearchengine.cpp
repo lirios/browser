@@ -26,16 +26,20 @@
 ExtensionSearchEngine::ExtensionSearchEngine(QObject *parent)
     : ExtensionElement(parent)
 {
-
+    m_parameters = new QList<ExtensionSearchEngineParameter*>();
 }
 
 ExtensionSearchEngine *ExtensionSearchEngine::clone(QObject *parent)
 {
     ExtensionSearchEngine* searchEngine = new ExtensionSearchEngine(parent);
-    searchEngine->setName(name());
-    searchEngine->setExtensionName(extensionName());
-    searchEngine->setTitle(title());
-    searchEngine->setSummary(summary());
-    searchEngine->setDescription(description());
+    searchEngine->setName(m_name);
+    searchEngine->setExtensionName(m_extensionName);
+    searchEngine->setTitle(m_title);
+    searchEngine->setSummary(m_summary);
+    searchEngine->setDescription(m_description);
+    searchEngine->setUrlBase(m_urlBase);
+    for (int i=0; i<m_parameters->length(); i++) {
+        searchEngine->parameters()->append(m_parameters->at(i)->clone());
+    }
     return searchEngine;
 }

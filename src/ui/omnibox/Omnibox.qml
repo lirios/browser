@@ -36,7 +36,8 @@ Item {
     id: omnibox
     property TabController tabController
     property TabsModel tabsModel
-    property string searchUrl
+    property string searchEngine
+    property ExtensionTheme currentTheme
     property alias editingUrl: showUrlField.editActive
 
     function focusUrlField() {
@@ -99,7 +100,7 @@ Item {
                     font.pixelSize: 14
 
                     onAccepted: {
-                        var url = UrlUtils.validUrl(text, searchUrl);
+                        var url = UrlUtils.validUrl(text, searchEngine, currentTheme);
                         if (!tabsModel.active.valid) {
                             tabController.openUrl(url);
                         }

@@ -3,6 +3,7 @@ module ui
 # components
 ActionBar 1.0 components/ActionBar.qml
 ThemeSelection 1.0 components/ThemeSelection.qml
+SearchEngineSelection 1.0 components/SearchEngineSelection.qml
 
 # tabview
 TabView 1.0 tabview/TabView.qml

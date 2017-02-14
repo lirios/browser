@@ -34,6 +34,8 @@ class ExtensionSearchEngineParameter : public QObject
 public:
     explicit ExtensionSearchEngineParameter(QObject *parent = nullptr);
 
+    ExtensionSearchEngineParameter* clone(QObject* parent = nullptr);
+
     enum SearchContext {
         None = 0x0,
         Search = 0x1,

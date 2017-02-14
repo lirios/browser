@@ -43,6 +43,7 @@
 #include "../core/extensions/extension.h"
 #include "../core/utils/secondarythemetimer.h"
 #include "../core/utils/themeprovider.h"
+#include "../core/utils/searchprovider.h"
 
 #ifdef Q_OS_MACOS
     #include "mac/MacOsEventListener.h"
@@ -101,6 +102,10 @@ int main(int argc, char *argv[])
     ThemeProvider incognitoThemeProvider;
     incognitoThemeProvider.setModel(extensionsManager.themesModel());
 
+    // Create and configure search provider
+    SearchProvider searchProvider;
+    searchProvider.setModel(extensionsManager.searchEnginesModel());
+
     // Create qml app engine
     QQmlApplicationEngine engine;
 
@@ -127,6 +132,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("Extensions", &extensionsManager);
     engine.rootContext()->setContextProperty("Theme", &themeProvider);
     engine.rootContext()->setContextProperty("IncognitoTheme", &incognitoThemeProvider);
+    engine.rootContext()->setContextProperty("Search", &searchProvider);
 
     #ifdef Q_OS_MACOS
         engine.rootContext()->setContextProperty("MacEvents", &evListener);

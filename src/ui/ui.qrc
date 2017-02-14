@@ -34,5 +34,6 @@
         <file>tabview/content/ExtensionsContent.qml</file>
         <file>tabview/content/AboutContent.qml</file>
         <file>components/ThemeSelection.qml</file>
+        <file>components/SearchEngineSelection.qml</file>
     </qresource>
 </RCC>

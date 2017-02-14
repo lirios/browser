@@ -60,6 +60,7 @@ public:
     void unloadFile(const QString filePath);
 
     ExtensionThemesModel* themesModel() const { return m_extensionThemesModel; }
+    ExtensionSearchEnginesModel* searchEnginesModel() const { return m_extensionSearchEnginesModel; }
 
 signals:
     void extensionsModelChanged(ExtensionsModel* model);

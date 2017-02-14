@@ -36,7 +36,8 @@ class ExtensionSearchEngine : public ExtensionElement
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     Q_PROPERTY(QString summary READ summary WRITE setSummary NOTIFY summaryChanged)
     Q_PROPERTY(QString description READ description WRITE setDescription NOTIFY descriptionChanged)
-    Q_PROPERTY(QList<ExtensionSearchEngineParameter*> parameters READ parameters WRITE setParameters NOTIFY parametersChanged)
+    Q_PROPERTY(QString urlBase READ urlBase WRITE setUrlBase NOTIFY urlBaseChanged)
+    Q_PROPERTY(QList<ExtensionSearchEngineParameter*>* parameters READ parameters NOTIFY parametersChanged)
 public:
     explicit ExtensionSearchEngine(QObject *parent = nullptr);
 
@@ -51,20 +52,24 @@ public:
     QString description() const { return m_description; }
     void setDescription(QString description) { descriptionChanged(m_description = description); }
 
-    QList<ExtensionSearchEngineParameter*> parameters() const { return m_parameters; }
-    void setParameters(QList<ExtensionSearchEngineParameter*> parameters) { parametersChanged(parameters); }
+    QString urlBase() const { return m_urlBase; }
+    void setUrlBase(QString urlBase) { urlBaseChanged(m_urlBase = urlBase); }
+
+    QList<ExtensionSearchEngineParameter*>* parameters() const { return m_parameters; }
 
 signals:
     void titleChanged(QString title);
     void summaryChanged(QString summary);
     void descriptionChanged(QString description);
-    void parametersChanged(QList<ExtensionSearchEngineParameter*> parameters);
+    void urlBaseChanged(QString urlBase);
+    void parametersChanged(QList<ExtensionSearchEngineParameter*>* parameters);
 
 private:
     QString m_title;
     QString m_summary;
     QString m_description;
-    QList<ExtensionSearchEngineParameter*> m_parameters;
+    QString m_urlBase;
+    QList<ExtensionSearchEngineParameter*>* m_parameters;
 };
 
 #endif // EXTENSIONSEARCHENGINE_H

@@ -51,7 +51,7 @@ signals:
     void extensionNameChanged(QString extensionName);
     void nameChanged(QString name);
 
-private:
+protected:
     bool m_valid;
     QString m_extensionName;
     QString m_name;
