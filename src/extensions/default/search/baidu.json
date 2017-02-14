@@ -1,0 +1,25 @@
+{
+    "schema": {
+        "type": "lbx/search",
+        "version": "0.1.0"
+    },
+    "meta": {
+        "name": "default.baidu",
+        "title": "Baidu",
+        "summary": "Baidu search engine",
+        "description": "Baidu Web Search."
+    },
+    "url": {
+        "base": {
+            "search": "https://baidu.com/s",
+            "homepage": "https://baidu.com/"
+        },
+        "params": [
+            {
+                "name": "wd",
+                "value": "search.query",
+                "context": ["search"]
+            }
+        ]
+    }
+}

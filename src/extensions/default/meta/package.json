@@ -23,7 +23,8 @@
                 "res://search/duckduckgo.json",
                 "res://search/google.json",
                 "res://search/bing.json",
-                "res://search/yahoo.json"
+                "res://search/yahoo.json",
+                "res://search/baidu.json"
             ]
         }
     }
