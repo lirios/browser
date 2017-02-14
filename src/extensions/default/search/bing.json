@@ -1,0 +1,25 @@
+{
+    "schema": {
+        "type": "lbx/search",
+        "version": "0.1.0"
+    },
+    "meta": {
+        "name": "default.bing",
+        "title": "Bing",
+        "summary": "Bing search engine",
+        "description": "Bing Web Search."
+    },
+    "url": {
+        "base": {
+            "search": "https://bing.com/search",
+            "homepage": "https://bing.com/"
+        },
+        "params": [
+            {
+                "name": "q",
+                "value": "search.query",
+                "context": ["search"]
+            }
+        ]
+    }
+}

@@ -1,0 +1,25 @@
+{
+    "schema": {
+        "type": "lbx/search",
+        "version": "0.1.0"
+    },
+    "meta": {
+        "name": "default.yahoo",
+        "title": "Yahoo",
+        "summary": "Yahoo search engine",
+        "description": "Yahoo Web Search."
+    },
+    "url": {
+        "base": {
+            "search": "https://search.yahoo.com/search",
+            "homepage": "https://yahoo.com/"
+        },
+        "params": [
+            {
+                "name": "q",
+                "value": "search.query",
+                "context": ["search"]
+            }
+        ]
+    }
+}

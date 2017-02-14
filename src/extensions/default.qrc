@@ -6,5 +6,7 @@
         <file>default/themes/light.json</file>
         <file>default/search/duckduckgo.json</file>
         <file>default/search/google.json</file>
+        <file>default/search/bing.json</file>
+        <file>default/search/yahoo.json</file>
     </qresource>
 </RCC>
