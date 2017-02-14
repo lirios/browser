@@ -412,8 +412,14 @@ bool ExtensionParser::parseSearchEngine(const QByteArray jsonData)
         assertField(root, "url", Type::Object);
         QJsonObject urlObject = root["url"].toObject();
 
-        assertField(urlObject, "base", Type::String);
-        QString urlBase = urlObject["base"].toString();
+        assertField(urlObject, "base", Type::Object);
+        QJsonObject baseObject = urlObject["base"].toObject();
+
+        assertField(baseObject, "search", Type::String);
+        QString urlBaseSearch = baseObject["search"].toString();
+
+        assertField(baseObject, "homepage", Type::String);
+        QString urlBaseHomepage = baseObject["homepage"].toString();
 
         assertField(urlObject, "params", Type::Array);
         QJsonArray params = urlObject["params"].toArray();
@@ -425,7 +431,8 @@ bool ExtensionParser::parseSearchEngine(const QByteArray jsonData)
         searchEngine->setTitle(searchTitle);
         searchEngine->setSummary(searchSummary);
         searchEngine->setDescription(searchDescription);
-        searchEngine->setUrlBase(urlBase);
+        searchEngine->setUrlBaseSearch(urlBaseSearch);
+        searchEngine->setUrlBaseHomepage(urlBaseHomepage);
 
         for (QJsonValue value : params) {
             if (!value.isObject()) {

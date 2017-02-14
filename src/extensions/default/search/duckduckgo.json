@@ -10,7 +10,10 @@
         "description": "The search engine that doesn't track you."
     },
     "url": {
-        "base": "https://duckduckgo.com/",
+        "base": {
+            "search": "https://duckduckgo.com/",
+            "homepage": "https://duckduckgo.com/"
+        },
         "params": [
             {
                 "name": "q",

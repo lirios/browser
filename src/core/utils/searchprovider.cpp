@@ -35,7 +35,7 @@ QString SearchProvider::searchUrl(QString query, QString engine, ExtensionTheme*
 {
     ExtensionSearchEngine* searchEngine = m_model->get(engine);
     QList<ExtensionSearchEngineParameter*>* params = searchEngine->parameters();
-    QString urlString = searchEngine->urlBase() + '?';
+    QString urlString = searchEngine->urlBaseSearch() + '?';
     bool first = true;
     for (int i=0; i<params->count(); i++) {
         ExtensionSearchEngineParameter* param = params->at(i);
@@ -63,7 +63,7 @@ QString SearchProvider::homepage(QString engine, ExtensionTheme *theme) const
 {
     ExtensionSearchEngine* searchEngine = m_model->get(engine);
     QList<ExtensionSearchEngineParameter*>* params = searchEngine->parameters();
-    QString urlString = searchEngine->urlBase() + '?';
+    QString urlString = searchEngine->urlBaseHomepage() + '?';
     bool first = true;
     for (int i=0; i<params->count(); i++) {
         ExtensionSearchEngineParameter* param = params->at(i);

@@ -36,7 +36,8 @@ class ExtensionSearchEngine : public ExtensionElement
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     Q_PROPERTY(QString summary READ summary WRITE setSummary NOTIFY summaryChanged)
     Q_PROPERTY(QString description READ description WRITE setDescription NOTIFY descriptionChanged)
-    Q_PROPERTY(QString urlBase READ urlBase WRITE setUrlBase NOTIFY urlBaseChanged)
+    Q_PROPERTY(QString urlBaseSearch READ urlBaseSearch WRITE setUrlBaseSearch NOTIFY urlBaseSearchChanged)
+    Q_PROPERTY(QString urlBaseHomepage READ urlBaseHomepage WRITE setUrlBaseHomepage NOTIFY urlBaseHomepageChanged)
     Q_PROPERTY(QList<ExtensionSearchEngineParameter*>* parameters READ parameters NOTIFY parametersChanged)
 public:
     explicit ExtensionSearchEngine(QObject *parent = nullptr);
@@ -52,8 +53,11 @@ public:
     QString description() const { return m_description; }
     void setDescription(QString description) { descriptionChanged(m_description = description); }
 
-    QString urlBase() const { return m_urlBase; }
-    void setUrlBase(QString urlBase) { urlBaseChanged(m_urlBase = urlBase); }
+    QString urlBaseSearch() const { return m_urlBaseSearch; }
+    void setUrlBaseSearch(QString urlBaseSearch) { urlBaseSearchChanged(m_urlBaseSearch = urlBaseSearch); }
+
+    QString urlBaseHomepage() const { return m_urlBaseHomepage; }
+    void setUrlBaseHomepage(QString urlBaseHomepage) { urlBaseHomepageChanged(m_urlBaseHomepage = urlBaseHomepage); }
 
     QList<ExtensionSearchEngineParameter*>* parameters() const { return m_parameters; }
 
@@ -61,14 +65,16 @@ signals:
     void titleChanged(QString title);
     void summaryChanged(QString summary);
     void descriptionChanged(QString description);
-    void urlBaseChanged(QString urlBase);
+    void urlBaseSearchChanged(QString urlBaseSearchChanged);
+    void urlBaseHomepageChanged(QString urlBaseHomepage);
     void parametersChanged(QList<ExtensionSearchEngineParameter*>* parameters);
 
 private:
     QString m_title;
     QString m_summary;
     QString m_description;
-    QString m_urlBase;
+    QString m_urlBaseSearch;
+    QString m_urlBaseHomepage;
     QList<ExtensionSearchEngineParameter*>* m_parameters;
 };
 

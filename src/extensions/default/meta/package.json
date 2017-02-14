@@ -20,7 +20,8 @@
                 "res://themes/bluegrey.json"
             ],
             "search": [
-                "res://search/duckduckgo.json"
+                "res://search/duckduckgo.json",
+                "res://search/google.json"
             ]
         }
     }

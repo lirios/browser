@@ -37,7 +37,8 @@ ExtensionSearchEngine *ExtensionSearchEngine::clone(QObject *parent)
     searchEngine->setTitle(m_title);
     searchEngine->setSummary(m_summary);
     searchEngine->setDescription(m_description);
-    searchEngine->setUrlBase(m_urlBase);
+    searchEngine->setUrlBaseSearch(m_urlBaseSearch);
+    searchEngine->setUrlBaseHomepage(m_urlBaseHomepage);
     for (int i=0; i<m_parameters->length(); i++) {
         searchEngine->parameters()->append(m_parameters->at(i)->clone());
     }

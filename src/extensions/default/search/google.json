@@ -1,0 +1,25 @@
+{
+    "schema": {
+        "type": "lbx/search",
+        "version": "0.1.0"
+    },
+    "meta": {
+        "name": "default.google",
+        "title": "Google",
+        "summary": "Google search engine",
+        "description": "Google Web Search."
+    },
+    "url": {
+        "base": {
+            "search": "https://google.com/search",
+            "homepage": "https://google.com/"
+        },
+        "params": [
+            {
+                "name": "q",
+                "value": "search.query",
+                "context": ["search"]
+            }
+        ]
+    }
+}
