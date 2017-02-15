@@ -51,7 +51,7 @@ public:
     void add(ExtensionSearchEngine* searchEngine);
     void remove(const int row);
     void remove(ExtensionSearchEngine* searchEngine);
-    void removeFromExtensionName(const QString extensionName);
+    void removeByExtensionName(const QString extensionName);
     Q_INVOKABLE ExtensionSearchEngine *get(const int row) const;
     Q_INVOKABLE ExtensionSearchEngine *get(const QString name) const;
 

@@ -113,10 +113,10 @@ void ExtensionsManager::addExtension(Extension *extension)
 void ExtensionsManager::removeExtension(Extension *extension)
 {
     // Remove themes from theme model
-    m_extensionThemesModel->removeFromExtensionName(extension->name());
+    m_extensionThemesModel->removeByExtensionName(extension->name());
 
     // Remove from search engines model
-    m_extensionSearchEnginesModel->removeFromExtensionName(extension->name());
+    m_extensionSearchEnginesModel->removeByExtensionName(extension->name());
 
     // Remove from extensions model
     m_extensionsModel->remove(extension);
