@@ -51,6 +51,7 @@ BaseOverlay {
 
         TextField {
             id: searchField
+            selectByMouse: true
             enabled: searchEnabled
             placeholderText: "Find in page"
             onAccepted: {

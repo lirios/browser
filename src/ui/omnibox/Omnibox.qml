@@ -93,6 +93,7 @@ Item {
                     anchors.fill: parent
                     visible: showUrlField.editActive
 
+                    selectByMouse: true
                     bottomPadding: Units.smallSpacing
                     background: Rectangle { color: container.color }
                     font.pixelSize: 14
