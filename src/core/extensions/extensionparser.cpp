@@ -28,7 +28,7 @@
 ExtensionParser::ExtensionParser(QObject *parent)
     : QObject(parent)
 {
-
+    m_error = false;
 }
 
 bool ExtensionParser::open(const QUrl url, ExtensionType type)
@@ -47,7 +47,7 @@ bool ExtensionParser::open(const QUrl url, ExtensionType type)
 
         // Attempt to open QuaZip
         if (!m_zip->open(QuaZip::mdUnzip)) {
-            qWarning() << "Error: Could not open file" << m_filePath << "for read.";
+            error("Could not open file \"" +  m_filePath + "\" for read.");
             return false;
         }
     }
@@ -76,13 +76,13 @@ QByteArray ExtensionParser::readResource(const QString resource)
         if (!fileList.contains(resourceFileName) && fileList.contains(m_pureFileName + "/" + resourceFileName)) {
             resourceFileName = m_pureFileName + "/" + resourceFileName;
         } else {
-            qWarning() << "Error: Could not find resource" << resource << "in" << m_filePath;
+            error("Could not find resource \"" + resource + "\" in \"" + m_filePath + "\".");
             throw ResourceError();
         }
 
         m_zip->setCurrentFile(resourceFileName);
         if (!m_zipFile->open(QIODevice::ReadOnly)) {
-            qCritical() << "Could not open resource" << resource << "in" << m_filePath << "for read.";
+            error("Could not open resource \"" + resource + "\" in \"" + m_filePath + "\" for read.");
             throw ResourceError();
         }
 
@@ -91,7 +91,7 @@ QByteArray ExtensionParser::readResource(const QString resource)
     } else if (m_type == ExtensionType::QRC) {
         QFile file(":/" + m_filePath + "/" + resourceFileName);
         if (!file.open(QIODevice::ReadOnly)) {
-            qCritical() << "Could not open resource" << resource << "in" << m_filePath << "for read.";
+            error("Could not open resource " + resource + "\" in \"" + m_filePath + "\" for read.");
             throw ResourceError();
         }
         data = file.readAll();
@@ -112,14 +112,16 @@ bool ExtensionParser::load()
     // Read meta data
     try {
         QByteArray metaData = readResource("res://meta/package.json");
-        if(!parseMeta(metaData)) {
-            qCritical() << "Failed to parse meta data.";
-            qCritical() << "Stopped loading extension.";
-            return false;
-        }
+        parseMeta(metaData);
     }
     catch (ResourceError &e) {
-        qCritical() << "Stopped loading extension.";
+        qCritical() << "ResourceError: Stopped loading extension.";
+        return false;
+    } catch (FieldError &e) {
+        qCritical() << "FieldError: Stopped loading extension.";
+        return false;
+    } catch (ParseError &e) {
+        qCritical() << "ParseError: Stopped loading extension.";
         return false;
     }
 
@@ -127,362 +129,320 @@ bool ExtensionParser::load()
     return true;
 }
 
-bool ExtensionParser::parseMeta(const QByteArray jsonData)
+
+void ExtensionParser::loadTheme(const QString resourceName)
 {
-    try {
-        QJsonDocument doc(QJsonDocument::fromJson(jsonData));
-        if (doc.isEmpty()) {
-            qWarning() << "Error: Invalid JSON document.";
-            return false;
-        }
-        QJsonObject root = doc.object();
-
-        // Parse schema
-        assertField(root, "schema", Type::Object);
-        QJsonObject schema = root["schema"].toObject();
-
-        assertField(schema, "type", Type::String);
-        QString schemaType = schema["type"].toString();
-        if (schemaType != "lbx/meta") {
-            qWarning() << "Error: Invalid schema type" << schemaType << "detected. Expected \"lbx/meta\".";
-            throw ParseError();
-        }
-
-        assertField(schema, "version", Type::String);
-        QString schemaVersion = schema["version"].toString();
-        if (schemaVersion != "0.1.0") {
-            qWarning() << "Error: Invalid schema version" << schemaVersion << "detected.";
-            throw ParseError();
-        }
-
-        // Parse meta
-        assertField(root, "meta", Type::Object);
-        QJsonObject meta = root["meta"].toObject();
-
-        assertField(meta, "name", Type::String);
-        QString metaName = meta["name"].toString();
-        if (metaName != m_pureFileName) {
-            qWarning() << "Error: Meta name" << metaName << "doesn't match package name.";
-            throw ParseError();
-        }
-        m_extension->setName(metaName);
-
-        assertField(meta, "name", Type::String);
-        m_extension->setTitle(meta["title"].toString());
-
-        assertField(meta, "version", Type::String);
-        m_extension->setVersion(meta["version"].toString());
-
-        assertField(meta, "author", Type::String);
-        m_extension->setAuthor(meta["author"].toString());
-
-        assertField(meta, "description", Type::String);
-        m_extension->setDescription(meta["description"].toString());
-
-        assertField(meta, "summary", Type::String);
-        m_extension->setSummary(meta["summary"].toString());
-
-        assertField(meta, "email", Type::String);
-        m_extension->setEmail(meta["email"].toString());
-
-        // Parse content
-        assertField(root, "content", Type::Object);
-        QJsonObject content = root["content"].toObject();
-
-        // Parse static content
-        if (content.contains("static")) {
-            assertField(content, "static", Type::Object);
-            QJsonObject contentStatic = content["static"].toObject();
-            qDebug() << "Extension contains static content.";
-
-            // Parse themes
-            if (contentStatic.contains("themes")) {
-                assertField(contentStatic, "themes", Type::Array);
-                QJsonArray themes = contentStatic["themes"].toArray();
-                qDebug() << "Extension contains themes.";
-                for (QJsonValue value: themes) {
-                    if (!value.isString()) {
-                        qDebug() << "Error: Field \"themes\" must be an array of resource names!";
-                        throw ParseError();
-                    }
-                    if (!loadTheme(value.toString())) {
-                        qCritical() << "Failed to parse theme data.";
-                        qCritical() << "Stopped loading extension.";
-                        throw ParseError();
-                    }
-                }
-            }
-
-            // Parse search engines
-            if (contentStatic.contains("search")) {
-                assertField(contentStatic, "search", Type::Array);
-                QJsonArray searchEngines = contentStatic["search"].toArray();
-                qDebug() << "Extension contains search engines.";
-                for (QJsonValue value: searchEngines) {
-                    if (!value.isString()) {
-                        qDebug() << "Error: Field \"search\" must be an array of resource names!";
-                        throw ParseError();
-                    }
-                    if (!loadSearchEngine(value.toString())) {
-                        qCritical() << "Failed to parse search engine data.";
-                        qCritical() << "Stopped loading extension.";
-                        throw ParseError();
-                    }
-                }
-            }
-        }
-    } catch (ParseError &e) {
-        return false;
-    }
-    return true;
-}
-
-bool ExtensionParser::loadTheme(const QString resourceName)
-{
-    try {
-        QByteArray themeData = readResource(resourceName);
-        if(!parseTheme(themeData)) {
-            return false;
-        }
-    }
-    catch (ResourceError &e) {
-        return false;
-    }
-
+    QByteArray themeData = readResource(resourceName);
+    parseTheme(themeData);
     qDebug() << "Theme" << resourceName << "loaded.";
-    return true;
 }
 
-bool ExtensionParser::parseTheme(const QByteArray jsonData)
+void ExtensionParser::loadSearchEngine(const QString resourceName)
 {
-    try {
-        QJsonDocument doc(QJsonDocument::fromJson(jsonData));
-        if (doc.isEmpty()) {
-            qWarning() << "Error: Invalid JSON document.";
-            throw ParseError();
-        }
-        QJsonObject themeObject = doc.object();
-
-        // Parse schema
-        assertField(themeObject, "schema", Type::Object);
-        QJsonObject schema = themeObject["schema"].toObject();
-
-        assertField(schema, "type", Type::String);
-        QString schemaType = schema["type"].toString();
-        if (schemaType != "lbx/theme") {
-            qWarning() << "Error: Invalid schema type" << schemaType << "detected. Expected \"lbx/theme\".";
-            throw ParseError();
-        }
-
-        assertField(schema, "version", Type::String);
-        QString schemaVersion = schema["version"].toString();
-        if (schemaVersion != "0.1.0") {
-            qWarning() << "Error: Invalid schema version" << schemaVersion << "detected.";
-            throw ParseError();
-        }
-
-        // Parse meta
-        assertField(themeObject, "meta", Type::Object);
-        QJsonObject meta = themeObject["meta"].toObject();
-
-        assertField(meta, "name", Type::String);
-        QString themeName = meta["name"].toString();
-        if (!themeName.startsWith(m_extension->name() + ".")) {
-            qWarning() << "Error: Theme name" << themeName << "doesn't match package name.";
-            throw ParseError();
-        }
-
-        assertField(meta, "title", Type::String);
-        QString themeTitle = meta["title"].toString();
-
-        assertField(meta, "summary", Type::String);
-        QString themeSummary = meta["summary"].toString();
-
-        assertField(meta, "description", Type::String);
-        QString themeDescription = meta["description"].toString();
-
-        // Parse palette
-        assertField(themeObject, "palette", Type::Object);
-        QJsonObject palette = themeObject["palette"].toObject();
-
-        assertField(palette, "dark", Type::Bool);
-        bool paletteDark = palette["dark"].toBool();
-
-        assertField(palette, "adapt_website_theme", Type::Bool);
-        bool paletteAdaptWebsiteTheme = palette["adapt_website_theme"].toBool();
-
-        assertField(palette, "accent", Type::String);
-        QColor paletteAccent(palette["accent"].toString());
-
-        assertField(palette, "primary", Type::String);
-        QColor palettePrimary(palette["primary"].toString());
-
-        assertField(palette, "foreground", Type::String);
-        QColor paletteForeground(palette["foreground"].toString());
-
-        assertField(palette, "background", Type::String);
-        QColor paletteBackground(palette["background"].toString());
-
-        // Create instance and store
-        ExtensionTheme* theme = new ExtensionTheme(this->extension());
-        theme->setExtensionName(m_extension->name());
-        theme->setName(themeName);
-        theme->setTitle(themeTitle);
-        theme->setSummary(themeSummary);
-        theme->setDescription(themeDescription);
-        theme->setDark(paletteDark);
-        theme->setAdaptWebsiteTheme(paletteAdaptWebsiteTheme);
-        theme->setAccent(paletteAccent);
-        theme->setPrimary(palettePrimary);
-        theme->setForeground(paletteForeground);
-        theme->setBackground(paletteBackground);
-        m_extension->m_extensionThemes.append(theme);
-    }
-    catch(ParseError &e) {
-        return false;
-    }
-    return true;
-}
-
-bool ExtensionParser::loadSearchEngine(const QString resourceName)
-{
-    try {
-        QByteArray data = readResource(resourceName);
-        if(!parseSearchEngine(data)) {
-            return false;
-        }
-    }
-    catch (ResourceError &e) {
-        return false;
-    }
-
+    QByteArray data = readResource(resourceName);
+    parseSearchEngine(data);
     qDebug() << "Search engine" << resourceName << "loaded.";
-    return true;
 }
 
-bool ExtensionParser::parseSearchEngine(const QByteArray jsonData)
+void ExtensionParser::parseMeta(const QByteArray jsonData)
 {
-    try {
-        QJsonDocument doc(QJsonDocument::fromJson(jsonData));
-        if (doc.isEmpty()) {
-            qWarning() << "Error: Invalid JSON document.";
+    QJsonDocument doc(QJsonDocument::fromJson(jsonData));
+    if (doc.isEmpty()) {
+        error("Invalid JSON document.");
+        throw ParseError();
+    }
+    QJsonObject root = doc.object();
+
+    // Parse schema
+    assertField(root, "schema", Type::Object);
+    QJsonObject schema = root["schema"].toObject();
+
+    assertField(schema, "type", Type::String);
+    QString schemaType = schema["type"].toString();
+    if (schemaType != "lbx/meta") {
+        error("Invalid schema type \"" + schemaType + "\" detected. Expected \"lbx/meta\".");
+        throw ParseError();
+    }
+
+    assertField(schema, "version", Type::String);
+    QString schemaVersion = schema["version"].toString();
+    if (schemaVersion != "0.1.0") {
+        error( "Invalid schema version \"" + schemaVersion + "\" detected.");
+        throw ParseError();
+    }
+
+    // Parse meta
+    assertField(root, "meta", Type::Object);
+    QJsonObject meta = root["meta"].toObject();
+
+    assertField(meta, "name", Type::String);
+    QString metaName = meta["name"].toString();
+    if (metaName != m_pureFileName) {
+        error("Meta name \"" + metaName + "\" doesn't match package name.");
+        throw ParseError();
+    }
+    m_extension->setName(metaName);
+
+    assertField(meta, "name", Type::String);
+    m_extension->setTitle(meta["title"].toString());
+
+    assertField(meta, "version", Type::String);
+    m_extension->setVersion(meta["version"].toString());
+
+    assertField(meta, "author", Type::String);
+    m_extension->setAuthor(meta["author"].toString());
+
+    assertField(meta, "description", Type::String);
+    m_extension->setDescription(meta["description"].toString());
+
+    assertField(meta, "summary", Type::String);
+    m_extension->setSummary(meta["summary"].toString());
+
+    assertField(meta, "email", Type::String);
+    m_extension->setEmail(meta["email"].toString());
+
+    // Parse content
+    assertField(root, "content", Type::Object);
+    QJsonObject content = root["content"].toObject();
+
+    // Parse static content
+    if (content.contains("static")) {
+        assertField(content, "static", Type::Object);
+        QJsonObject contentStatic = content["static"].toObject();
+        qDebug() << "Extension contains static content.";
+
+        // Parse themes
+        if (contentStatic.contains("themes")) {
+            assertField(contentStatic, "themes", Type::Array);
+            QJsonArray themes = contentStatic["themes"].toArray();
+            qDebug() << "Extension contains themes.";
+            for (QJsonValue value: themes) {
+                if (!value.isString()) {
+                    error("Field \"themes\" must be an array of resource names.");
+                    throw ParseError();
+                }
+                loadTheme(value.toString());
+            }
+        }
+
+        // Parse search engines
+        if (contentStatic.contains("search")) {
+            assertField(contentStatic, "search", Type::Array);
+            QJsonArray searchEngines = contentStatic["search"].toArray();
+            qDebug() << "Extension contains search engines.";
+            for (QJsonValue value: searchEngines) {
+                if (!value.isString()) {
+                    error("Field \"search\" must be an array of resource names.");
+                    throw ParseError();
+                }
+                loadSearchEngine(value.toString());
+            }
+        }
+    }
+}
+
+void ExtensionParser::parseTheme(const QByteArray jsonData)
+{
+    QJsonDocument doc(QJsonDocument::fromJson(jsonData));
+    if (doc.isEmpty()) {
+        error("Invalid JSON document.");
+        throw ParseError();
+    }
+    QJsonObject themeObject = doc.object();
+
+    // Parse schema
+    assertField(themeObject, "schema", Type::Object);
+    QJsonObject schema = themeObject["schema"].toObject();
+
+    assertField(schema, "type", Type::String);
+    QString schemaType = schema["type"].toString();
+    if (schemaType != "lbx/theme") {
+        error("Invalid schema type \"" + schemaType + "\" detected. Expected \"lbx/theme\".");
+        throw ParseError();
+    }
+
+    assertField(schema, "version", Type::String);
+    QString schemaVersion = schema["version"].toString();
+    if (schemaVersion != "0.1.0") {
+        error("Invalid schema version \"" + schemaVersion + "\" detected.");
+        throw ParseError();
+    }
+
+    // Parse meta
+    assertField(themeObject, "meta", Type::Object);
+    QJsonObject meta = themeObject["meta"].toObject();
+
+    assertField(meta, "name", Type::String);
+    QString themeName = meta["name"].toString();
+    if (!themeName.startsWith(m_extension->name() + ".")) {
+        error("Theme name \"" + themeName + "\" doesn't match package name.");
+        throw ParseError();
+    }
+
+    assertField(meta, "title", Type::String);
+    QString themeTitle = meta["title"].toString();
+
+    assertField(meta, "summary", Type::String);
+    QString themeSummary = meta["summary"].toString();
+
+    assertField(meta, "description", Type::String);
+    QString themeDescription = meta["description"].toString();
+
+    // Parse palette
+    assertField(themeObject, "palette", Type::Object);
+    QJsonObject palette = themeObject["palette"].toObject();
+
+    assertField(palette, "dark", Type::Bool);
+    bool paletteDark = palette["dark"].toBool();
+
+    assertField(palette, "adapt_website_theme", Type::Bool);
+    bool paletteAdaptWebsiteTheme = palette["adapt_website_theme"].toBool();
+
+    assertField(palette, "accent", Type::String);
+    QColor paletteAccent(palette["accent"].toString());
+
+    assertField(palette, "primary", Type::String);
+    QColor palettePrimary(palette["primary"].toString());
+
+    assertField(palette, "foreground", Type::String);
+    QColor paletteForeground(palette["foreground"].toString());
+
+    assertField(palette, "background", Type::String);
+    QColor paletteBackground(palette["background"].toString());
+
+    // Create instance and store
+    ExtensionTheme* theme = new ExtensionTheme(this->extension());
+    theme->setExtensionName(m_extension->name());
+    theme->setName(themeName);
+    theme->setTitle(themeTitle);
+    theme->setSummary(themeSummary);
+    theme->setDescription(themeDescription);
+    theme->setDark(paletteDark);
+    theme->setAdaptWebsiteTheme(paletteAdaptWebsiteTheme);
+    theme->setAccent(paletteAccent);
+    theme->setPrimary(palettePrimary);
+    theme->setForeground(paletteForeground);
+    theme->setBackground(paletteBackground);
+    m_extension->m_extensionThemes.append(theme);
+}
+
+void ExtensionParser::parseSearchEngine(const QByteArray jsonData)
+{
+    QJsonDocument doc(QJsonDocument::fromJson(jsonData));
+    if (doc.isEmpty()) {
+        error("Invalid JSON document.");
+        throw ParseError();
+    }
+    QJsonObject root = doc.object();
+
+    // Parse schema
+    assertField(root, "schema", Type::Object);
+    QJsonObject schema = root["schema"].toObject();
+
+    assertField(schema, "type", Type::String);
+    QString schemaType = schema["type"].toString();
+    if (schemaType != "lbx/search") {
+        error("Invalid schema type \"" + schemaType + "\" detected. Expected \"lbx/search\".");
+        throw ParseError();
+    }
+
+    assertField(schema, "version", Type::String);
+    QString schemaVersion = schema["version"].toString();
+    if (schemaVersion != "0.1.0") {
+        error("Invalid schema version \"" + schemaVersion + "\" detected.");
+        throw ParseError();
+    }
+
+    // Parse meta
+    assertField(root, "meta", Type::Object);
+    QJsonObject meta = root["meta"].toObject();
+
+    assertField(meta, "name", Type::String);
+    QString searchName = meta["name"].toString();
+    if (!searchName.startsWith(m_extension->name() + ".")) {
+        error("Search name \"" + searchName + "\" doesn't match package name.");
+        throw ParseError();
+    }
+
+    assertField(meta, "title", Type::String);
+    QString searchTitle = meta["title"].toString();
+
+    assertField(meta, "summary", Type::String);
+    QString searchSummary = meta["summary"].toString();
+
+    assertField(meta, "description", Type::String);
+    QString searchDescription = meta["description"].toString();
+
+    // Parse url
+    assertField(root, "url", Type::Object);
+    QJsonObject urlObject = root["url"].toObject();
+
+    assertField(urlObject, "base", Type::Object);
+    QJsonObject baseObject = urlObject["base"].toObject();
+
+    assertField(baseObject, "search", Type::String);
+    QString urlBaseSearch = baseObject["search"].toString();
+
+    assertField(baseObject, "homepage", Type::String);
+    QString urlBaseHomepage = baseObject["homepage"].toString();
+
+    assertField(urlObject, "params", Type::Array);
+    QJsonArray params = urlObject["params"].toArray();
+
+    // Create instance
+    ExtensionSearchEngine* searchEngine = new ExtensionSearchEngine(this->extension());
+    searchEngine->setExtensionName(m_extension->name());
+    searchEngine->setName(searchName);
+    searchEngine->setTitle(searchTitle);
+    searchEngine->setSummary(searchSummary);
+    searchEngine->setDescription(searchDescription);
+    searchEngine->setUrlBaseSearch(urlBaseSearch);
+    searchEngine->setUrlBaseHomepage(urlBaseHomepage);
+
+    for (QJsonValue value : params) {
+        if (!value.isObject()) {
+            error("Field \"params\" must be an array of objects.");
+            searchEngine->deleteLater();
             throw ParseError();
         }
-        QJsonObject root = doc.object();
+        QJsonObject paramObject = value.toObject();
 
-        // Parse schema
-        assertField(root, "schema", Type::Object);
-        QJsonObject schema = root["schema"].toObject();
+        assertField(paramObject, "name", Type::String);
+        QString paramName = paramObject["name"].toString();
 
-        assertField(schema, "type", Type::String);
-        QString schemaType = schema["type"].toString();
-        if (schemaType != "lbx/search") {
-            qWarning() << "Error: Invalid schema type" << schemaType << "detected. Expected \"lbx/search\".";
-            throw ParseError();
-        }
+        assertField(paramObject, "value", Type::String);
+        QString paramValue = paramObject["value"].toString();
 
-        assertField(schema, "version", Type::String);
-        QString schemaVersion = schema["version"].toString();
-        if (schemaVersion != "0.1.0") {
-            qWarning() << "Error: Invalid schema version" << schemaVersion << "detected.";
-            throw ParseError();
-        }
+        assertField(paramObject, "context", Type::Array);
+        QJsonArray contextArray = paramObject["context"].toArray();
 
-        // Parse meta
-        assertField(root, "meta", Type::Object);
-        QJsonObject meta = root["meta"].toObject();
+        ExtensionSearchEngineParameter::ContextFlag paramContext;
 
-        assertField(meta, "name", Type::String);
-        QString searchName = meta["name"].toString();
-        if (!searchName.startsWith(m_extension->name() + ".")) {
-            qWarning() << "Error: search name" << searchName << "doesn't match package name.";
-            throw ParseError();
-        }
-
-        assertField(meta, "title", Type::String);
-        QString searchTitle = meta["title"].toString();
-
-        assertField(meta, "summary", Type::String);
-        QString searchSummary = meta["summary"].toString();
-
-        assertField(meta, "description", Type::String);
-        QString searchDescription = meta["description"].toString();
-
-        // Parse url
-        assertField(root, "url", Type::Object);
-        QJsonObject urlObject = root["url"].toObject();
-
-        assertField(urlObject, "base", Type::Object);
-        QJsonObject baseObject = urlObject["base"].toObject();
-
-        assertField(baseObject, "search", Type::String);
-        QString urlBaseSearch = baseObject["search"].toString();
-
-        assertField(baseObject, "homepage", Type::String);
-        QString urlBaseHomepage = baseObject["homepage"].toString();
-
-        assertField(urlObject, "params", Type::Array);
-        QJsonArray params = urlObject["params"].toArray();
-
-        // Create instance
-        ExtensionSearchEngine* searchEngine = new ExtensionSearchEngine(this->extension());
-        searchEngine->setExtensionName(m_extension->name());
-        searchEngine->setName(searchName);
-        searchEngine->setTitle(searchTitle);
-        searchEngine->setSummary(searchSummary);
-        searchEngine->setDescription(searchDescription);
-        searchEngine->setUrlBaseSearch(urlBaseSearch);
-        searchEngine->setUrlBaseHomepage(urlBaseHomepage);
-
-        for (QJsonValue value : params) {
-            if (!value.isObject()) {
-                qWarning() << "Error: Field \"params\" must be an array of objects";
+        for (QJsonValue contextValue: contextArray) {
+            if (!contextValue.isString()) {
+                error("Field \"context\" must be an array of strings.");
                 searchEngine->deleteLater();
                 throw ParseError();
             }
-            QJsonObject paramObject = value.toObject();
+            QString contextString = contextValue.toString();
 
-            assertField(paramObject, "name", Type::String);
-            QString paramName = paramObject["name"].toString();
-
-            assertField(paramObject, "value", Type::String);
-            QString paramValue = paramObject["value"].toString();
-
-            assertField(paramObject, "context", Type::Array);
-            QJsonArray contextArray = paramObject["context"].toArray();
-
-            ExtensionSearchEngineParameter::ContextFlag paramContext;
-
-            for (QJsonValue contextValue: contextArray) {
-                if (!contextValue.isString()) {
-                    qWarning() << "Error: Field \"context\" must be an array of strings";
-                    searchEngine->deleteLater();
-                    throw ParseError();
-                }
-                QString contextString = contextValue.toString();
-
-                if (contextString == "search")
-                    paramContext |= ExtensionSearchEngineParameter::Search;
-                else if (contextString == "homepage")
-                    paramContext |= ExtensionSearchEngineParameter::Homepage;
-                else {
-                    qWarning() << "Error: Unknown context value" << contextString << "detected.";
-                    searchEngine->deleteLater();
-                    throw ParseError();
-                }
+            if (contextString == "search")
+                paramContext |= ExtensionSearchEngineParameter::Search;
+            else if (contextString == "homepage")
+                paramContext |= ExtensionSearchEngineParameter::Homepage;
+            else {
+                error("Unknown context value \"" + contextString + "\" detected.");
+                searchEngine->deleteLater();
+                throw ParseError();
             }
-            ExtensionSearchEngineParameter* searchParameter = new ExtensionSearchEngineParameter(searchEngine);
-            searchParameter->setName(paramName);
-            searchParameter->setValue(paramValue);
-            searchParameter->setContext(paramContext);
-            searchEngine->parameters()->append(searchParameter);
         }
-        m_extension->m_extensionSearchEngines.append(searchEngine);
+        ExtensionSearchEngineParameter* searchParameter = new ExtensionSearchEngineParameter(searchEngine);
+        searchParameter->setName(paramName);
+        searchParameter->setValue(paramValue);
+        searchParameter->setContext(paramContext);
+        searchEngine->parameters()->append(searchParameter);
     }
-    catch(ParseError &e) {
-        return false;
-    }
-    return true;
+    m_extension->m_extensionSearchEngines.append(searchEngine);
 }
 
 ExtensionParser::FieldStatus ExtensionParser::fieldStatus(QJsonObject object, QString fieldName, Type fieldType)
@@ -505,14 +465,14 @@ void ExtensionParser::assertField(QJsonObject object, QString fieldName, Type fi
     FieldStatus status = fieldStatus(object, fieldName, fieldType);
     switch (status) {
         case FieldStatus::NonExistent:
-            qWarning() << "Error: Required field" << fieldName << "does not exist.";
-            throw ParseError();
+            error("Required field \"" + fieldName + "\" does not exist.");
+            throw FieldError();
         case FieldStatus::WrongType:
-            qWarning() << "Error: Field" << fieldName << "must be of type" << typeName(fieldType) << "by requirement.";
-            throw ParseError();
+            error("Field \"" + fieldName + "\" must be of type \"" + typeName(fieldType) + "\" by requirement.");
+            throw FieldError();
         case FieldStatus::Empty:
-            qWarning() << "Error: Required field" << fieldName << "is empty";
-            throw ParseError();
+            error("Required field \"" + fieldName + "\" field is empty");
+            throw FieldError();
         case FieldStatus::Valid:
             break;
     }
@@ -538,4 +498,11 @@ QString ExtensionParser::typeName(Type type)
         default:
             return "Unknown";
     }
+}
+
+void ExtensionParser::error(QString errorString)
+{
+    qWarning("Error: %s", qPrintable(errorString));
+    m_errorString = errorString;
+    m_error = true;
 }

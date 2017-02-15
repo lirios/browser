@@ -43,27 +43,6 @@
 
 using Type = QJsonValue::Type;
 
-class FieldError : public QException
-{
-public:
-    void raise() const { throw *this; }
-    FieldError *clone() const { return new FieldError(*this); }
-};
-
-class ResourceError : public QException
-{
-public:
-    void raise() const { throw *this; }
-    ResourceError *clone() const { return new ResourceError(*this); }
-};
-
-class ParseError : public QException
-{
-public:
-    void raise() const { throw *this; }
-    ParseError *clone() const { return new ParseError(*this); }
-};
-
 enum ExtensionType {
     LBX,
     QRC
@@ -75,6 +54,21 @@ class ExtensionParser : public QObject
 public:
     explicit ExtensionParser(QObject *parent=nullptr);
 
+    bool open(const QUrl url, ExtensionType type=ExtensionType::LBX);
+    void close();
+
+    bool load();
+
+    Extension* extension() const { return m_extension; }
+    void setExtension(Extension* extension) { extensionChanged(m_extension = extension); }
+
+    QString errorString() const { return m_errorString; }
+    bool hasError() const { return m_error; }
+
+signals:
+    void extensionChanged(Extension* extension);
+
+private: // enum
     enum FieldStatus {
         Valid,
         NonExistent,
@@ -82,27 +76,46 @@ public:
         Empty
     };
 
-    bool open(const QUrl url, ExtensionType type=ExtensionType::LBX);
-    void close();
+private: // exceptions
+    class FieldError : public QException
+    {
+    public:
+        void raise() const { throw *this; }
+        FieldError *clone() const { return new FieldError(*this); }
+    };
 
-    bool load();
+    class ResourceError : public QException
+    {
+    public:
+        void raise() const { throw *this; }
+        ResourceError *clone() const { return new ResourceError(*this); }
+    };
 
+    class ParseError : public QException
+    {
+    public:
+        void raise() const { throw *this; }
+        ParseError *clone() const { return new ParseError(*this); }
+    };
+
+private: // methods
     QByteArray readResource(const QString resourceName);
     QString fromResourceName(QString resourceName);
 
-    bool parseMeta(const QByteArray jsonData);
-    bool loadTheme(const QString resourceName);
-    bool parseTheme(const QByteArray jsonData);
-    bool loadSearchEngine(const QString resourceName);
-    bool parseSearchEngine(const QByteArray jsonData);
+    void loadTheme(const QString resourceName);
+    void loadSearchEngine(const QString resourceName);
 
-    Extension* extension() const { return m_extension; }
-    void setExtension(Extension* extension) { extensionChanged(m_extension = extension); }
+    void parseMeta(const QByteArray jsonData);
+    void parseTheme(const QByteArray jsonData);
+    void parseSearchEngine(const QByteArray jsonData);
 
-signals:
-    void extensionChanged(Extension* extension);
+    FieldStatus fieldStatus(QJsonObject object, QString fieldName, Type fieldType);
+    void assertField(QJsonObject object, QString fieldName, Type fieldType);
 
-private:
+    QString typeName(Type type);
+    void error(QString errorString);
+
+private: // members
     QuaZip* m_zip;
     QuaZipFile* m_zipFile;
 
@@ -113,10 +126,8 @@ private:
     QString m_filePath;
     QString m_pureFileName;
 
-    FieldStatus fieldStatus(QJsonObject object, QString fieldName, Type fieldType);
-    void assertField(QJsonObject object, QString fieldName, Type fieldType);
-
-    QString typeName(Type type);
+    QString m_errorString;
+    bool m_error;
 };
 
 #endif // EXTENSIONPARSER_H
