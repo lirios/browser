@@ -52,6 +52,7 @@ Item {
 
             TextField {
                 id: searchField
+                selectByMouse: true
                 placeholderText: "Search"
             }
         }

@@ -104,6 +104,7 @@ TabContent {
                         Layout.minimumWidth: 256
                         Layout.leftMargin: 32
                         enabled: Settings.startConfig.customEnabled
+                        selectByMouse: true
                         placeholderText: "Custom start url"
                         text: Settings.startConfig.customUrl
                         onEditingFinished: {
@@ -170,6 +171,7 @@ TabContent {
                         Layout.maximumWidth: 56
                         text: Qt.formatTime(Settings.themeConfig.secondaryStartTime, "HH:mm")
                         enabled: radioButtonDarkBetween.checked
+                        selectByMouse: true
                         maximumLength: 5
                         validator: RegExpValidator {
                             regExp: /^([0-1][0-9]|2[0-3]):([0-5][0-9])/
@@ -191,6 +193,7 @@ TabContent {
                         Layout.maximumWidth: 56
                         text: Qt.formatTime(Settings.themeConfig.secondaryEndTime, "HH:mm")
                         enabled: radioButtonDarkBetween.checked
+                        selectByMouse: true
                         maximumLength: 5
                         validator: RegExpValidator {
                             regExp: /^([0-1][0-9]|2[0-3]):([0-5][0-9])/
