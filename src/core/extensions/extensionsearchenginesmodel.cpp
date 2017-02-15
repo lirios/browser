@@ -95,6 +95,15 @@ void ExtensionSearchEnginesModel::remove(ExtensionSearchEngine *searchEngine)
         remove(index);
 }
 
+void ExtensionSearchEnginesModel::removeFromExtensionName(const QString extensionName)
+{
+    for (ExtensionSearchEngine* searchEngine : m_searchEngines) {
+        if (searchEngine->extensionName() == extensionName) {
+            remove(searchEngine);
+        }
+    }
+}
+
 ExtensionSearchEngine *ExtensionSearchEnginesModel::get(const int row) const
 {
     if (row < 0 || row >= count()) {

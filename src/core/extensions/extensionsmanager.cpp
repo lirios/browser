@@ -112,10 +112,15 @@ void ExtensionsManager::addExtension(Extension *extension)
 
 void ExtensionsManager::removeExtension(Extension *extension)
 {
-    // Remove from model
-    m_extensionsModel->remove(extension);
     // Remove themes from theme model
     m_extensionThemesModel->removeFromExtensionName(extension->name());
+
+    // Remove from search engines model
+    m_extensionSearchEnginesModel->removeFromExtensionName(extension->name());
+
+    // Remove from extensions model
+    m_extensionsModel->remove(extension);
+
     // Delete object
     extension->deleteLater();
     qDebug() << "Extension unloaded.";
