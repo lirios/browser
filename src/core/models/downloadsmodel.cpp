@@ -74,7 +74,7 @@ WebDownload* DownloadsModel::add()
 
 WebDownload* DownloadsModel::get(const int index) const
 {
-    if (index < 0 || index > rowCount()) {
+    if (index < 0 || index >= rowCount()) {
         return m_invalid_download;
     }
     return m_downloads_list.at(index);
