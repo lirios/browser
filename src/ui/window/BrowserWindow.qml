@@ -444,7 +444,7 @@ ApplicationWindow {
             text: "View source"
             iconName: "action/code"
             onClicked: {
-                tabController.openUrl("view-source:" + tabsModel.active.url, false, tabsModel.row(tabsModel.active) + 1);
+                tabController.openUrl("view-source:" + tabsModel.active.url, false, tabsModel.activeRow + 1);
             }
         }
 

@@ -69,7 +69,7 @@ QtObject {
                     request: request
                 }
             },
-            tabsModel.row(tabsModel.active) + 1 // Insert tab next to the current tab
+            tabsModel.activeRow + 1 // Insert tab next to the current tab
         );
     }
 

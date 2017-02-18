@@ -237,8 +237,8 @@ Item {
                 anchors {
                     bottom: parent.bottom
                 }
-                visible: tabsModel.activeIndex > -1 && !tabBar.dragActive
-                x: tabsModel.activeIndex * tabWidth
+                visible: tabsModel.activeRow > -1 && !tabBar.dragActive
+                x: tabsModel.activeRow * tabWidth
                 width: tabBar.tabWidth
                 color: indicatorColor
 
@@ -321,8 +321,8 @@ Item {
         onActiveChanged: {
             // Ensure the active tab is fully visible
             if (tab.valid) {
-                if (tabsModel.activeIndex !== -1) {
-                    tabsListView.positionViewAtIndex(tabsModel.activeIndex, ListView.Contain);
+                if (tabsModel.activeRow !== -1) {
+                    tabsListView.positionViewAtIndex(tabsModel.activeRow, ListView.Contain);
                 }
             }
         }

@@ -33,7 +33,7 @@ class TabsModel : public QAbstractListModel
     Q_PROPERTY(int count READ count NOTIFY countChanged)
     Q_PROPERTY(bool empty READ empty NOTIFY emptyChanged)
     Q_PROPERTY(Tab* active READ active NOTIFY activeChanged)
-    Q_PROPERTY(int activeIndex READ activeIndex NOTIFY activeIndexChanged)
+    Q_PROPERTY(int activeRow READ activeRow NOTIFY activeRowChanged)
 public:
     explicit TabsModel(QObject *parent = nullptr);
 
@@ -69,7 +69,7 @@ public:
     Q_INVOKABLE bool setActive(unsigned int uid);
     Q_INVOKABLE bool setActive(Tab* tab);
     Q_INVOKABLE Tab* active() const;
-    Q_INVOKABLE int activeIndex() const;
+    Q_INVOKABLE int activeRow() const;
 
     Q_INVOKABLE void setInactive(Tab* tab);
     Q_INVOKABLE void setInactive();
@@ -81,7 +81,7 @@ signals:
     void countChanged(int count);
     void emptyChanged(bool empty);
     void activeChanged(Tab* tab);
-    void activeIndexChanged(int index);
+    void activeRowChanged(int index);
     void beforeTabRemoved(Tab* tab);
 
 public slots:
