@@ -56,6 +56,16 @@ Item {
             }
         }
     ]
+
+    property list<Action> floatingActions: [
+        Action {
+            iconName: "content/add"
+            onTriggered: {
+                newTab();
+            }
+        }
+    ]
+
     property list<Action> rightActions: [
         Action {
             visible: tabsListView.contentWidth > tabsListView.width
@@ -66,6 +76,7 @@ Item {
             }
         },
         Action {
+            visible: !floationActionBar.canShow
             iconName: "content/add"
             onTriggered: {
                 newTab();
@@ -238,6 +249,35 @@ Item {
                 }
 
                 Behavior on anchors.bottomMargin {
+                    NumberAnimation {
+                        duration: Units.mediumDuration
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+            }
+
+            TabBarActionBar {
+                id: floationActionBar
+                anchors {
+                    top: parent.top
+                    bottom: parent.bottom
+                }
+
+                property bool canShow: (x + width) < tabsListView.width
+                property bool showing: canShow && !tabBar.dragActive
+
+                x: tabsModel.count * tabBar.tabWidth + Units.smallSpacing
+                opacity: showing ? 1 : 0
+                actions: floatingActions
+
+                Behavior on x {
+                    NumberAnimation {
+                        duration: Units.mediumDuration
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+
+                Behavior on opacity {
                     NumberAnimation {
                         duration: Units.mediumDuration
                         easing.type: Easing.InOutQuad
