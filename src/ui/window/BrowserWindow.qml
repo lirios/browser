@@ -92,6 +92,16 @@ ApplicationWindow {
         }
     }
 
+    property color selectionColor: {
+        if (incognito) {
+            return IncognitoTheme.current.accent;
+        } else if (websiteThemeActive) {
+            return tabsModel.active.themeColor
+        } else {
+            return Theme.current.accent;
+        }
+    }
+
     property TabController tabController: TabController {
         id: tabController
         tabBar: tabBar
@@ -251,6 +261,7 @@ ApplicationWindow {
                     tabsModel: tabController.tabsModel
                     searchEngine: window.searchEngine
                     currentTheme: incognito ? IncognitoTheme.current : Theme.current
+                    selectionColor: window.selectionColor
 
                     leftActions: [
                         Action {

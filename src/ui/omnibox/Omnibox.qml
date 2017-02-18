@@ -38,6 +38,7 @@ Item {
     property TabsModel tabsModel
     property string searchEngine
     property ExtensionTheme currentTheme
+    property color selectionColor
     property alias editingUrl: showUrlField.editActive
 
     function focusUrlField() {
@@ -93,7 +94,7 @@ Item {
                     anchors.fill: parent
                     visible: showUrlField.editActive
 
-                    selectionColor: tabsModel.active.hasThemeColor ? tabsModel.active.themeColor : Material.accent
+                    selectionColor: omnibox.selectionColor
                     selectByMouse: true
                     bottomPadding: Units.smallSpacing
                     background: Rectangle { color: container.color }

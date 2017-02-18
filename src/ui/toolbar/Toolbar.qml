@@ -33,6 +33,7 @@ Item {
     property TabsModel tabsModel
     property string searchEngine
     property ExtensionTheme currentTheme
+    property color selectionColor: Material.accent
     property alias omnibox: omnibox
 
     property list<Action> leftActions
@@ -64,6 +65,7 @@ Item {
             tabController: toolbar.tabController
             searchEngine: toolbar.searchEngine
             currentTheme: toolbar.currentTheme
+            selectionColor: toolbar.selectionColor
         }
 
         ActionBar {
