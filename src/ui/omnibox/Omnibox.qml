@@ -83,7 +83,7 @@ Item {
                     if (activeFocus) {
                         editActive = true;
                         textField.forceActiveFocus();
-                        textField.select(showUrlField.selectionStart, showUrlField.selectionEnd);
+                        textField.selectAll();
                     }
                 }
 
