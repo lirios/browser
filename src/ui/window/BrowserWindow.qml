@@ -441,6 +441,14 @@ ApplicationWindow {
         }
 
         MenuItem {
+            text: "View source"
+            iconName: "action/code"
+            onClicked: {
+                tabController.openUrl("view-source:" + tabsModel.active.url, false, tabsModel.row(tabsModel.active) + 1);
+            }
+        }
+
+        MenuItem {
             text: "Downloads"
             iconName: "file/file_download"
             onClicked: {

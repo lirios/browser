@@ -50,11 +50,14 @@ QtObject {
     signal newWindowRequested(var request)
     signal fullScreenRequested(var request)
 
-    function openUrl(url, background) {
-        addTab(TabType.fromUrl(url), {
-            url: url,
-            background: background
-        });
+    function openUrl(url, background, index) {
+        addTab(
+            TabType.fromUrl(url), {
+                url: url,
+                background: background
+            },
+            index || -1
+        );
     }
 
     function openNewViewRequest(request) {
