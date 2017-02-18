@@ -57,16 +57,19 @@ QtObject {
     }
 
     function openNewViewRequest(request) {
-        addTab(TabType.webview, {
-            background: request.destination === NewViewRequest.NewViewInBackgroundTab,
-            properties: {
-                profile: profile,
-                request: request
-            }
-        });
+        addTab (
+            TabType.webview, {
+                background: request.destination === NewViewRequest.NewViewInBackgroundTab,
+                properties: {
+                    profile: profile,
+                    request: request
+                }
+            },
+            tabsModel.row(tabsModel.active) + 1 // Insert tab next to the current tab
+        );
     }
 
-    function addTab(type, data) {
+    function addTab(type, data, index) {
         // Register new unique id
         var uid = lastUID++;
         var page;
@@ -75,7 +78,7 @@ QtObject {
             data["properties"] = {};
 
         // Add tab model representation
-        tabsModel.add(uid);
+        tabsModel.insert(uid, index || -1);
 
         // Create page
         page = tabPageComponent.createObject(tabContentView.container, {

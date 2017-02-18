@@ -79,20 +79,39 @@ QHash<int, QByteArray> TabsModel::roleNames() const
     return roles;
 }
 
-Tab* TabsModel::get(const int index) const
+Tab* TabsModel::get(const int row) const
 {
-    if (index < 0 || index > rowCount()) {
+    if (row < 0 || row > rowCount()) {
         return m_invalidTab;
     }
-    return m_tabsList.at(index);
+    return m_tabsList.at(row);
+}
+
+int TabsModel::row(unsigned int uid)
+{
+    return row(byUID(uid));
+}
+
+int TabsModel::row(Tab *tab)
+{
+    return m_tabsList.indexOf(tab);
 }
 
 void TabsModel::add(unsigned int uid)
 {
-    beginInsertRows(QModelIndex(), rowCount(), rowCount());
+    // Append tab at the end
+    insert(uid, -1);
+}
+
+void TabsModel::insert(unsigned int uid, int row)
+{
+    // Append at the end if no row is given
+    if (row == -1)
+        row = rowCount();
+    beginInsertRows(QModelIndex(), row, row);
     Tab* tab = new Tab(this);
     tab->setUid(uid);
-    m_tabsList.append(tab);
+    m_tabsList.insert(row, tab);
     countChanged(count());
     emptyChanged(false);
     endInsertRows();

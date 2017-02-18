@@ -53,8 +53,11 @@ public:
     QHash<int, QByteArray> roleNames() const;
     Q_INVOKABLE QVariant data(const QModelIndex &index, int role) const;
 
-    Q_INVOKABLE Tab* get(const int index) const;
+    Q_INVOKABLE Tab* get(const int row) const;
+    Q_INVOKABLE int row(unsigned int uid);
+    Q_INVOKABLE int row(Tab* tab);
     Q_INVOKABLE void add(unsigned int uid);
+    Q_INVOKABLE void insert(unsigned int uid, int row=-1);
     Q_INVOKABLE bool move(int fromRow, int toRow);
     Q_INVOKABLE int count() const;
     Q_INVOKABLE bool remove(unsigned int uid);
