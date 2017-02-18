@@ -28,6 +28,14 @@ import dperini.regexweburl 1.0
 QtObject {
     property var webUrlRegex: RegexWebUrl.re_weburl
 
+    function isChromeUrl(url) {
+        return url.indexOf("chrome://") == 0;
+    }
+
+    function isViewSourceUrl(url) {
+        return url.indexOf("view-source:") == 0;
+    }
+
     function isWebUrl(url) {
         return url.match(webUrlRegex) !== null;
     }
@@ -45,6 +53,14 @@ QtObject {
         }
         // Liri url
         else if (isLiriUrl(url)) {
+            return url;
+        }
+        // Chrome url
+        else if (isChromeUrl(url)) {
+            return url;
+        }
+        // View source url
+        else if (isViewSourceUrl(url)) {
             return url;
         }
         // Search term
