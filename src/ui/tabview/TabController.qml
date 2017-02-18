@@ -106,8 +106,6 @@ QtObject {
             return false;
         // Unregister page
         tabContentView.unregisterPage(uid);
-        // Set previous tab active
-//        tabsModel.setPreviousTabActive();
         return true;
     }
 
