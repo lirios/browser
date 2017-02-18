@@ -93,6 +93,7 @@ Item {
                     anchors.fill: parent
                     visible: showUrlField.editActive
 
+                    selectionColor: tabsModel.active.hasThemeColor ? tabsModel.active.themeColor : Material.accent
                     selectByMouse: true
                     bottomPadding: Units.smallSpacing
                     background: Rectangle { color: container.color }
