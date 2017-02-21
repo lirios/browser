@@ -32,7 +32,7 @@ import SlimeEngine 0.2
 import core 1.0
 import ".."
 
-FluidWindow {
+ApplicationWindow {
     id: window
 
     property var root
