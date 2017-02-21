@@ -280,6 +280,7 @@ Item {
 
                 property bool canShow: (x + width) < tabsListView.width
                 property bool showing: canShow && !tabBar.dragActive
+                                       && !(tabsListView.dragging || tabsListView.flicking)
 
                 x: tabsModel.count * tabBar.tabWidth + Units.smallSpacing
                 opacity: showing ? 1 : 0
@@ -294,7 +295,7 @@ Item {
 
                 Behavior on opacity {
                     NumberAnimation {
-                        duration: Units.mediumDuration
+                        duration: Units.shortDuration
                         easing.type: Easing.InOutQuad
                     }
                 }
