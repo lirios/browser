@@ -256,6 +256,21 @@ Item {
                 }
             }
 
+            MouseArea {
+                anchors {
+                    top: parent.top
+                    bottom: parent.bottom
+                }
+                visible: x < tabsListView.width
+                width: tabsListView.width - x
+                x: tabsModel.count * tabBar.tabWidth
+
+                acceptedButtons: Qt.MiddleButton
+                onClicked: {
+                    newTab();
+                }
+            }
+
             TabBarActionBar {
                 id: floationActionBar
                 anchors {
