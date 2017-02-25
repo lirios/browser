@@ -36,6 +36,11 @@ public:
 
     ExtensionSearchEngineParameter* clone(QObject* parent = nullptr);
 
+    enum Type {
+        Get,
+        Hashbang
+    };
+
     enum SearchContext {
         None = 0x0,
         Search = 0x1,
@@ -44,6 +49,9 @@ public:
 
     Q_DECLARE_FLAGS(ContextFlag, SearchContext)
     Q_FLAGS(ContextFlag)
+
+    Type type() const { return m_type; }
+    void setType(Type type) { typeChanged(m_type = type); }
 
     QString name() const { return m_name; }
     void setName(QString name) { nameChanged(m_name = name); }
@@ -55,11 +63,13 @@ public:
     void setContext(ContextFlag context) { contextChanged(m_context = context); }
 
 signals:
+    void typeChanged(Type type);
     void nameChanged(QString name);
     void valueChanged(QString value);
     void contextChanged(ContextFlag context);
 
 private:
+    Type m_type;
     QString m_name;
     QString m_value;
     ContextFlag m_context;

@@ -1,0 +1,26 @@
+{
+    "schema": {
+        "type": "lbx/search",
+        "version": "0.1.0"
+    },
+    "meta": {
+        "name": "default.peekier",
+        "title": "Peekier",
+        "summary": "Peekier search engine",
+        "description": "Peekier Web Search."
+    },
+    "url": {
+        "base": {
+            "search": "https://peekier.com",
+            "homepage": "https://peekier.com"
+        },
+        "params": [
+            {
+                "type": "hashbang",
+                "name": "hashbang",
+                "value": "search.query",
+                "context": ["search"]
+            }
+        ]
+    }
+}

@@ -33,61 +33,64 @@ SearchProvider::SearchProvider(QObject *parent)
 
 QString SearchProvider::searchUrl(QString query, QString engine, ExtensionTheme* theme) const
 {
-    ExtensionSearchEngine* searchEngine = m_model->get(engine);
-    QList<ExtensionSearchEngineParameter*>* params = searchEngine->parameters();
-    QString urlString = searchEngine->urlBaseSearch();
-    bool first = true;
-    for (int i=0; i<params->count(); i++) {
-        ExtensionSearchEngineParameter* param = params->at(i);
-        if (param->context() & ExtensionSearchEngineParameter::Search) {
-            QString name = param->name();
-            QString value = param->value();
-            QString paramString;
-            if (first)
-                paramString += QString('?') + name + '=';
-            else
-                paramString += QString('&') + name + '=';
-            if (value == "search.query") {
-                paramString.append(query);
-            }
-            else if (value == "theme.background") {
-                paramString.append(theme->background().name().replace("#", "%23"));
-            }
-            else {
-                paramString.append(value);
-            }
-            urlString.append(paramString);
-            first = false;
-        }
-    }
-    return urlString;
+    return url(ExtensionSearchEngineParameter::Search, query, engine, theme);
 }
 
 QString SearchProvider::homepage(QString engine, ExtensionTheme *theme) const
 {
+    return url(ExtensionSearchEngineParameter::Homepage, "", engine, theme);
+}
+
+QString SearchProvider::url(ExtensionSearchEngineParameter::SearchContext context, QString query, QString engine, ExtensionTheme *theme) const
+{
     ExtensionSearchEngine* searchEngine = m_model->get(engine);
     QList<ExtensionSearchEngineParameter*>* params = searchEngine->parameters();
-    QString urlString = searchEngine->urlBaseHomepage();
-    bool first = true;
+    QString urlString;
+    if (context == ExtensionSearchEngineParameter::Search) {
+        urlString = searchEngine->urlBaseSearch();
+    } else if (context == ExtensionSearchEngineParameter::Homepage) {
+        urlString = searchEngine->urlBaseHomepage();
+    }
+    QString getString;
+    QString hashbangString;
+    bool firstGet = true;
+    bool uniqueHashbang = true;
     for (int i=0; i<params->count(); i++) {
         ExtensionSearchEngineParameter* param = params->at(i);
-        if (param->context() & ExtensionSearchEngineParameter::Homepage) {
-            QString name = param->name();
-            QString value = param->value();
-            QString paramString;
-            if (first)
-                paramString += QString('?') + name + '=';
-            else
-                paramString += QString('&') + name + '=';
-            if (value == "theme.background") {
-                paramString.append(theme->background().name().replace("#", "%23"));
+        if (param->context() & context) {
+            ExtensionSearchEngineParameter::Type type = param->type();
+            if (type == ExtensionSearchEngineParameter::Get) {
+                QString name = param->name();
+                QString value = param->value();
+                QString paramString;
+                if (firstGet)
+                    paramString += QString('?') + name + '=';
+                else
+                    paramString += QString('&') + name + '=';
+                paramString.append(dynamicValue(value, query, theme));
+                firstGet = false;
+                getString.append(paramString);
+            } else if (type == ExtensionSearchEngineParameter::Hashbang) {
+                if (uniqueHashbang) {    // Only allow one hashbang per context
+                    QString value = param->value();
+                    hashbangString = "#!";
+                    hashbangString.append(dynamicValue(value, query, theme));
+                    uniqueHashbang = false;
+                }
             }
-            else {
-                paramString.append(value);
-            }
-            urlString.append(paramString);
-            first = false;
         }
     }
+    urlString.append(getString + hashbangString);
     return urlString;
+}
+
+QString SearchProvider::dynamicValue(QString value, QString query, ExtensionTheme* theme) const
+{
+    if (value == "search.query") {
+        return query;
+    } else if (value == "theme.background") {
+        return theme->background().name().replace("#", "%23");
+    } else {
+        return value;
+    }
 }

@@ -16,6 +16,7 @@
         },
         "params": [
             {
+                "type": "get",
                 "name": "q",
                 "value": "search.query",
                 "context": ["search"]

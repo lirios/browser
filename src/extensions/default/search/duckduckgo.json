@@ -16,11 +16,13 @@
         },
         "params": [
             {
+                "type": "get",
                 "name": "q",
                 "value": "search.query",
                 "context": ["search"]
             },
             {
+                "type": "get",
                 "name": "kae",
                 "value": "theme.background",
                 "context": ["search", "homepage"]

@@ -399,6 +399,9 @@ void ExtensionParser::parseSearchEngine(const QByteArray jsonData)
     searchEngine->setUrlBaseSearch(urlBaseSearch);
     searchEngine->setUrlBaseHomepage(urlBaseHomepage);
 
+    // Helper to ensure there is only one hashbang parameter per context
+    ExtensionSearchEngineParameter::ContextFlag hashbangDetected;
+
     for (QJsonValue value : params) {
         if (!value.isObject()) {
             error("Field \"params\" must be an array of objects.");
@@ -407,16 +410,10 @@ void ExtensionParser::parseSearchEngine(const QByteArray jsonData)
         }
         QJsonObject paramObject = value.toObject();
 
-        assertField(paramObject, "name", Type::String);
-        QString paramName = paramObject["name"].toString();
-
-        assertField(paramObject, "value", Type::String);
-        QString paramValue = paramObject["value"].toString();
+        ExtensionSearchEngineParameter::ContextFlag paramContext;
 
         assertField(paramObject, "context", Type::Array);
         QJsonArray contextArray = paramObject["context"].toArray();
-
-        ExtensionSearchEngineParameter::ContextFlag paramContext;
 
         for (QJsonValue contextValue: contextArray) {
             if (!contextValue.isString()) {
@@ -426,17 +423,45 @@ void ExtensionParser::parseSearchEngine(const QByteArray jsonData)
             }
             QString contextString = contextValue.toString();
 
-            if (contextString == "search")
+            if (contextString == "search") {
                 paramContext |= ExtensionSearchEngineParameter::Search;
-            else if (contextString == "homepage")
+            } else if (contextString == "homepage") {
                 paramContext |= ExtensionSearchEngineParameter::Homepage;
-            else {
+            } else {
                 error("Unknown context value \"" + contextString + "\" detected.");
                 searchEngine->deleteLater();
                 throw ParseError();
             }
         }
+
+        assertField(paramObject, "type", Type::String);
+        QString typeString = paramObject["type"].toString();
+        ExtensionSearchEngineParameter::Type paramType;
+        if (typeString == "get") {
+            paramType = ExtensionSearchEngineParameter::Get;
+        } else if (typeString == "hashbang") {
+            paramType = ExtensionSearchEngineParameter::Hashbang;
+            if (hashbangDetected & paramContext) {
+                // There may only be one hashbang specified per context
+                error("Duplicate hashbang parameter detected.");
+                searchEngine->deleteLater();
+                throw ParseError();
+            }
+            hashbangDetected |= paramContext;
+        } else {
+            error("Unknown param type value \"" + typeString + "\" detected.");
+            searchEngine->deleteLater();
+            throw ParseError();
+        }
+
+        assertField(paramObject, "name", Type::String);
+        QString paramName = paramObject["name"].toString();
+
+        assertField(paramObject, "value", Type::String);
+        QString paramValue = paramObject["value"].toString();
+
         ExtensionSearchEngineParameter* searchParameter = new ExtensionSearchEngineParameter(searchEngine);
+        searchParameter->setType(paramType);
         searchParameter->setName(paramName);
         searchParameter->setValue(paramValue);
         searchParameter->setContext(paramContext);

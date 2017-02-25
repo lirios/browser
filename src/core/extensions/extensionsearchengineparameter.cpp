@@ -32,6 +32,7 @@ ExtensionSearchEngineParameter::ExtensionSearchEngineParameter(QObject *parent)
 ExtensionSearchEngineParameter *ExtensionSearchEngineParameter::clone(QObject *parent)
 {
     ExtensionSearchEngineParameter* param = new ExtensionSearchEngineParameter(parent);
+    param->setType(m_type);
     param->setName(m_name);
     param->setValue(m_value);
     param->setContext(m_context);

@@ -43,11 +43,15 @@ public:
 
     Q_INVOKABLE QString searchUrl(QString query, QString engine, ExtensionTheme* theme) const;
     Q_INVOKABLE QString homepage(QString engine, ExtensionTheme* theme) const;
+    QString url(ExtensionSearchEngineParameter::SearchContext context, QString query, QString engine, ExtensionTheme* theme) const;
 
 signals:
     void modelChanged(ExtensionSearchEnginesModel* model);
 
-private:
+private: // methods
+    QString dynamicValue(QString value, QString query, ExtensionTheme* theme) const;
+
+private: // members
     QString m_engine;
     ExtensionSearchEnginesModel* m_model;
 };

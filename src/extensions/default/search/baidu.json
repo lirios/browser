@@ -16,6 +16,7 @@
         },
         "params": [
             {
+                "type": "get",
                 "name": "wd",
                 "value": "search.query",
                 "context": ["search"]
