@@ -43,13 +43,13 @@ void SecondaryThemeTimer::stop()
 
 void SecondaryThemeTimer::update()
 {
-    bool isDark = false;
+    bool isActive = false;
     QTime now = QTime::currentTime();
     if (m_endTime > m_startTime) {
-        isDark = (now > m_startTime && now < m_endTime);
+        isActive = (now > m_startTime && now < m_endTime);
     }
     else {
-        isDark = (now > m_startTime || now < m_endTime );
+        isActive = (now > m_startTime || now < m_endTime );
     }
-    isActiveTimeChanged(m_isActiveTime = isDark);
+    isActiveTimeChanged(m_isActiveTime = isActive);
 }
