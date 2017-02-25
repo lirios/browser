@@ -39,6 +39,7 @@
 #include "../core/extensions/extensionsmanager.h"
 #include "../core/extensions/extensionsmodel.h"
 #include "../core/extensions/extensiontheme.h"
+#include "../core/extensions/extensionsearchengine.h"
 #include "../core/extensions/extensionthemesmodel.h"
 #include "../core/extensions/extension.h"
 #include "../core/utils/secondarythemetimer.h"
@@ -97,9 +98,11 @@ int main(int argc, char *argv[])
 
     // Create and configure theme provider
     ThemeProvider themeProvider;
+    themeProvider.setDefaultName("default.light");
     themeProvider.setModel(extensionsManager.themesModel());
 
     ThemeProvider incognitoThemeProvider;
+    incognitoThemeProvider.setDefaultName("default.bluegrey");
     incognitoThemeProvider.setModel(extensionsManager.themesModel());
 
     // Create and configure search provider
@@ -121,6 +124,7 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<Extension>("core", 1, 0, "Extension", "Extension (from module core) may not be created directly.");
     qmlRegisterUncreatableType<ExtensionsModel>("core", 1, 0, "ExtensionsModel", "ExtensionsModel (from module core) may not be created directly.");
     qmlRegisterUncreatableType<ExtensionTheme>("core", 1, 0, "ExtensionTheme", "ExtensionTheme (from module core) may not be created directly.");
+    qmlRegisterUncreatableType<ExtensionSearchEngine>("core", 1, 0, "ExtensionSearchEngine", "ExtensionSearchEngine (from module core) may not be created directly.");
     qmlRegisterUncreatableType<ExtensionThemesModel>("core", 1, 0, "ExtensionThemesModel", "ExtensionThemesModel (from module core) may not be created directly.");
 
     // Register context properties

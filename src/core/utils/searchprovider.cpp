@@ -28,7 +28,7 @@
 SearchProvider::SearchProvider(QObject *parent)
     : QObject(parent)
 {
-
+    m_defaultSearchEngine = "default.duckduckgo";
 }
 
 QString SearchProvider::searchUrl(QString query, QString engine, ExtensionTheme* theme) const
@@ -44,6 +44,11 @@ QString SearchProvider::homepage(QString engine, ExtensionTheme *theme) const
 QString SearchProvider::url(ExtensionSearchEngineParameter::SearchContext context, QString query, QString engine, ExtensionTheme *theme) const
 {
     ExtensionSearchEngine* searchEngine = m_model->get(engine);
+    if (!searchEngine->valid()) {
+        qWarning() << "Search engine" << engine << "was requested but could not not be found.";
+        qWarning() << "Falling back to default search engine" << m_defaultSearchEngine << "...";
+        searchEngine = m_model->get(m_defaultSearchEngine);
+    }
     QList<ExtensionSearchEngineParameter*>* params = searchEngine->parameters();
     QString urlString;
     if (context == ExtensionSearchEngineParameter::Search) {

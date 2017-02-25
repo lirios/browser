@@ -52,6 +52,7 @@ private: // methods
     QString dynamicValue(QString value, QString query, ExtensionTheme* theme) const;
 
 private: // members
+    QString m_defaultSearchEngine;
     QString m_engine;
     ExtensionSearchEnginesModel* m_model;
 };

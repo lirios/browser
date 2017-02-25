@@ -24,6 +24,7 @@
 import QtQuick 2.7
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.0
+import QtQuick.Controls.Material 2.0
 import Fluid.Controls 1.0
 import Fluid.Core 1.0
 
@@ -39,6 +40,7 @@ Item {
         id: column
 
         width: parent.width
+        spacing: Units.smallSpacing
 
         RowLayout {
             spacing: Units.largeSpacing
@@ -54,6 +56,33 @@ Item {
                 id: searchField
                 selectByMouse: true
                 placeholderText: "Search"
+            }
+        }
+
+        Column {
+            width: parent.width
+            spacing: Units.smallSpacing
+            visible: !Extensions.searchEnginesModel.get(selectedName).valid
+
+            Label {
+                width: parent.width
+                wrapMode: Text.WordWrap
+                text: "The selected search engine %1 could not be found. ".arg('"' + selectedName + '"')
+                color: Material.color(Material.Red)
+            }
+
+            Label {
+                width: parent.width
+                wrapMode: Text.WordWrap
+                text: "Either this search engine has been removed or there was a problem loading it."
+                color: Material.color(Material.Red)
+            }
+
+            Label {
+                width: parent.width
+                wrapMode: Text.WordWrap
+                text: "Select another search engine below."
+                color: Material.color(Material.Red)
             }
         }
 

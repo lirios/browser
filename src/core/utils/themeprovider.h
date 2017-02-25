@@ -40,6 +40,9 @@ public:
     QString name() const { return m_name; }
     void setName(QString name) { nameChanged(m_name = name); }
 
+    QString defaultName() const { return m_defaultName; }
+    void setDefaultName(QString defaultName) { m_defaultName = defaultName; }
+
     ExtensionThemesModel* model() { return m_model; }
     void setModel(ExtensionThemesModel* model);
 
@@ -52,6 +55,7 @@ signals:
 
 private:
     QString m_name;
+    QString m_defaultName;
     ExtensionThemesModel* m_model;
     ExtensionTheme* m_current;
 

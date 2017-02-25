@@ -28,6 +28,7 @@
 ThemeProvider::ThemeProvider(QObject *parent)
     : QObject(parent)
 {
+    m_defaultName = "default.light";
     connect(this, &ThemeProvider::nameChanged,
             this, &ThemeProvider::update);
 }
@@ -42,5 +43,12 @@ void ThemeProvider::setModel(ExtensionThemesModel *model)
 void ThemeProvider::update()
 {
     // Get theme by name
-    currentChanged(m_current = m_model->get(m_name));
+    ExtensionTheme* theme = m_model->get(m_name);
+    // Fallback to default theme if theme couldn't be found
+    if (!theme->valid()) {
+        qWarning() << "Theme" << m_name << "was requested but could not be found.";
+        qWarning() << "Falling back to default theme" << m_defaultName << "...";
+        theme = m_model->get(m_defaultName);
+    }
+    currentChanged(m_current = theme);
 }
