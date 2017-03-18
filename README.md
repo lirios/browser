@@ -10,13 +10,13 @@ Liri Browser
 A cross-platform material design web browser
 
 ## Dependencies
-* Qt >= 5.7.0 with at least the following modules is required:
+* Qt >= 5.8.0 with at least the following modules is required:
  * [qtbase](http://code.qt.io/cgit/qt/qtbase.git)
  * [qtdeclarative](http://code.qt.io/cgit/qt/qtdeclarative.git)
  * [qtquickcontrols2](http://code.qt.io/cgit/qt/qtquickcontrols2.git)
 
 The following modules and their dependencies are required:
-* [fluid](https://github.com/lirios/fluid)
+* [Fluid](https://github.com/lirios/fluid) from develop branch
 * [SlimeEngine](https://github.com/tim-sueberkrueb/slime-engine)
     * with either [Oxide](https://launchpad.net/oxide) or [QtWebEngine](http://code.qt.io/cgit/qt/qtwebengine.git/)
 
