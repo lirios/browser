@@ -29,7 +29,7 @@ SearchProvider::SearchProvider(QObject *parent)
     : QObject(parent)
 {
     m_defaultSearchEngine = "default.duckduckgo";
-    m_reDynamicValue = QRegularExpression(R"(^\$\(\s?[A-Za-z_.]+\s?\)$)");
+    m_reDynamicValue = QRegularExpression(R"(\$\(\s?([A-Za-z_.]+)\s?\))");
 }
 
 QString SearchProvider::searchUrl(QString query, QString engine, ExtensionTheme* theme) const
@@ -92,14 +92,20 @@ QString SearchProvider::url(ExtensionSearchEngineParameter::SearchContext contex
 
 QString SearchProvider::dynamicValue(QString value, QString query, ExtensionTheme* theme) const
 {
-    QRegularExpressionMatch dynamicValueMatch = m_reDynamicValue.match(value);
-    if (dynamicValueMatch.hasMatch()) {
-        QString fieldName = value.mid(2, value.length()-3);
-        fieldName = fieldName.simplified().replace(" ", "");
-        if (fieldName == "search.query") {
-            return query;
-        } else if (fieldName == "theme.background") {
-            return theme->background().name().replace("#", "%23");
+    QRegularExpressionMatchIterator matchIterator = m_reDynamicValue.globalMatch(value);
+    int offset = 0;
+    while (matchIterator.hasNext()) {
+        QRegularExpressionMatch dynamicValueMatch = matchIterator.next();
+        if (dynamicValueMatch.hasMatch()) {
+            QString fieldName = dynamicValueMatch.captured(1);
+            QString replaceValue;
+            if (fieldName == "search.query") {
+                replaceValue = query;
+            } else if (fieldName == "theme.background") {
+                replaceValue = theme->background().name().replace("#", "%23");
+            }
+            value.replace(dynamicValueMatch.capturedStart() + offset, dynamicValueMatch.capturedLength(), replaceValue);
+            offset += (replaceValue.length() - dynamicValueMatch.capturedLength());
         }
     }
     return value;
