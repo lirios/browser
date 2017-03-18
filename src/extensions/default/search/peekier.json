@@ -18,7 +18,7 @@
             {
                 "type": "hashbang",
                 "name": "hashbang",
-                "value": "search.query",
+                "value": "$(search.query)",
                 "context": ["search"]
             }
         ]

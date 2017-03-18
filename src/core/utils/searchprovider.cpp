@@ -22,6 +22,7 @@
 */
 
 #include <QDebug>
+#include <QRegExp>
 
 #include "searchprovider.h"
 
@@ -91,11 +92,15 @@ QString SearchProvider::url(ExtensionSearchEngineParameter::SearchContext contex
 
 QString SearchProvider::dynamicValue(QString value, QString query, ExtensionTheme* theme) const
 {
-    if (value == "search.query") {
-        return query;
-    } else if (value == "theme.background") {
-        return theme->background().name().replace("#", "%23");
-    } else {
-        return value;
+    QRegExp reDynamicValue(R"(\$\(\s?[A-Za-z_.]+\s?\))");
+    if (reDynamicValue.exactMatch(value)) {
+        QString fieldName = value.mid(2, value.length()-3);
+        fieldName = fieldName.simplified().replace(" ", "");
+        if (fieldName == "search.query") {
+            return query;
+        } else if (fieldName == "theme.background") {
+            return theme->background().name().replace("#", "%23");
+        }
     }
+    return value;
 }
