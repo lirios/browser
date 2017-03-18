@@ -25,7 +25,8 @@
                 "res://search/bing.json",
                 "res://search/yahoo.json",
                 "res://search/baidu.json",
-                "res://search/peekier.json"
+                "res://search/peekier.json",
+                "res://search/yandex.json"
             ]
         }
     }
