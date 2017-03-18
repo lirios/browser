@@ -22,7 +22,6 @@
 */
 
 #include <QDebug>
-#include <QRegExp>
 
 #include "searchprovider.h"
 
@@ -30,6 +29,7 @@ SearchProvider::SearchProvider(QObject *parent)
     : QObject(parent)
 {
     m_defaultSearchEngine = "default.duckduckgo";
+    m_reDynamicValue = QRegularExpression(R"(^\$\(\s?[A-Za-z_.]+\s?\)$)");
 }
 
 QString SearchProvider::searchUrl(QString query, QString engine, ExtensionTheme* theme) const
@@ -92,8 +92,8 @@ QString SearchProvider::url(ExtensionSearchEngineParameter::SearchContext contex
 
 QString SearchProvider::dynamicValue(QString value, QString query, ExtensionTheme* theme) const
 {
-    QRegExp reDynamicValue(R"(\$\(\s?[A-Za-z_.]+\s?\))");
-    if (reDynamicValue.exactMatch(value)) {
+    QRegularExpressionMatch dynamicValueMatch = m_reDynamicValue.match(value);
+    if (dynamicValueMatch.hasMatch()) {
         QString fieldName = value.mid(2, value.length()-3);
         fieldName = fieldName.simplified().replace(" ", "");
         if (fieldName == "search.query") {

@@ -26,6 +26,7 @@
 
 #include <QObject>
 #include <QList>
+#include <QRegularExpression>
 
 #include "../extensions/extensiontheme.h"
 #include "../extensions/extensionsearchengine.h"
@@ -55,6 +56,7 @@ private: // members
     QString m_defaultSearchEngine;
     QString m_engine;
     ExtensionSearchEnginesModel* m_model;
+    QRegularExpression m_reDynamicValue;
 };
 
 #endif // SEARCHPROVIDER_H
