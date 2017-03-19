@@ -106,7 +106,7 @@ Item {
 
             delegate: ListItem {
                 property bool isSelected: name === selectedName
-
+                highlighted: isSelected
                 width: listView.width
                 text: title
                 subText: summary

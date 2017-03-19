@@ -76,6 +76,7 @@ TabContent {
                     delegate: ListItem {
                         property bool isSelected: listView.selectedName == name
 
+                        highlighted: isSelected
                         iconName: isSelected ? "navigation/check" : "action/extension"
                         text: title
                         subText: summary
