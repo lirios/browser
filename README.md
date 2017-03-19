@@ -3,7 +3,7 @@ Liri Browser
 
 [![License](https://img.shields.io/badge/license-GPLv3.0-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.html)
 [![GitHub release](https://img.shields.io/github/release/lirios/browser.svg)](https://github.com/lirios/browser)
-[![Build Status](https://travis-ci.org/lirios/browser.svg?branch=master)](https://travis-ci.org/lirios/browser)
+[![Build Status](https://travis-ci.org/lirios/browser.svg?branch=develop)](https://travis-ci.org/lirios/browser)
 [![GitHub issues](https://img.shields.io/github/issues/lirios/browser.svg)](https://github.com/lirios/browser/issues)
 [![Maintained](https://img.shields.io/maintenance/yes/2017.svg)](https://github.com/lirios/browser/commits/develop)
 
