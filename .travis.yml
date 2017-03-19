@@ -20,12 +20,12 @@ script:
   - git clone -b develop https://github.com/lirios/fluid
   - cd fluid
   - git submodule update --init
+  - ./scripts/fetch_icons.sh
   - mkdir build
   - cd build
   - qmake CONFIG+=use_qt_paths ..
   - make -j4
   - sudo make install
-  - find ..
   - # sudo make INSTALL_ROOT=../../appdir install ; sudo chown -R $USER ../../appdir ; find ../../appdir/
   - cd ../../
   - git clone https://github.com/tim-sueberkrueb/slime-engine
