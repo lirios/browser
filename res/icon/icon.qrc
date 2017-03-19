@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/res">
+        <file alias="icon">512x512/io.liri.Browser.png</file>
+    </qresource>
+</RCC>

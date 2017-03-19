@@ -48,5 +48,9 @@ set the `PREFIX` environment variable when running `qmake`. For example:
 PREFIX=/opt qmake ..
 ```
 
+## Credits
+Many thanks to ...
+* [Corbin Crutchley](https://github.com/crutchcorn) for creating the application icon
+
 ## Licensing
 Licensed under the terms of the GNU General Public License version 3 or, at your option, any later version.

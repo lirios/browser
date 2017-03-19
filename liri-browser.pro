@@ -8,17 +8,23 @@ QT += qml quick quickcontrols2
 
 unix:!android {
     target.path = $$LIRI_INSTALL_BINDIR
-}
 
-# Deprecation warning for PREFIX
-prefix = $$(PREFIX)
-!isEmpty(prefix) {
-    warning("Using the PREFIX environment variable to specify the installation prefix is deprecated.")
-    warning("Use qmake LIRI_INSTALL_PREFIX=<path> instead.")
-    target.path = $${prefix}/bin
-}
+    icon.path = $$LIRI_INSTALL_PREFIX/share/icons/hicolor
+    icon.files += res/icon/512x512
 
-INSTALLS += target
+    desktop.path = $$LIRI_INSTALL_PREFIX/share/applications
+    desktop.files += res/io.liri.Browser.desktop
+
+    # Deprecation warning for PREFIX
+    prefix = $$(PREFIX)
+    !isEmpty(prefix) {
+        warning("Using the PREFIX environment variable to specify the installation prefix is deprecated.")
+        warning("Use qmake LIRI_INSTALL_PREFIX=<path> instead.")
+        target.path = $${prefix}/bin
+    }
+
+    INSTALLS += target icon desktop
+}
 
 # Specify CONFIG+=QTWEBENGINE_ENABLED when running qmake.
 # Otherwise, Liri Browser expects the Oxide web engine.
@@ -42,3 +48,5 @@ include(src/3rdparty/3rdparty.pri)
 include(src/core/core.pri)
 include(src/main/main.pri)
 include(src/ui/ui.pri)
+
+RESOURCES +=

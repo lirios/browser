@@ -48,6 +48,8 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
 
+    app.setWindowIcon(QIcon("qrc:/res/icon.png"));
+
     QQuickStyle::setStyle(QLatin1String("Material"));
 
     #if IS_QTWEBENGINE_ENABLED == 1
