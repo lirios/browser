@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/res">
-        <file alias="icon">512x512/io.liri.Browser.png</file>
+        <file alias="icon.png">512x512/apps/io.liri.Browser.png</file>
     </qresource>
 </RCC>

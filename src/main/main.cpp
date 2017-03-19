@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
 
-    app.setWindowIcon(QIcon("qrc:/res/icon.png"));
+    app.setWindowIcon(QIcon(":/res/icon.png"));
 
     QQuickStyle::setStyle(QLatin1String("Material"));
 
