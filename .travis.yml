@@ -1,7 +1,7 @@
 cache:
   directories:
     - /var/cache/apt/archives/*.deb
-  
+
 language: cpp
 compiler: gcc
 sudo: require
@@ -10,13 +10,20 @@ dist: trusty
 before_install:
   - sudo add-apt-repository ppa:beineri/opt-qt58-trusty -y
   - sudo apt-get update -qq
-    
+
 install:
   - sudo apt-get -y install qt58base qt58declarative qt58quickcontrols2 qt58svg qt58webengine qt58graphicaleffects
   - source /opt/qt58/bin/qt58-env.sh
 
 script:
   - mkdir -p ./appdir
+  - wget -O quazip.zip https://sourceforge.net/projects/quazip/files/quazip/0.7.3/quazip-0.7.3.zip
+  - unzip quazip.zip
+  - cd quazip-0.7.3
+  - qmake PREFIX=/usr/local .
+  - make
+  - sudo make install
+  - cd ..
   - git clone -b develop https://github.com/lirios/fluid
   - cd fluid
   - git submodule update --init
@@ -41,7 +48,7 @@ script:
   - make -j4
   - sudo make INSTALL_ROOT=../appdir install ; sudo chown -R $USER ../appdir ; find ../appdir/
   - cd ../
-  - wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" 
+  - wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
   - chmod a+x linuxdeployqt*.AppImage
   - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
   - ./linuxdeployqt*.AppImage ./appdir/usr/share/applications/*.desktop -bundle-non-qt-libs -qmldir=. -qmldir=slime-engine/modules/SlimeEngine/qmldir -verbose=2
