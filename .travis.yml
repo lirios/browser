@@ -17,7 +17,6 @@ install:
 
 script:
   - mkdir -p ./appdir
-  - sudo make install
   - git clone -b develop https://github.com/lirios/fluid
   - cd fluid
   - git submodule update --init
@@ -44,8 +43,8 @@ script:
   - wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" 
   - chmod a+x linuxdeployqt*.AppImage
   - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
-  - ./linuxdeployqt*.AppImage ./appdir/usr/share/applications/*.desktop -bundle-non-qt-libs -qmldir=. -verbose=2
+  - ./linuxdeployqt*.AppImage ./appdir/usr/share/applications/*.desktop -bundle-non-qt-libs -qmldir=. -qmldir=slime-engine/modules/SlimeEngine/qmldir -verbose=2
   - rm ./appdir/io.liri.Browser.png # Workaround for linuxedeloyqt bug
-  - ./linuxdeployqt*.AppImage ./appdir/usr/share/applications/*.desktop -appimage -qmldir=. -verbose=2
+  - ./linuxdeployqt*.AppImage ./appdir/usr/share/applications/*.desktop -appimage -qmldir=. -qmldir=slime-engine/modules/SlimeEngine/qmldir -verbose=2
   - find ./appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f 2-3 | sort | uniq
   - curl --upload-file ./Liri_Browser*.AppImage https://transfer.sh/Liri_Browser-git.$(git rev-parse --short HEAD)-x86_64.AppImage
