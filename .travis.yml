@@ -45,6 +45,7 @@ script:
   - chmod a+x linuxdeployqt*.AppImage
   - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
   - ./linuxdeployqt*.AppImage ./appdir/usr/share/applications/*.desktop -bundle-non-qt-libs -verbose=2
-  - ./linuxdeployqt*.AppImage ./appdir/usr/share/applications/*.desktop -appimage -verbose=3
+  - rm ./appdir/io.liri.Browser.png # Workaround for linuxedeloyqt bug
+  - ./linuxdeployqt*.AppImage ./appdir/usr/share/applications/*.desktop -appimage -verbose=2
   - find ./appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f 2-3 | sort | uniq
   - curl --upload-file ./APPNAME*.AppImage https://transfer.sh/APPNAME-git.$(git rev-parse --short HEAD)-x86_64.AppImage
