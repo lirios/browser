@@ -22,7 +22,7 @@ script:
   - git submodule update --init
   - mkdir build
   - cd build
-  - qmake LIRI_INSTALL_PREFIX=/usr ..
+  - qmake CONFIG+=use_qt_paths ..
   - make -j4
   - sudo make install
   - # sudo make INSTALL_ROOT=../../appdir install ; sudo chown -R $USER ../../appdir ; find ../../appdir/
