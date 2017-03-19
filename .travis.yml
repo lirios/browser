@@ -29,7 +29,7 @@ script:
   - cd ../../
   - git clone https://github.com/tim-sueberkrueb/slime-engine
   - cd slime-engine
-  - qmake PREFIX=/usr
+  - qmake
   - make -j4
   - sudo make install
   - sudo make INSTALL_ROOT=../appdir install ; sudo chown -R $USER ../appdir ; find ../appdir/
