@@ -253,10 +253,9 @@ ApplicationWindow {
     }
 
     ShortcutManager {
-        root: window.root
+        window: window
         tabBar: tabBar
         toolbar: toolbar
-        tabsModel: window.tabsModel
         searchOverlay: searchOverlay
     }
 

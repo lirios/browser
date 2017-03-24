@@ -27,6 +27,7 @@
 #include <QtQuickControls2/QQuickStyle>
 #include <QQmlContext>
 #include <QDebug>
+#include <QIcon>
 
 #include "../core/models/tabsmodel.h"
 #include "../core/models/tab.h"
