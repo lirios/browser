@@ -51,6 +51,7 @@ PREFIX=/opt qmake ..
 ## Credits
 Many thanks to ...
 * [Corbin Crutchley](https://github.com/crutchcorn) for creating the application icon
+* [Simon Peter](https://github.com/probonopd) for adding AppImage support
 
 ## Licensing
 Licensed under the terms of the GNU General Public License version 3 or, at your option, any later version.
