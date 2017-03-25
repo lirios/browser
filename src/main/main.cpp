@@ -23,6 +23,7 @@
 
 #include <QtGlobal>
 #include <QGuiApplication>
+#include <QIcon>
 #include <QQmlApplicationEngine>
 #include <QtQuickControls2/QQuickStyle>
 #include <QQmlContext>
