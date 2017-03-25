@@ -20,7 +20,7 @@ script:
   - wget -O quazip.zip https://sourceforge.net/projects/quazip/files/quazip/0.7.3/quazip-0.7.3.zip
   - unzip quazip.zip
   - cd quazip-0.7.3
-  - qmake PREFIX=/usr/local .
+  - qmake PREFIX=/usr .
   - make
   - sudo make install
   - cd ..
