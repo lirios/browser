@@ -22,7 +22,9 @@ Remember to update this file before any release is made, also make sure
 a .mailmap file is maintained if committer names and email addresses
 change over time.
 
- * Tim Süberkrüb <tim.sueberkrueb@web.de>
+ * Tim Süberkrüb <dev@timsueberkrueb.io>
  * Ivan Fateev <johnny.j.poison@gmail.com>
  * Pier Luigi Fiorini <pierluigi.fiorini@gmail.com>
+ * Alexander Stefanov-Khryukin <alexander@mezon.ru>
+ * Simon Peter <probonopd@users.noreply.github.com>
 
