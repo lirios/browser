@@ -3,7 +3,7 @@ Liri Browser
 
 # Core Developers
 
- * Tim Süberkrüb <tim.sueberkrueb@web.de>
+ * Tim Süberkrüb <dev@timsueberkrueb.io>
 
 # Contributors
 
