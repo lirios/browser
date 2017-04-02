@@ -25,6 +25,7 @@ import QtQuick 2.7
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.0
 import QtQuick.Controls.Material 2.0
+import QtQuick.Window 2.0
 import Fluid.Core 1.0
 import Fluid.Controls 1.0
 import Fluid.Material 1.0
@@ -74,6 +75,13 @@ ApplicationWindow {
         onNewWindowRequested: {
             root.openWindowRequest(request);
         }
+        onFullScreenRequested: {
+            var isFullScreen = window.visibility === Window.FullScreen;
+            if (isFullScreen !== request.toggleOn) {
+                toggleFullScreen();
+                request.accept();
+            }
+        }
     }
 
     function timeString(time) {
@@ -83,6 +91,15 @@ ApplicationWindow {
     function openRequest(request) {
         request.destination = NewViewRequest.NewViewInTab;
         tabController.openNewViewRequest(request);
+    }
+
+    function toggleFullScreen() {
+        if (window.visibility === Window.FullScreen) {
+            window.showNormal();
+        } else {
+            window.showFullScreen();
+        }
+        window.requestActivate();
     }
 
     width: 1024

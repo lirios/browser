@@ -32,6 +32,11 @@ QtObject {
 
     signal newWebViewRequested(var request)
     signal closeRequested()
+    signal fullScreenRequested(var request)
+
+    onFullScreenRequested: {
+        internal.tabController.fullScreenRequested(request);
+    }
 
     onNewWebViewRequested: {
         switch (request.destination) {

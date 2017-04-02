@@ -231,14 +231,9 @@ Item {
 
     Shortcut {
         autoRepeat: false
-        sequence: "F12"
+        sequence: Qt.platform.os == "osx" ? "Ctrl+Meta+F" : "F11"
         onActivated: {
-            if (window.visibility === Window.FullScreen) {
-                window.showNormal();
-            } else {
-                window.showFullScreen();
-            }
-
+            window.toggleFullScreen();
         }
     }
 
