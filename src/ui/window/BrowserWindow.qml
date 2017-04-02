@@ -65,6 +65,8 @@ ApplicationWindow {
     property TabsModel tabsModel: TabsModel {}
     property DownloadsModel downloadsModel
 
+    property bool isFullScreen: window.visibility === Window.FullScreen
+
     property TabController tabController: TabController {
         id: tabController
         tabBar: tabBar
@@ -76,8 +78,7 @@ ApplicationWindow {
             root.openWindowRequest(request);
         }
         onFullScreenRequested: {
-            var isFullScreen = window.visibility === Window.FullScreen;
-            if (isFullScreen !== request.toggleOn) {
+            if (window.isFullScreen !== request.toggleOn) {
                 toggleFullScreen();
                 request.accept();
             }
@@ -184,6 +185,13 @@ ApplicationWindow {
                     }
                 ]
                 rightActions: [
+                    Action {
+                        iconName: window.isFullScreen ? "navigation/fullscreen_exit" : "navigation/fullscreen"
+                        onTriggered: {
+                            toggleFullScreen()
+                        }
+                    },
+
                     Action {
                         enabled: tabsModel.active.valid && tabsModel.active.canReload
                         iconName: tabsModel.active.loading ? "navigation/close" : "navigation/refresh"
