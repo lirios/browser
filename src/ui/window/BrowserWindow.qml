@@ -242,13 +242,6 @@ ApplicationWindow {
                     ]
                     rightActions: [
                         Action {
-                            iconName: window.isFullScreen ? "navigation/fullscreen_exit" : "navigation/fullscreen"
-                            onTriggered: {
-                                toggleFullScreen()
-                            }
-                        },
-
-                        Action {
                             enabled: tabsModel.active.valid && tabsModel.active.canReload
                             iconName: tabsModel.active.loading ? "navigation/close" : "navigation/refresh"
                             onTriggered: {
@@ -264,6 +257,13 @@ ApplicationWindow {
                             onTriggered: {
                                 rightDrawer.loadContent(rightDrawer.downloads);
                                 rightDrawer.open();
+                            }
+                        },
+                        Action {
+                            iconName: "navigation/fullscreen_exit"
+                            visible: window.isFullScreen
+                            onTriggered: {
+                                toggleFullScreen()
                             }
                         },
                         Action {
