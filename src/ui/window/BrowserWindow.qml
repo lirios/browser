@@ -66,6 +66,7 @@ ApplicationWindow {
     property DownloadsModel downloadsModel
 
     property bool isFullScreen: window.visibility === Window.FullScreen
+    property string fullScreenInitiator
 
     property TabController tabController: TabController {
         id: tabController
@@ -415,6 +416,16 @@ ApplicationWindow {
             onClicked: {
                 rightDrawer.loadContent(rightDrawer.downloads);
                 rightDrawer.open();
+            }
+        }
+
+        MenuItem {
+            text: "Fullscreen"
+            iconName: "navigation/fullscreen"
+            visible: !window.isFullScreen
+            height: visible ? undefined : 0
+            onClicked: {
+                toggleFullScreen();
             }
         }
 
