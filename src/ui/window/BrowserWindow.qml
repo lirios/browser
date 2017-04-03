@@ -66,7 +66,7 @@ ApplicationWindow {
     property DownloadsModel downloadsModel
 
     property bool isFullScreen: window.visibility === Window.FullScreen
-    property string fullScreenInitiator
+    property bool fullScreenUserChoice
 
     property TabController tabController: TabController {
         id: tabController
@@ -79,9 +79,7 @@ ApplicationWindow {
             root.openWindowRequest(request);
         }
         onFullScreenRequested: {
-            if (window.isFullScreen !== request.toggleOn) {
-                toggleFullScreen();
-            }
+            setFullScreen(fullScreenUserChoice || request.toggleOn)
             request.accept();
         }
     }
@@ -96,12 +94,19 @@ ApplicationWindow {
     }
 
     function toggleFullScreen() {
-        if (window.visibility === Window.FullScreen) {
+        setFullScreen(window.visibility !== Window.FullScreen);
+        fullScreenUserChoice = isFullScreen;
+    }
+
+    function setFullScreen(fullscreen) {
+        if (!fullscreen) {
             window.showNormal();
         } else {
             window.showFullScreen();
         }
+        // required to preserve focus on Mac platform
         window.requestActivate();
+
     }
 
     width: 1024
