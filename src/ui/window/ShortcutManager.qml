@@ -109,9 +109,9 @@ Item {
     Shortcut {
         autoRepeat: false
         context: Qt.ApplicationShortcut
-        // it's a hack since StandardKey.PreviousChild not working for current Qt 5.7
-        // TODO: for mac it should be forced to Ctrl+Shift+Tab
-        sequence: Qt.platform.os == "osx" ? "Meta+Shift+Tab" : "Ctrl+Shift+Tab"
+        // for Mac it's handled via macEvents
+        // due to bug https://bugreports.qt.io/browse/QTBUG-8596
+        sequence: "Ctrl+Shift+Tab"
         onActivated: {
             tabsModel.setPreviousTabActive();
         }
@@ -119,6 +119,8 @@ Item {
 
     Shortcut {
         autoRepeat: false
+        // for Mac it's handled via macEvents
+        // due to bug https://bugreports.qt.io/browse/QTBUG-8596
         sequence: "Meta+Tab"
         onActivated: {
             tabsModel.setNextTabActive();
