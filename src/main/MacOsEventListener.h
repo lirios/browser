@@ -1,6 +1,7 @@
 #ifndef MACOSEVENTLISTENER_H
 #define MACOSEVENTLISTENER_H
 
+#include <string>
 #include <functional>
 
 struct Event {
