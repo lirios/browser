@@ -50,10 +50,7 @@
 
 int main(int argc, char *argv[])
 {
-
-    #if defined(ENABLE_HIGH_DPI_SCALING)
-        QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    #endif
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QGuiApplication app(argc, argv);
 
@@ -61,8 +58,8 @@ int main(int argc, char *argv[])
     MacOsEventListener evListener;
     initMacOsEventListener(&evListener);
     #endif
+    app.setWindowIcon(QIcon(":/res/icons/iconx512.png"));
 
-    app.setWindowIcon(QIcon(":/res/icon.png"));
 
     QQuickStyle::setStyle(QLatin1String("Material"));
 
