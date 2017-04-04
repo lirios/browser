@@ -65,6 +65,8 @@ ApplicationWindow {
     property TabsModel tabsModel: TabsModel {}
     property DownloadsModel downloadsModel
 
+    property bool isWindowed: window.visibility === Window.Windowed
+    property bool isMaximized: window.visibility === Window.Maximized
     property bool isFullScreen: window.visibility === Window.FullScreen
     property bool fullScreenUserChoice
 
@@ -224,6 +226,14 @@ ApplicationWindow {
                     tabController: tabController
                     tabsModel: tabController.tabsModel
                     newTabUrl: startUrl
+
+                    onToggleMaximizeRequested: {
+                        if (window.isMaximized || window.isFullScreen) {
+                            window.showNormal();
+                        } else if (window.isWindowed) {
+                            window.showMaximized();
+                        }
+                    }
                 }
 
                 Toolbar {

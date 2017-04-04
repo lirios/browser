@@ -90,6 +90,7 @@ Item {
     }
 
     signal tabCloseRequested(int uid)
+    signal toggleMaximizeRequested()
 
     height: tabHeight
 
@@ -265,9 +266,14 @@ Item {
                 width: tabsListView.width - x
                 x: tabsModel.count * tabBar.tabWidth
 
-                acceptedButtons: Qt.MiddleButton
+                acceptedButtons: Qt.LeftButton | Qt.MiddleButton
                 onClicked: {
-                    newTab();
+                    if (mouse.button === Qt.MidButton)
+                        newTab();
+                }
+                onDoubleClicked: {
+                    if (mouse.button === Qt.LeftButton)
+                        toggleMaximizeRequested()
                 }
             }
 
