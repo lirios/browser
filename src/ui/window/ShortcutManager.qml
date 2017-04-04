@@ -121,7 +121,7 @@ Item {
         autoRepeat: false
         // for Mac it's handled via macEvents
         // due to bug https://bugreports.qt.io/browse/QTBUG-8596
-        sequence: "Meta+Tab"
+        sequence: "Ctrl+Tab"
         onActivated: {
             tabsModel.setNextTabActive();
         }
