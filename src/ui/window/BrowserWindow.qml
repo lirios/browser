@@ -301,6 +301,10 @@ ApplicationWindow {
     Item {
         anchors.fill: parent
 
+        Keys.onPressed:  {
+            shortcutManager.keyPressed(event);
+        }
+
         TabContentView {
             id: tabContentView
             anchors.fill: parent
@@ -353,6 +357,7 @@ ApplicationWindow {
     }
 
     ShortcutManager {
+        id: shortcutManager
         window: window
         tabBar: tabBar
         toolbar: toolbar

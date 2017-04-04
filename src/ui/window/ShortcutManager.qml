@@ -35,6 +35,27 @@ Item {
     property SearchOverlay searchOverlay
     property var tabsModel: shortcutManager.window.tabsModel
 
+    signal keyPressed(var event);
+
+    onKeyPressed: {
+        if (Qt.platform.os !== "osx")
+        {
+            event.accepted = false;
+            return;
+        }
+
+        console.log("Key pressed in shortcut manager " + event.key);
+        console.log("Modifiers: " + event.modifiers);
+
+        if ((event.key === Qt.Key_Tab)
+                && (event.modifiers & Qt.ShiftModifier)
+                && (event.modifiers & Qt.MetaModifier)) {
+            tabsModel.setPreviousTabActive();
+            console.log("prev tab");
+        }
+        event.accepted = false;
+    }
+
     function setActiveTabByIndex(idx) {
         if (idx < 0 || idx >= tabsModel.count) {
             return;
@@ -93,6 +114,7 @@ Item {
 
     Shortcut {
         autoRepeat: false
+        context: Qt.ApplicationShortcut
         // it's a hack since StandardKey.PreviousChild not working for current Qt 5.7
         // TODO: for mac it should be forced to Ctrl+Shift+Tab
         sequence: Qt.platform.os == "osx" ? "Meta+Shift+Tab" : "Ctrl+Shift+Tab"
@@ -103,7 +125,7 @@ Item {
 
     Shortcut {
         autoRepeat: false
-        sequence: StandardKey.NextChild
+        sequence: "Meta+Tab"
         onActivated: {
             tabsModel.setNextTabActive();
         }
