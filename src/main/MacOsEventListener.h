@@ -3,22 +3,26 @@
 
 #include <string>
 #include <functional>
+#include <QObject>
 
-struct Event {
+enum class TabEvent {
+    ShiftTab,
+    CtrlShiftTab
+};
+class MacOsEventListener;
+
+MacOsEventListener* initMacOsEventListener(MacOsEventListener *parent);
+
+class MacOsEventListener : public QObject {
+    Q_OBJECT
+
 public:
-    enum class Modifier {
-        None = 0,
-        Ctrl = 1 << 1,
-        Alt = 1 << 2,
-        Cmd = 1 << 3,
-        Shift = 1 << 4,
-    };
+    MacOsEventListener(QObject* parent = 0) : QObject(parent) {}
 
-    Modifier modifiers;
-    std::string key;
+signals:
+    void ctrlShiftTabPressed();
+    void ctrlTabPressed();
 
 };
-
-void initMacOsEventListener(std::function<void(Event)> listener);
 
 #endif // MACOSEVENTLISTENER_H

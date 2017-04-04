@@ -35,26 +35,20 @@ Item {
     property SearchOverlay searchOverlay
     property var tabsModel: shortcutManager.window.tabsModel
 
-    signal keyPressed(var event);
+    Connections {
+        target: Qt.platform.os === "osx" ? MacEvents : null
+        enabled:Qt.platform.os === "osx"
+        ignoreUnknownSignals: true
 
-    onKeyPressed: {
-        if (Qt.platform.os !== "osx")
-        {
-            event.accepted = false;
-            return;
-        }
-
-        console.log("Key pressed in shortcut manager " + event.key);
-        console.log("Modifiers: " + event.modifiers);
-
-        if ((event.key === Qt.Key_Tab)
-                && (event.modifiers & Qt.ShiftModifier)
-                && (event.modifiers & Qt.MetaModifier)) {
+        onCtrlShiftTabPressed: {
             tabsModel.setPreviousTabActive();
-            console.log("prev tab");
         }
-        event.accepted = false;
+
+        onCtrlTabPressed: {
+            tabsModel.setNextTabActive();
+        }
     }
+
 
     function setActiveTabByIndex(idx) {
         if (idx < 0 || idx >= tabsModel.count) {
