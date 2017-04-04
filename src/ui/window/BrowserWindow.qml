@@ -425,7 +425,7 @@ ApplicationWindow {
         }
 
         MenuItem {
-            text: "Fullscreen"
+            text: window.isFullScreen? "Exit fullscreen" : "Fullscreen"
             iconName: !window.isFullScreen ? "navigation/fullscreen" : "navigation/fullscreen_exit"
             onClicked: {
                 toggleFullScreen();
