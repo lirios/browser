@@ -41,6 +41,10 @@ TabContent {
         id: webview
         engine: webengine
         anchors.fill: parent
+        onFullScreenRequested: {
+            actionManager.fullScreenRequested(request);
+        }
+
         onNewViewRequested: {
             actionManager.newWebViewRequested(request);
         }

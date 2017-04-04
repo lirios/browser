@@ -22,17 +22,18 @@
 */
 
 import QtQuick 2.7
+import QtQuick.Window 2.0
 import core 1.0
 import ".."
 
 Item {
     id: shortcutManager
 
-    property var root
-    property TabsModel tabsModel
+    property var window
     property Toolbar toolbar
     property TabBar tabBar
     property SearchOverlay searchOverlay
+    property var tabsModel: shortcutManager.window.tabsModel
 
     function setActiveTabByIndex(idx) {
         if (idx < 0 || idx >= tabsModel.count) {
@@ -214,7 +215,7 @@ Item {
         autoRepeat: false
         sequence: "Ctrl+n"
         onActivated: {
-            var window = root.newWindow();
+            var window = window.root.newWindow();
             window.showNormal();
         }
     }
@@ -223,8 +224,16 @@ Item {
         autoRepeat: false
         sequence: "Ctrl+Shift+n"
         onActivated: {
-            var window = root.newIncognitoWindow();
+            var window = window.root.newIncognitoWindow();
             window.showNormal();
+        }
+    }
+
+    Shortcut {
+        autoRepeat: false
+        sequence: Qt.platform.os == "osx" ? "Ctrl+Meta+F" : "F11"
+        onActivated: {
+            window.toggleFullScreen();
         }
     }
 

@@ -25,6 +25,7 @@ import QtQuick 2.7
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.0
 import QtQuick.Controls.Material 2.0
+import QtQuick.Window 2.0
 import Fluid.Core 1.0
 import Fluid.Controls 1.0
 import Fluid.Material 1.0
@@ -64,6 +65,9 @@ ApplicationWindow {
     property TabsModel tabsModel: TabsModel {}
     property DownloadsModel downloadsModel
 
+    property bool isFullScreen: window.visibility === Window.FullScreen
+    property bool fullScreenUserChoice
+
     property TabController tabController: TabController {
         id: tabController
         tabBar: tabBar
@@ -73,6 +77,10 @@ ApplicationWindow {
         webengine: root.webengine
         onNewWindowRequested: {
             root.openWindowRequest(request);
+        }
+        onFullScreenRequested: {
+            setFullScreen(fullScreenUserChoice || request.toggleOn)
+            request.accept();
         }
     }
 
@@ -85,6 +93,22 @@ ApplicationWindow {
         tabController.openNewViewRequest(request);
     }
 
+    function toggleFullScreen() {
+        setFullScreen(window.visibility !== Window.FullScreen);
+        fullScreenUserChoice = isFullScreen;
+    }
+
+    function setFullScreen(fullscreen) {
+        if (!fullscreen) {
+            window.showNormal();
+        } else {
+            window.showFullScreen();
+        }
+        // required to preserve focus on Mac platform
+        window.requestActivate();
+
+    }
+
     width: 1024
     height: 640
 
@@ -93,6 +117,50 @@ ApplicationWindow {
                                  .arg(incognito ? "(Private mode)" : "")
 
     Material.theme: darkThemeActive || incognito ? Material.Dark : Material.Light
+
+    MouseArea {
+        id: topAreaTrigger
+        parent: window.overlay
+        anchors.left: parent.left
+        anchors.right: parent.right
+        hoverEnabled: true
+
+        z:100
+        height: 15
+        enabled: window.isFullScreen
+        onClicked: mouse.accepted = false;
+        onPressed: mouse.accepted = false;
+        onReleased: mouse.accepted = false;
+        onDoubleClicked: mouse.accepted = false;
+        onPositionChanged: mouse.accepted = false;
+        onPressAndHold: mouse.accepted = false;
+        onContainsMouseChanged: {
+            if (containsMouse) {
+                isOnToolbarTrigger.enabled = true;
+            }
+        }
+    }
+
+    MouseArea {
+        z:100
+        id: isOnToolbarTrigger
+        width: toolbarContainer.width
+        height: headColumn.implicitHeight
+        hoverEnabled: true
+        parent: window.overlay
+        onClicked: mouse.accepted = false;
+        onPressed: mouse.accepted = false;
+        onReleased: mouse.accepted = false;
+        onDoubleClicked: mouse.accepted = false;
+        onPositionChanged: mouse.accepted = false;
+        onPressAndHold: mouse.accepted = false;
+        onContainsMouseChanged: {
+            if (!containsMouse)
+            {
+                enabled = false;
+            }
+        }
+    }
 
     // Header
     header: ToolBar {
@@ -118,6 +186,11 @@ ApplicationWindow {
         property color foregroundColor: Utils.lightDark(backgroundColor, "#212121", "white")
         property color accentColor: Utils.lightDark(backgroundColor, defaultAccentColor, "white")
         property color defaultAccentColor: Material.color(Material.Pink)
+        property bool hidden: isFullScreen
+                              && !(topAreaTrigger.containsMouse || isOnToolbarTrigger.containsMouse)
+                              && !toolbar.omnibox.editingUrl
+
+
 
         Layout.fillWidth: true
         Material.elevation: 0
@@ -126,75 +199,102 @@ ApplicationWindow {
         Material.foreground: foregroundColor
         Material.accent: accentColor
         z: 5
+        implicitHeight: toolbarWrapper.y + toolbarWrapper.implicitHeight
+
+        Item {
+            id: toolbarWrapper
+            anchors {
+                left: parent.left
+                right: parent.right
+            }
+            y: toolbarContainer.hidden ? -height : 0
+            implicitHeight: headColumn.implicitHeight
+            height: implicitHeight
+
+            ColumnLayout {
+                id: headColumn
+                anchors.fill: parent
+                spacing: 0
+
+                TabBar {
+                    id: tabBar
+
+                    Layout.fillWidth: true
+
+                    tabController: tabController
+                    tabsModel: tabController.tabsModel
+                    newTabUrl: startUrl
+                }
+
+                Toolbar {
+                    id: toolbar
+
+                    Layout.fillWidth: true
+
+                    tabController: tabController
+                    tabsModel: tabController.tabsModel
+                    searchUrl: window.searchUrl
+                    leftActions: [
+                        Action {
+                            iconName: "navigation/arrow_back"
+                            enabled: tabsModel.active.valid && tabsModel.active.canGoBack
+                            onTriggered: tabsModel.active.goBack()
+                        },
+                        Action {
+                            iconName: "navigation/arrow_forward"
+                            enabled: tabsModel.active.valid && tabsModel.active.canGoForward
+                            onTriggered: tabsModel.active.goForward()
+                        }
+                    ]
+                    rightActions: [
+                        Action {
+                            enabled: tabsModel.active.valid && tabsModel.active.canReload
+                            iconName: tabsModel.active.loading ? "navigation/close" : "navigation/refresh"
+                            onTriggered: {
+                                if (tabsModel.active.loading)
+                                    tabsModel.active.stop();
+                                else
+                                    tabsModel.active.reload();
+                            }
+                        },
+                        Action {
+                            visible: downloadsModel.count > 0
+                            iconName: "file/file_download"
+                            onTriggered: {
+                                rightDrawer.loadContent(rightDrawer.downloads);
+                                rightDrawer.open();
+                            }
+                        },
+                        Action {
+                            iconName: "navigation/fullscreen_exit"
+                            visible: window.isFullScreen
+                            onTriggered: {
+                                toggleFullScreen()
+                            }
+                        },
+                        Action {
+                            id: toolbarOverflowAction
+                            iconName: "navigation/more_vert"
+                            onTriggered: {
+                                toolbarActionsOverflowMenu.open();
+                            }
+                        }
+                    ]
+                }
+            }
+
+            Behavior on y {
+                PropertyAnimation {
+                    duration: 300
+                    easing.type: Easing.InOutCubic
+                }
+            }
+        }
 
         Behavior on backgroundColor {
             ColorAnimation { duration: 100 }
         }
 
-        ColumnLayout {
-            id: headColumn
-            anchors.fill: parent
-            spacing: 0
-
-            TabBar {
-                id: tabBar
-
-                Layout.fillWidth: true
-
-                tabController: tabController
-                tabsModel: tabController.tabsModel
-                newTabUrl: startUrl
-            }
-
-            Toolbar {
-                id: toolbar
-
-                Layout.fillWidth: true
-
-                tabController: tabController
-                tabsModel: tabController.tabsModel
-                searchUrl: window.searchUrl
-                leftActions: [
-                    Action {
-                        iconName: "navigation/arrow_back"
-                        enabled: tabsModel.active.valid && tabsModel.active.canGoBack
-                        onTriggered: tabsModel.active.goBack()
-                    },
-                    Action {
-                        iconName: "navigation/arrow_forward"
-                        enabled: tabsModel.active.valid && tabsModel.active.canGoForward
-                        onTriggered: tabsModel.active.goForward()
-                    }
-                ]
-                rightActions: [
-                    Action {
-                        enabled: tabsModel.active.valid && tabsModel.active.canReload
-                        iconName: tabsModel.active.loading ? "navigation/close" : "navigation/refresh"
-                        onTriggered: {
-                            if (tabsModel.active.loading)
-                                tabsModel.active.stop();
-                            else
-                                tabsModel.active.reload();
-                        }
-                    },
-                    Action {
-                        visible: downloadsModel.count > 0
-                        iconName: "file/file_download"
-                        onTriggered: {
-                            rightDrawer.loadContent(rightDrawer.downloads);
-                            rightDrawer.open();
-                        }
-                    },
-                    Action {
-                        id: toolbarOverflowAction
-                        iconName: "navigation/more_vert"
-                        onTriggered: {
-                            toolbarActionsOverflowMenu.open();
-                        }
-                    }
-                ]
-            }
-        }
     }
 
     // Body
@@ -253,10 +353,9 @@ ApplicationWindow {
     }
 
     ShortcutManager {
-        root: window.root
+        window: window
         tabBar: tabBar
         toolbar: toolbar
-        tabsModel: window.tabsModel
         searchOverlay: searchOverlay
     }
 
@@ -322,6 +421,14 @@ ApplicationWindow {
             onClicked: {
                 rightDrawer.loadContent(rightDrawer.downloads);
                 rightDrawer.open();
+            }
+        }
+
+        MenuItem {
+            text: window.isFullScreen? "Exit fullscreen" : "Fullscreen"
+            iconName: !window.isFullScreen ? "navigation/fullscreen" : "navigation/fullscreen_exit"
+            onClicked: {
+                toggleFullScreen();
             }
         }
 
