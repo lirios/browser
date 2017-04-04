@@ -44,9 +44,7 @@
 
 int main(int argc, char *argv[])
 {
-    #if defined(ENABLE_HIGH_DPI_SCALING)
-        QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    #endif
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QGuiApplication app(argc, argv);
 
