@@ -1,7 +1,7 @@
 /*
  * This file is part of Liri Browser
  *
- * Copyright (C) 2016 Ivan Fateev <johnny.j.poision@gmail.com>
+ * Copyright (C) 2017 Ivan Fateev <johnny.j.poision@gmail.com>
  *
  * $BEGIN_LICENSE:GPL3+$
  *
@@ -40,7 +40,7 @@ class MacOsEventListener : public QObject {
     Q_OBJECT
 
 public:
-    MacOsEventListener(QObject* parent = 0) : QObject(parent) {}
+    MacOsEventListener(QObject* parent = nullptr) : QObject(parent) {}
 
 signals:
     void ctrlShiftTabPressed();
