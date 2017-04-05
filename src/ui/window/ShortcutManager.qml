@@ -37,7 +37,7 @@ Item {
 
     Connections {
         target: Qt.platform.os === "osx" ? MacEvents : null
-        enabled:Qt.platform.os === "osx"
+        enabled: Qt.platform.os === "osx"
         ignoreUnknownSignals: true
 
         onCtrlShiftTabPressed: {
@@ -233,8 +233,7 @@ Item {
         autoRepeat: false
         sequence: "Ctrl+n"
         onActivated: {
-            var window = window.root.newWindow();
-            window.showNormal();
+            window.root.newWindow().showNormal();
         }
     }
 
@@ -242,8 +241,7 @@ Item {
         autoRepeat: false
         sequence: "Ctrl+Shift+n"
         onActivated: {
-            var window = window.root.newIncognitoWindow();
-            window.showNormal();
+            window.root.newIncognitoWindow().showNormal();
         }
     }
 
