@@ -167,4 +167,3 @@ void Tab::setThemeColor(QColor themeColor)
 {
     themeColorChanged(m_themeColor = themeColor);
 }
-

@@ -36,7 +36,9 @@ Item {
     id: omnibox
     property TabController tabController
     property TabsModel tabsModel
-    property string searchUrl
+    property string searchEngine
+    property ExtensionTheme currentTheme
+    property color selectionColor
     property alias editingUrl: showUrlField.editActive
 
     function focusUrlField() {
@@ -71,7 +73,6 @@ Item {
                 Layout.fillWidth: true
 
                 Material.foreground: "#212121"
-                Material.accent: Material.color(Material.Pink)
 
                 bottomPadding: Units.smallSpacing
 
@@ -93,14 +94,14 @@ Item {
                     anchors.fill: parent
                     visible: showUrlField.editActive
 
-                    selectionColor: tabsModel.active.hasThemeColor ? tabsModel.active.themeColor : Material.accent
+                    selectionColor: omnibox.selectionColor
                     selectByMouse: true
                     bottomPadding: Units.smallSpacing
                     background: Rectangle { color: container.color }
                     font.pixelSize: 14
 
                     onAccepted: {
-                        var url = UrlUtils.validUrl(text, searchUrl);
+                        var url = UrlUtils.validUrl(text, searchEngine, currentTheme);
                         if (!tabsModel.active.valid) {
                             tabController.openUrl(url);
                         }
@@ -131,7 +132,7 @@ Item {
 
             height: 2
             width: parent.width * (tabsModel.active.loadProgress / 100)
-            color: "red"
+            color: Material.accent
 
             Behavior on width {
                 enabled: tabsModel.active.loading

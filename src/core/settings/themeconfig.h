@@ -1,3 +1,26 @@
+/*
+ * This file is part of Liri Browser
+ *
+ * Copyright (C) 2017 Tim Süberkrüb <tim.sueberkrueb@web.de>
+ *
+ * $BEGIN_LICENSE:GPL3+$
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * $END_LICENSE$
+*/
+
 #ifndef THEMECONFIG_H
 #define THEMECONFIG_H
 
@@ -7,42 +30,54 @@
 class ThemeConfig : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(bool themeColorEnabled READ themeColorEnabled WRITE setThemeColorEnabled NOTIFY themeColorEnabledChanged)
-    Q_PROPERTY(bool darkThemeEnabled READ darkThemeEnabled WRITE setDarkThemeEnabled NOTIFY darkThemeEnabledChanged)
-    Q_PROPERTY(QTime darkThemeStartTime READ darkThemeStartTime WRITE setDarkThemeStartTime NOTIFY darkThemeStartTimeChanged)
-    Q_PROPERTY(QTime darkThemeEndTime READ darkThemeEndTime WRITE setDarkThemeEndTime NOTIFY darkThemeEndTimeChanged)
+    Q_PROPERTY(QString primary READ primary WRITE setPrimary NOTIFY primaryChanged)
+    Q_PROPERTY(QString secondary READ secondary WRITE setSecondary NOTIFY secondaryChanged)
+    Q_PROPERTY(QString incognito READ incognito WRITE setIncognito NOTIFY incognitoChanged)
+    Q_PROPERTY(bool secondaryEnabled READ secondaryEnabled WRITE setSecondaryEnabled NOTIFY secondaryEnabledChanged)
+    Q_PROPERTY(QTime secondaryStartTime READ secondaryStartTime WRITE setSecondaryStartTime NOTIFY secondaryStartTimeChanged)
+    Q_PROPERTY(QTime secondaryEndTime READ secondaryEndTime WRITE setSecondaryEndTime NOTIFY secondaryEndTimeChanged)
 public:
     explicit ThemeConfig(QObject *parent = nullptr);
 
-    bool themeColorEnabled() const { return m_themeColorEnabled; }
-    void setThemeColorEnabled(bool themeColorEnabled) { themeColorEnabledChanged(m_themeColorEnabled = themeColorEnabled); }
+    QString primary() const { return m_primary; }
+    void setPrimary(QString primary) { primaryChanged(m_primary = primary); }
 
-    bool darkThemeEnabled() const { return m_darkThemeEnabled; }
-    void setDarkThemeEnabled(bool darkThemeEnabled) { darkThemeEnabledChanged(m_darkThemeEnabled = darkThemeEnabled); }
+    QString secondary() const { return m_secondary; }
+    void setSecondary(QString secondary) { secondaryChanged(m_secondary = secondary); }
 
-    QTime darkThemeStartTime() const { return m_darkThemeStartTime; }
-    void setDarkThemeStartTime(QTime darkThemeStartTime) { darkThemeStartTimeChanged(m_darkThemeStartTime = darkThemeStartTime); }
-    Q_INVOKABLE void setDarkThemeStartTime(QString darkThemeStartTime, QString format) {
-        darkThemeStartTimeChanged(m_darkThemeStartTime = QTime::fromString(darkThemeStartTime, format));
+    QString incognito() const { return m_incognito; }
+    void setIncognito(QString incognito) { incognitoChanged(m_incognito = incognito); }
+
+    bool secondaryEnabled() const { return m_secondaryEnabled; }
+    void setSecondaryEnabled(bool secondaryEnabled) { secondaryEnabledChanged(m_secondaryEnabled = secondaryEnabled); }
+
+    QTime secondaryStartTime() const { return m_secondaryStartTime; }
+    void setSecondaryStartTime(QTime secondaryStartTime) { secondaryStartTimeChanged(m_secondaryStartTime = secondaryStartTime); }
+    Q_INVOKABLE void setSecondaryStartTime(QString secondaryStartTime, QString format) {
+        secondaryStartTimeChanged(m_secondaryStartTime = QTime::fromString(secondaryStartTime, format));
     }
 
-    QTime darkThemeEndTime() const { return m_darkThemeEndTime; }
-    void setDarkThemeEndTime(QTime darkThemeEndTime) { darkThemeEndTimeChanged(m_darkThemeEndTime = darkThemeEndTime); }
-    Q_INVOKABLE void setDarkThemeEndTime(QString darkThemeEndTime, QString format) {
-        darkThemeEndTimeChanged(m_darkThemeEndTime = QTime::fromString(darkThemeEndTime, format));
+    QTime secondaryEndTime() const { return m_secondaryEndTime; }
+    void setSecondaryEndTime(QTime secondaryEndTime) { secondaryEndTimeChanged(m_secondaryEndTime = secondaryEndTime); }
+    Q_INVOKABLE void setSecondaryEndTime(QString secondaryEndTime, QString format) {
+        secondaryEndTimeChanged(m_secondaryEndTime = QTime::fromString(secondaryEndTime, format));
     }
 
 signals:
-    void themeColorEnabledChanged(bool themeColorEnabled);
-    void darkThemeEnabledChanged(bool darkThemeEnabled);
-    void darkThemeStartTimeChanged(QTime darkThemeStartTime);
-    void darkThemeEndTimeChanged(QTime darkThemeEndTime);
+    void primaryChanged(QString primary);
+    void secondaryChanged(QString secondary);
+    void incognitoChanged(QString incognito);
+    void secondaryEnabledChanged(bool secondaryEnabled);
+    void secondaryStartTimeChanged(QTime secondaryStartTime);
+    void secondaryEndTimeChanged(QTime secondaryEndTime);
 
 private:
-    bool m_themeColorEnabled;
-    bool m_darkThemeEnabled;
-    QTime m_darkThemeStartTime;
-    QTime m_darkThemeEndTime;
+    QString m_primary;
+    QString m_secondary;
+    QString m_incognito;
+    bool m_secondaryEnabled;
+    QTime m_secondaryStartTime;
+    QTime m_secondaryEndTime;
 };
 
 #endif // THEMECONFIG_H

@@ -28,6 +28,14 @@ import dperini.regexweburl 1.0
 QtObject {
     property var webUrlRegex: RegexWebUrl.re_weburl
 
+    function isChromeUrl(url) {
+        return url.indexOf("chrome://") == 0;
+    }
+
+    function isViewSourceUrl(url) {
+        return url.indexOf("view-source:") == 0;
+    }
+
     function isWebUrl(url) {
         return url.match(webUrlRegex) !== null;
     }
@@ -36,7 +44,7 @@ QtObject {
         return url.toString().indexOf("liri://") === 0;
     }
 
-    function validUrl(url, searchUrl) {
+    function validUrl(url, searchEngine, currentTheme) {
         // Valid web url
         var isHttped = (url.indexOf("http://") === 0 || url.indexOf("https://") === 0);
         var httpedUrl = isHttped ? url : "http://%1".arg(url);
@@ -47,9 +55,17 @@ QtObject {
         else if (isLiriUrl(url)) {
             return url;
         }
+        // Chrome url
+        else if (isChromeUrl(url)) {
+            return url;
+        }
+        // View source url
+        else if (isViewSourceUrl(url)) {
+            return url;
+        }
         // Search term
         else {
-            return searchUrl + url;
+            return Search.searchUrl(url, searchEngine, currentTheme);
         }
     }
 }

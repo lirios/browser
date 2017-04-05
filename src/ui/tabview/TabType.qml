@@ -1,7 +1,7 @@
 /*
  * This file is part of Liri Browser
  *
- * Copyright (C) 2016 Tim Süberkrüb <tim.sueberkrueb@web.de>
+ * Copyright (C) 2017 Tim Süberkrüb <tim.sueberkrueb@web.de>
  *
  * $BEGIN_LICENSE:GPL3+$
  *
@@ -29,11 +29,17 @@ QtObject {
     property int unknown: -1
     property int webview: 0
     property int settings: 1
+    property int extensions: 2
+    property int about: 3
 
     function fromUrl(url) {
         if (UrlUtils.isLiriUrl(url)) {
             if (url == "liri://settings")
                 return settings;
+            else if (url == "liri://extensions")
+                return extensions;
+            else if (url == "liri://about")
+                return about;
         } else {
             return webview;
         }

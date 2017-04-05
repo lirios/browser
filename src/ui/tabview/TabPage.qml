@@ -1,7 +1,7 @@
 /*
  * This file is part of Liri Browser
  *
- * Copyright (C) 2016 Tim Süberkrüb <tim.sueberkrueb@web.de>
+ * Copyright (C) 2017 Tim Süberkrüb <tim.sueberkrueb@web.de>
  *
  * $BEGIN_LICENSE:GPL3+$
  *
@@ -36,6 +36,20 @@ Item {
 
     property Component settingsContentComponent: Component {
         SettingsContent {
+            tab: tabPage.tab
+            actionManager: tabPage.actionManager
+        }
+    }
+
+    property Component extensionsContentComponent: Component {
+        ExtensionsContent {
+            tab: tabPage.tab
+            actionManager: tabPage.actionManager
+        }
+    }
+
+    property Component aboutContentComponent: Component {
+        AboutContent {
             tab: tabPage.tab
             actionManager: tabPage.actionManager
         }
@@ -87,6 +101,18 @@ Item {
                 break;
             case TabType.settings:
                 newContent = settingsContentComponent.createObject(
+                    contentContainer,
+                    data.properties
+                );
+                break;
+            case TabType.extensions:
+                newContent = extensionsContentComponent.createObject(
+                    contentContainer,
+                    data.properties
+                );
+                break;
+            case TabType.about:
+                newContent = aboutContentComponent.createObject(
                     contentContainer,
                     data.properties
                 );

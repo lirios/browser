@@ -19,6 +19,7 @@ The following modules and their dependencies are required:
 * [Fluid](https://github.com/lirios/fluid) from develop branch
 * [SlimeEngine](https://github.com/tim-sueberkrueb/slime-engine)
     * with either [Oxide](https://launchpad.net/oxide) or [QtWebEngine](http://code.qt.io/cgit/qt/qtwebengine.git/)
+* [quazip](http://quazip.sourceforge.net/)
 
 ## Build
 

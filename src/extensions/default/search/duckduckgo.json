@@ -1,0 +1,32 @@
+{
+    "schema": {
+        "type": "lbx/search",
+        "version": "0.1.0"
+    },
+    "meta": {
+        "name": "default.duckduckgo",
+        "title": "DuckDuckGo",
+        "summary": "DuckDuckGo search engine",
+        "description": "The search engine that doesn't track you."
+    },
+    "url": {
+        "base": {
+            "search": "https://duckduckgo.com/",
+            "homepage": "https://duckduckgo.com/"
+        },
+        "params": [
+            {
+                "type": "get",
+                "name": "q",
+                "value": "$(search.query)",
+                "context": ["search"]
+            },
+            {
+                "type": "get",
+                "name": "kae",
+                "value": "$(theme.background)",
+                "context": ["search", "homepage"]
+            }
+        ]
+    }
+}

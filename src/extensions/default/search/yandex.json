@@ -1,0 +1,26 @@
+{
+    "schema": {
+        "type": "lbx/search",
+        "version": "0.1.0"
+    },
+    "meta": {
+        "name": "default.yandex",
+        "title": "Yandex",
+        "summary": "Yandex search engine",
+        "description": "Yandex Web Search."
+    },
+    "url": {
+        "base": {
+            "search": "https://yandex.ru/search",
+            "homepage": "https://yandex.ru/"
+        },
+        "params": [
+            {
+                "type": "get",
+                "name": "text",
+                "value": "$(search.query)",
+                "context": ["search"]
+            }
+        ]
+    }
+}

@@ -1,0 +1,20 @@
+{
+    "schema": {
+        "type": "lbx/theme",
+        "version": "0.1.0"
+    },
+    "meta": {
+        "name": "default.bluegrey",
+        "title": "Default Blue Grey",
+        "summary": "A blue grey theme",
+        "description": "Default blue grey theme for Liri Browser"
+    },
+    "palette": {
+        "dark": true,
+        "adapt_website_theme": false,
+        "accent": "#3F51B5",
+        "primary": "#2196F3",
+        "foreground": "white",
+        "background": "#263238"
+    }
+}

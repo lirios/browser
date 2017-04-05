@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/extensions">
+        <file>default/meta/package.json</file>
+        <file>default/themes/bluegrey.json</file>
+        <file>default/themes/dark.json</file>
+        <file>default/themes/light.json</file>
+        <file>default/search/duckduckgo.json</file>
+        <file>default/search/google.json</file>
+        <file>default/search/bing.json</file>
+        <file>default/search/yahoo.json</file>
+        <file>default/search/baidu.json</file>
+        <file>default/search/peekier.json</file>
+        <file>default/search/yandex.json</file>
+    </qresource>
+</RCC>

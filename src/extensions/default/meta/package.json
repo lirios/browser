@@ -1,0 +1,33 @@
+{
+    "schema": {
+        "type": "lbx/meta",
+        "version": "0.1.0"
+    },
+    "meta": {
+        "name": "default",
+        "version": "0.1.0",
+        "title": "Default Extension",
+        "author": "Tim Süberkrüb",
+        "email": "tim.sueberkrueb@web.de",
+        "summary": "Default extension",
+        "description": "Provides default themes and elements"
+    },
+    "content": {
+        "static": {
+            "themes": [
+                "res://themes/light.json",
+                "res://themes/dark.json",
+                "res://themes/bluegrey.json"
+            ],
+            "search": [
+                "res://search/duckduckgo.json",
+                "res://search/google.json",
+                "res://search/bing.json",
+                "res://search/yahoo.json",
+                "res://search/baidu.json",
+                "res://search/peekier.json",
+                "res://search/yandex.json"
+            ]
+        }
+    }
+}

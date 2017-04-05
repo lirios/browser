@@ -134,7 +134,7 @@ bool TabsModel::move(int fromRow, int toRow)
     m_tabsList.move(fromRow, toRow);
 
     // Update active index
-    activeIndexChanged(activeIndex());
+    activeRowChanged(activeRow());
 
     endMoveRows();
     return true;
@@ -156,7 +156,7 @@ bool TabsModel::remove(Tab *tab)
     if (index == -1)
         return false;
 
-    int activeIdx = activeIndex();
+    int activeIdx = activeRow();
 
     // Call signal before removing and deleting tab
     beforeTabRemoved(tab);
@@ -222,7 +222,7 @@ Tab *TabsModel::active() const
     return m_activeTab;
 }
 
-int TabsModel::activeIndex() const
+int TabsModel::activeRow() const
 {
     return m_tabsList.indexOf(m_activeTab);
 }
@@ -258,11 +258,11 @@ bool TabsModel::activateTabRelativeToCurrent(int offset)
 {
     if (m_tabsList.length() == 0) {
         activeChanged(m_activeTab = m_invalidTab);
-        activeIndexChanged(activeIndex());
+        activeRowChanged(activeRow());
         return false;
     }
 
-    int currIndex = activeIndex();
+    int currIndex = activeRow();
     if (currIndex == -1) {
         setActive(m_tabsList.last(), true);
         return true;
@@ -291,6 +291,6 @@ bool TabsModel::setActive(Tab *tab, bool recordToHistory)
 
 
     activeChanged(tab);
-    activeIndexChanged(activeIndex());
+    activeRowChanged(activeRow());
     return true;
 }

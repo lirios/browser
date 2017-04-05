@@ -30,43 +30,30 @@
 class StartConfig : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QUrl primaryStartUrl READ primaryStartUrl WRITE setPrimaryStartUrl NOTIFY primaryStartUrlChanged)
-    Q_PROPERTY(QUrl defaultPrimaryStartUrl MEMBER m_defaultPrimaryStartUrl NOTIFY defaultPrimaryStartUrlChanged)
-    Q_PROPERTY(QUrl darkStartUrl READ darkStartUrl WRITE setDarkStartUrl NOTIFY darkStartUrlChanged)
-    Q_PROPERTY(QUrl defaultDarkStartUrl MEMBER m_defaultDarkStartUrl NOTIFY defaultDarkStartUrlChanged)
-    Q_PROPERTY(QUrl incognitoStartUrl READ incognitoStartUrl WRITE setIncognitoStartUrl NOTIFY incognitoStartUrlChanged)
-    Q_PROPERTY(QUrl defaultIncognitoStartUrl MEMBER m_defaultIncognitoStartUrl NOTIFY defaultIncognitoStartUrlChanged)
+    Q_PROPERTY(QString searchEngine READ searchEngine WRITE setSearchEngine NOTIFY searchEngineChanged)
+    Q_PROPERTY(QUrl customUrl READ customUrl WRITE setCustomUrl NOTIFY customUrlChanged)
+    Q_PROPERTY(bool customEnabled READ customEnabled WRITE setCustomEnabled NOTIFY customEnabledChanged)
 public:
     explicit StartConfig(QObject *parent = nullptr);
 
-    QUrl primaryStartUrl() const { return m_primaryStartUrl; }
-    void setPrimaryStartUrl(QUrl url) { primaryStartUrlChanged(m_primaryStartUrl = url); }
+    QString searchEngine() const { return m_searchEngine; }
+    void setSearchEngine(QString searchEngine) { searchEngineChanged(m_searchEngine = searchEngine); }
 
-    QUrl darkStartUrl() const { return m_darkStartUrl; }
-    void setDarkStartUrl(QUrl url) { darkStartUrlChanged(m_darkStartUrl = url); }
+    QUrl customUrl() const { return m_customUrl; }
+    void setCustomUrl(QUrl customUrl) { customUrlChanged(m_customUrl = customUrl); }
 
-    QUrl incognitoStartUrl() const { return m_incognitoStartUrl; }
-    void setIncognitoStartUrl(QUrl url) { incognitoStartUrlChanged(m_incognitoStartUrl = url); }
-
-    QUrl defaultPrimaryStartUrl() const { return m_defaultPrimaryStartUrl; }
-    QUrl defaultIncognitoStartUrl() const { return m_defaultIncognitoStartUrl; }
-    QUrl defaultDarkStartUrl() const { return m_defaultDarkStartUrl; }
+    bool customEnabled() const { return m_customEnabled; }
+    void setCustomEnabled(bool customEnabled) { customEnabledChanged(m_customEnabled = customEnabled); }
 
 signals:
-    void primaryStartUrlChanged(QUrl url);
-    void defaultPrimaryStartUrlChanged(QUrl url);
-    void darkStartUrlChanged(QUrl url);
-    void defaultDarkStartUrlChanged(QUrl url);
-    void incognitoStartUrlChanged(QUrl url);
-    void defaultIncognitoStartUrlChanged(QUrl url);
+    void searchEngineChanged(QString searchEngine);
+    void customUrlChanged(QUrl customUrl);
+    void customEnabledChanged(bool customEnabled);
 
 private:
-    QUrl m_primaryStartUrl;
-    QUrl m_defaultPrimaryStartUrl;
-    QUrl m_incognitoStartUrl;
-    QUrl m_defaultIncognitoStartUrl;
-    QUrl m_darkStartUrl;
-    QUrl m_defaultDarkStartUrl;
+    QString m_searchEngine;
+    QUrl m_customUrl;
+    bool m_customEnabled;
 
 };
 

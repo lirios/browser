@@ -1,7 +1,7 @@
 /*
  * This file is part of Liri Browser
  *
- * Copyright (C) 2016 Tim Süberkrüb <tim.sueberkrueb@web.de>
+ * Copyright (C) 2017 Tim Süberkrüb <tim.sueberkrueb@web.de>
  *
  * $BEGIN_LICENSE:GPL3+$
  *
@@ -36,6 +36,17 @@ TabContent {
         return Qt.formatTime(time, "HH:mm");
     }
 
+    canReload: false
+    canGoBack: false
+    canGoForward: false
+    loading: false
+    loadProgress: 100
+    iconUrl: Utils.getSourceForIconName("action/settings")
+    adaptIconColor: true
+    title: "Settings"
+    url: "liri://settings"
+    hasThemeColor: false
+
     Flickable {
         anchors {
             fill: parent
@@ -60,8 +71,9 @@ TabContent {
                     text: "Settings"
                 }
 
+
                 TitleLabel {
-                    text: "Start"
+                    text: "Homepage"
                 }
 
                 Label {
@@ -69,52 +81,35 @@ TabContent {
                     font.pixelSize: 16
                 }
 
-                GridLayout {
-                    columns: 2
-                    columnSpacing: 2 * Units.smallSpacing
-
-                    Label {
-                        text: "Primary"
-                    }
-
-                    TextField {
-                        Layout.minimumWidth: 256
-                        text: Settings.startConfig.primaryStartUrl
-                        onEditingFinished: {
-                            if (Settings.startConfig.primaryStartUrl != text) {
-                                Settings.startConfig.primaryStartUrl = text;
-                                Settings.dirty = true;
-                            }
+                ColumnLayout {
+                    RadioButton {
+                        checked: !Settings.startConfig.customEnabled
+                        text: "Current search engine"
+                        onClicked: {
+                            Settings.startConfig.customEnabled = false;
+                            Settings.dirty = true;
                         }
                     }
 
-                    Label {
-                        text: "Dark theme"
-                    }
-
-                    TextField {
-                        Layout.minimumWidth: 256
-                        text: Settings.startConfig.darkStartUrl
-                        onEditingFinished: {
-                            if (Settings.startConfig.darkStartUrl != text) {
-                                Settings.startConfig.darkStartUrl = text;
-                                Settings.dirty = true;
-                            }
+                    RadioButton {
+                        checked: Settings.startConfig.customEnabled
+                        text: "Custom"
+                        onClicked: {
+                            Settings.startConfig.customEnabled = true;
+                            Settings.dirty = true;
                         }
                     }
 
-                    Label {
-                        text: "Incognito"
-                    }
-
                     TextField {
                         Layout.minimumWidth: 256
-                        text: Settings.startConfig.incognitoStartUrl
+                        Layout.leftMargin: 32
+                        enabled: Settings.startConfig.customEnabled
+                        selectByMouse: true
+                        placeholderText: "Custom start url"
+                        text: Settings.startConfig.customUrl
                         onEditingFinished: {
-                            if (Settings.startConfig.incognitoStartUrl != text) {
-                                Settings.startConfig.incognitoStartUrl = text;
-                                Settings.dirty = true;
-                            }
+                            Settings.startConfig.customUrl = text;
+                            Settings.dirty = true;
                         }
                     }
                 }
@@ -123,77 +118,13 @@ TabContent {
                     text: "Search"
                 }
 
-                ColumnLayout {
-                    RadioButton {
-                        text: "DuckDuckGo"
-                        checked: Settings.searchConfig.searchEngine == SearchConfig.DuckDuckGo
-                        onClicked: {
-                            if (Settings.searchConfig.searchEngine != SearchConfig.DuckDuckGo) {
-                                Settings.searchConfig.searchEngine = SearchConfig.DuckDuckGo;
-                                Settings.dirty = true;
-                            }
-                        }
-                    }
-
-                    RadioButton {
-                        text: "Google"
-                        checked: Settings.searchConfig.searchEngine == SearchConfig.Google
-                        onClicked: {
-                            if (Settings.searchConfig.searchEngine != SearchConfig.Google) {
-                                Settings.searchConfig.searchEngine = SearchConfig.Google;
-                                Settings.dirty = true;
-                            }
-                        }
-                    }
-
-                    RadioButton {
-                        text: "Bing"
-                        checked: Settings.searchConfig.searchEngine == SearchConfig.Bing
-                        onClicked: {
-                            if (Settings.searchConfig.searchEngine != SearchConfig.Bing) {
-                                Settings.searchConfig.searchEngine = SearchConfig.Bing;
-                                Settings.dirty = true;
-                            }
-                        }
-                    }
-
-                    RadioButton {
-                        text: "Yahoo"
-                        checked: Settings.searchConfig.searchEngine == SearchConfig.Yahoo
-                        onClicked: {
-                            if (Settings.searchConfig.searchEngine != SearchConfig.Yahoo) {
-                                Settings.searchConfig.searchEngine = SearchConfig.Yahoo;
-                                Settings.dirty = true;
-                            }
-                        }
-                    }
-
-                    ColumnLayout {
-                        RowLayout {
-                            RadioButton {
-                                text: "Custom"
-                                checked: Settings.searchConfig.searchEngine == SearchConfig.Custom
-                                onClicked: {
-                                    if (Settings.searchConfig.searchEngine != SearchConfig.Custom) {
-                                        Settings.searchConfig.searchEngine = SearchConfig.Custom;
-                                        Settings.dirty = true;
-                                    }
-                                }
-                            }
-
-                            TextField {
-                                Layout.minimumWidth: 256
-                                enabled: Settings.searchConfig.searchEngine == SearchConfig.Custom
-                                text: Settings.searchConfig.customSearchUrl
-                                placeholderText: "e.g https://example.com/?q="
-                                onEditingFinished: {
-                                    if (Settings.searchConfig.customSearchUrl != text) {
-                                        Settings.searchConfig.customSearchUrl = text;
-                                        Settings.dirty = true;
-                                    }
-                                }
-                            }
-                        }
+                SearchEngineSelection {
+                    title: "Search engine"
+                    width: Math.min(parent.width, 400)
+                    selectedName: Settings.searchConfig.searchEngine
+                    onSelected: {
+                        Settings.searchConfig.searchEngine = selectedName;
+                        Settings.dirty = true;
                     }
                 }
 
@@ -201,172 +132,101 @@ TabContent {
                     text: "Theme"
                 }
 
-
-                ButtonGroup {
-                    buttons: [
-                        radioButtonLightTheme,
-                        radioButtonAlwaysDark,
-                        radioButtonDarkBetween
-                    ]
+                ThemeSelection {
+                    width: Math.min(parent.width, 400)
+                    title: "Primary theme"
+                    selectedName: Settings.themeConfig.primary
+                    onSelected: {
+                        Settings.themeConfig.primary = selectedName;
+                        Settings.dirty = true;
+                    }
                 }
 
-                ColumnLayout {
+                RowLayout {
                     CheckBox {
-                        text: "Adapt to website theme colors"
-                        checked: Settings.themeConfig.themeColorEnabled
+                        id: radioButtonDarkBetween
+                        text: "Secondary theme between"
+                        checked: Settings.themeConfig.secondaryEnabled && (timeString(Settings.themeConfig.secondaryStartTime)
+                                                                          !== timeString(Settings.themeConfig.secondaryEndTime))
                         onClicked: {
-                            if (Settings.themeConfig.themeColorEnabled !== checked) {
-                                Settings.themeConfig.themeColorEnabled = checked;
-                                Settings.dirty = true;
-                            }
-                        }
-                    }
-
-                    RadioButton {
-                        id: radioButtonLightTheme
-                        text: "Light theme"
-                        checked: !Settings.themeConfig.darkThemeEnabled
-                        onClicked: {
-                            if (Settings.themeConfig.darkThemeEnabled === checked) {
-                                Settings.themeConfig.darkThemeEnabled = !checked;
-                                Settings.dirty = true;
-                            }
-                        }
-                    }
-
-                    RadioButton {
-                        id: radioButtonAlwaysDark
-                        text: "Dark theme (always on)"
-                        checked: Settings.themeConfig.darkThemeEnabled
-                                 && (timeString(Settings.themeConfig.darkThemeStartTime)
-                                 === timeString(Settings.themeConfig.darkThemeEndTime))
-                        onClicked: {
-                            Settings.themeConfig.darkThemeEnabled = true;
-                            Settings.themeConfig.setDarkThemeStartTime("00:00", "HH:mm");
-                            Settings.themeConfig.setDarkThemeEndTime("00:00", "HH:mm");
-                            Settings.dirty = true;
-                        }
-                    }
-
-                    RowLayout {
-                        RadioButton {
-                            id: radioButtonDarkBetween
-                            text: "Dark between"
-                            checked: Settings.themeConfig.darkThemeEnabled
-                                     && (timeString(Settings.themeConfig.darkThemeStartTime)
-                                         !== timeString(Settings.themeConfig.darkThemeEndTime))
-                            onClicked: {
-                                Settings.themeConfig.darkThemeEnabled = true;
+                            if (checked) {
+                                Settings.themeConfig.secondaryEnabled = true;
                                 if (inputStartTime.text == inputEndTime.text) {
                                     inputStartTime.text = "21:00";
                                     inputEndTime.text = "07:00"
                                 }
-                                Settings.themeConfig.setDarkThemeStartTime(inputStartTime.text, "HH:mm");
-                                Settings.themeConfig.setDarkThemeEndTime(inputEndTime.text, "HH:mm");
-                                DarkThemeTimer.update();
-                                Settings.dirty = true;
+                                Settings.themeConfig.setSecondaryStartTime(inputStartTime.text, "HH:mm");
+                                Settings.themeConfig.setSecondaryEndTime(inputEndTime.text, "HH:mm");
                             }
+                            else {
+                                Settings.themeConfig.secondaryEnabled = false;
+                            }
+                            SecondaryThemeTimer.update();
+                            Settings.dirty = true;
+                        }
+                    }
+
+                    TextField {
+                        id: inputStartTime
+                        Layout.maximumWidth: 56
+                        text: Qt.formatTime(Settings.themeConfig.secondaryStartTime, "HH:mm")
+                        enabled: radioButtonDarkBetween.checked
+                        selectByMouse: true
+                        maximumLength: 5
+                        validator: RegExpValidator {
+                            regExp: /^([0-1][0-9]|2[0-3]):([0-5][0-9])/
+                        }
+                        onEditingFinished: {
+                            Settings.themeConfig.setSecondaryStartTime(text, "HH:mm");
+                            SecondaryThemeTimer.update();
+                            Settings.dirty = true;
                         }
 
-                        TextField {
-                            id: inputStartTime
-                            Layout.maximumWidth: 56
-                            text: Qt.formatTime(Settings.themeConfig.darkThemeStartTime, "HH:mm")
-                            enabled: radioButtonDarkBetween.checked
-                            maximumLength: 5
-                            validator: RegExpValidator {
-                                regExp: /^([0-1][0-9]|2[0-3]):([0-5][0-9])/
-                            }
-                            onEditingFinished: {
-                                Settings.themeConfig.setDarkThemeStartTime(text, "HH:mm");
-                                DarkThemeTimer.update();
-                                Settings.dirty = true;
-                            }
+                    }
 
-                        }
+                    Label {
+                        text: "and"
+                    }
 
-                        Label {
-                            text: "and"
+                    TextField {
+                        id: inputEndTime
+                        Layout.maximumWidth: 56
+                        text: Qt.formatTime(Settings.themeConfig.secondaryEndTime, "HH:mm")
+                        enabled: radioButtonDarkBetween.checked
+                        selectByMouse: true
+                        maximumLength: 5
+                        validator: RegExpValidator {
+                            regExp: /^([0-1][0-9]|2[0-3]):([0-5][0-9])/
                         }
+                        onEditingFinished: {
+                            Settings.themeConfig.setSecondaryEndTime(text, "HH:mm");
+                            SecondaryThemeTimer.update();
+                            Settings.dirty = true;
+                        }
+                    }
+                }
 
-                        TextField {
-                            id: inputEndTime
-                            Layout.maximumWidth: 56
-                            text: Qt.formatTime(Settings.themeConfig.darkThemeEndTime, "HH:mm")
-                            enabled: radioButtonDarkBetween.checked
-                            maximumLength: 5
-                            validator: RegExpValidator {
-                                regExp: /^([0-1][0-9]|2[0-3]):([0-5][0-9])/
-                            }
-                            onEditingFinished: {
-                                Settings.themeConfig.setDarkThemeEndTime(text, "HH:mm");
-                                DarkThemeTimer.update();
-                                Settings.dirty = true;
-                            }
-                        }
+                ThemeSelection {
+                    enabled: Settings.themeConfig.secondaryEnabled
+                    width: Math.min(parent.width, 400)
+                    title: "Secondary theme"
+                    selectedName: Settings.themeConfig.secondary
+                    onSelected: {
+                        Settings.themeConfig.secondary = selectedName;
+                        Settings.dirty = true;
+                    }
+                }
+
+                ThemeSelection {
+                    width: Math.min(parent.width, 400)
+                    title: "Incognito theme"
+                    selectedName: Settings.themeConfig.incognito
+                    onSelected: {
+                        Settings.themeConfig.incognito = selectedName;
+                        Settings.dirty = true;
                     }
                 }
             }
         }
-    }
-
-    Binding {
-        target: content.tab
-        property: "canReload"
-        value: false
-    }
-
-    Binding {
-        target: content.tab
-        property: "iconUrl"
-        value: Utils.getSourceForIconName("action/settings")
-    }
-
-    Binding {
-        target: content.tab
-        property: "adaptIconColor"
-        value: true
-    }
-
-    Binding {
-        target: content.tab
-        property: "canGoBack"
-        value: false
-    }
-
-    Binding {
-        target: content.tab
-        property: "canGoForward"
-        value: false
-    }
-
-    Binding {
-        target: content.tab
-        property: "loading"
-        value: false
-    }
-
-    Binding {
-        target: content.tab
-        property: "loadProgress"
-        value: 100
-    }
-
-    Binding {
-        target: content.tab
-        property: "url"
-        value: "liri://settings"
-    }
-
-    Binding {
-        target: content.tab
-        property: "title"
-        value: "Settings"
-    }
-
-    Binding {
-        target: content.tab
-        property: "hasThemeColor"
-        value: false
     }
 }
