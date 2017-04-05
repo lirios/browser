@@ -38,9 +38,7 @@
 #include "../core/utils/darkthemetimer.h"
 
 #ifdef Q_OS_MACOS
-
-#include "MacOsEventListener.h"
-
+    #include "mac/MacOsEventListener.h"
 #endif
 
 // Include QtWebEngine if enabled (otherwise Oxide is expected)
@@ -55,8 +53,8 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     #ifdef Q_OS_MACOS
-    MacOsEventListener evListener;
-    initMacOsEventListener(&evListener);
+        MacOsEventListener evListener;
+        initMacOsEventListener(&evListener);
     #endif
     app.setWindowIcon(QIcon(":/res/icons/iconx512.png"));
 
