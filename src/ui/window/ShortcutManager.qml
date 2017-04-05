@@ -35,6 +35,14 @@ Item {
     property SearchOverlay searchOverlay
     property var tabsModel: shortcutManager.window.tabsModel
 
+    function setActiveTabByIndex(idx) {
+        if (idx < 0 || idx >= tabsModel.count) {
+            return;
+        }
+
+        tabsModel.setActive(tabsModel.get(idx));
+    }
+
     Connections {
         target: Qt.platform.os === "osx" ? MacEvents : null
         enabled: Qt.platform.os === "osx"
@@ -49,14 +57,6 @@ Item {
         }
     }
 
-
-    function setActiveTabByIndex(idx) {
-        if (idx < 0 || idx >= tabsModel.count) {
-            return;
-        }
-
-        tabsModel.setActive(tabsModel.get(idx));
-    }
 
     Shortcut {
         autoRepeat: false
