@@ -6,6 +6,7 @@ TARGET = liri-browser
 CONFIG += c++11
 QT += qml quick quickcontrols2
 
+
 unix:!android {
     target.path = $$LIRI_INSTALL_BINDIR
 

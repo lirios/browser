@@ -233,6 +233,7 @@ ApplicationWindow {
                         } else if (window.isWindowed) {
                             window.showMaximized();
                         }
+                        window.requestActivate();
                     }
                 }
 
@@ -363,6 +364,7 @@ ApplicationWindow {
     }
 
     ShortcutManager {
+        id: shortcutManager
         window: window
         tabBar: tabBar
         toolbar: toolbar

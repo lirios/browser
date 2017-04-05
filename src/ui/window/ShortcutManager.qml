@@ -43,6 +43,21 @@ Item {
         tabsModel.setActive(tabsModel.get(idx));
     }
 
+    Connections {
+        target: Qt.platform.os === "osx" ? MacEvents : null
+        enabled: Qt.platform.os === "osx"
+        ignoreUnknownSignals: true
+
+        onCtrlShiftTabPressed: {
+            tabsModel.setPreviousTabActive();
+        }
+
+        onCtrlTabPressed: {
+            tabsModel.setNextTabActive();
+        }
+    }
+
+
     Shortcut {
         autoRepeat: false
         sequence: StandardKey.Back
@@ -93,9 +108,10 @@ Item {
 
     Shortcut {
         autoRepeat: false
-        // it's a hack since StandardKey.PreviousChild not working for current Qt 5.7
-        // TODO: for mac it should be forced to Ctrl+Shift+Tab
-        sequence: Qt.platform.os == "osx" ? "Meta+Shift+Tab" : "Ctrl+Shift+Tab"
+        context: Qt.ApplicationShortcut
+        // for Mac it's handled via macEvents
+        // due to bug https://bugreports.qt.io/browse/QTBUG-8596
+        sequence: "Ctrl+Shift+Tab"
         onActivated: {
             tabsModel.setPreviousTabActive();
         }
@@ -103,7 +119,9 @@ Item {
 
     Shortcut {
         autoRepeat: false
-        sequence: StandardKey.NextChild
+        // for Mac it's handled via macEvents
+        // due to bug https://bugreports.qt.io/browse/QTBUG-8596
+        sequence: "Ctrl+Tab"
         onActivated: {
             tabsModel.setNextTabActive();
         }
@@ -215,8 +233,7 @@ Item {
         autoRepeat: false
         sequence: "Ctrl+n"
         onActivated: {
-            var window = window.root.newWindow();
-            window.showNormal();
+            window.root.newWindow().showNormal();
         }
     }
 
@@ -224,8 +241,7 @@ Item {
         autoRepeat: false
         sequence: "Ctrl+Shift+n"
         onActivated: {
-            var window = window.root.newIncognitoWindow();
-            window.showNormal();
+            window.root.newIncognitoWindow().showNormal();
         }
     }
 

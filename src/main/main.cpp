@@ -37,6 +37,10 @@
 #include "../core/settings/settings.h"
 #include "../core/utils/darkthemetimer.h"
 
+#ifdef Q_OS_MACOS
+    #include "mac/MacOsEventListener.h"
+#endif
+
 // Include QtWebEngine if enabled (otherwise Oxide is expected)
 #if IS_QTWEBENGINE_ENABLED == 1
     #include <QtWebEngine>
@@ -48,7 +52,12 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
 
+    #ifdef Q_OS_MACOS
+        MacOsEventListener evListener;
+        initMacOsEventListener(&evListener);
+    #endif
     app.setWindowIcon(QIcon(":/res/icons/iconx512.png"));
+
 
     QQuickStyle::setStyle(QLatin1String("Material"));
 
@@ -79,6 +88,9 @@ int main(int argc, char *argv[])
     // Register context properties
     engine.rootContext()->setContextProperty("Settings", &settings);
     engine.rootContext()->setContextProperty("DarkThemeTimer", &darkThemeTimer);
+    #ifdef Q_OS_MACOS
+        engine.rootContext()->setContextProperty("MacEvents", &evListener);
+    #endif
 
     // setup qml imports
     engine.addImportPath("qrc:/");
