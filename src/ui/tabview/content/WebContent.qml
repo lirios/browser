@@ -23,7 +23,6 @@
 
 import QtQuick 2.7
 import QtWebEngine 1.4
-import SlimeEngine 0.2
 import "../.."
 
 TabContent {
@@ -32,7 +31,7 @@ TabContent {
     property var webview: webview
     property alias url: webview.url
     property alias profile: webview.profile
-    property int webengine
+    property WebEngineNewViewRequest request
 
     property bool hasThemeColor: false
     property color themeColor
@@ -175,6 +174,12 @@ TabContent {
             if (caseSensitive)
                 flags |= WebEngineView.FindCaseSensitively
             webview.findText(text, flags);
+        }
+    }
+
+    Component.onCompleted: {
+        if (request !== null) {
+            request.openIn(webview);
         }
     }
 }
