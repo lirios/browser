@@ -22,7 +22,7 @@
 */
 
 import QtQuick 2.7
-import SlimeEngine 0.2
+import QtWebEngine 1.4
 import core 1.0
 import ".."
 
@@ -31,9 +31,8 @@ QtObject {
     property TabBar tabBar
     property TabContentView tabContentView
     property TabsModel tabsModel
-    property WebProfile profile
+    property WebEngineProfile profile
     property int lastUID: 0
-    property int webengine
 
     property Component tabPageComponent: Component { TabPage {} }
     property Component actionManagerComponent: Component { TabActionManager {} }
@@ -85,7 +84,6 @@ QtObject {
         page = tabPageComponent.createObject(tabContentView.container, {
             profile: profile,
             tab: tabsModel.byUID(uid),
-            webengine: webengine
         });
 
         // Load page
