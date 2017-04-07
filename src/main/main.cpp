@@ -57,9 +57,7 @@ int main(int argc, char *argv[])
 
     QQuickStyle::setStyle(QLatin1String("Material"));
 
-    #if IS_QTWEBENGINE_ENABLED == 1
-        QtWebEngine::initialize();
-    #endif
+    QtWebEngine::initialize();
 
     // Create settings instance and load
     Settings settings;

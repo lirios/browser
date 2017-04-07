@@ -4,7 +4,7 @@ TEMPLATE = app
 TARGET = liri-browser
 
 CONFIG += c++11
-QT += qml quick quickcontrols2
+QT += qml quick quickcontrols2 webengine
 
 
 unix:!android {
@@ -22,14 +22,6 @@ unix:!android {
 
     desktop.path = $$LIRI_INSTALL_PREFIX/share/applications
     desktop.files += res/io.liri.Browser.desktop
-
-    # Deprecation warning for PREFIX
-    prefix = $$(PREFIX)
-    !isEmpty(prefix) {
-        warning("Using the PREFIX environment variable to specify the installation prefix is deprecated.")
-        warning("Use qmake LIRI_INSTALL_PREFIX=<path> instead.")
-        target.path = $${prefix}/bin
-    }
 
     INSTALLS += target desktop
 }
