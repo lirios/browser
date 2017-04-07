@@ -14,11 +14,12 @@ A cross-platform material design web browser
  * [qtbase](http://code.qt.io/cgit/qt/qtbase.git)
  * [qtdeclarative](http://code.qt.io/cgit/qt/qtdeclarative.git)
  * [qtquickcontrols2](http://code.qt.io/cgit/qt/qtquickcontrols2.git)
+ * [qtwebengine](http://code.qt.io/cgit/qt/qtwebengine.git/)
+ * [qtsvg](http://code.qt.io/cgit/qt/qtsvg.git/)
+ * [qtgraphicaleffects](http://code.qt.io/cgit/qt/qtgraphicaleffects.git/)
 
 The following modules and their dependencies are required:
 * [Fluid](https://github.com/lirios/fluid) from develop branch
-* [SlimeEngine](https://github.com/tim-sueberkrueb/slime-engine)
-    * with either [Oxide](https://launchpad.net/oxide) or [QtWebEngine](http://code.qt.io/cgit/qt/qtwebengine.git/)
 
 ## Build
 
@@ -27,10 +28,6 @@ From the root of the repository, run:
 mkdir build && cd build
 qmake ..
 make
-```
-Note: Oxide web engine is expected by default. To build for QtWebEngine, add `CONFIG+=QTWEBENGINE_ENABLED` to your `qmake` line:
-```sh
-qmake .. CONFIG+=QTWEBENGINE_ENABLED
 ```
 
 Use `make distclean` from inside your `build` directory to clean up.
