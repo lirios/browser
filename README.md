@@ -40,9 +40,9 @@ From your build directory, run:
 sudo make install
 ```
 The browser will be installed to `/usr/local` by default. To specify a custom installation prefix,
-set the `PREFIX` environment variable when running `qmake`. For example:
+set the `LIRI_INSTALL_PREFIX` option when running `qmake`. For example:
 ```sh
-PREFIX=/opt qmake ..
+qmake .. LIRI_INSTALL_PREFIX=/opt
 ```
 
 ## Credits
