@@ -169,7 +169,12 @@ TabContent {
             webview.reload();
         }
         onFindText: {
-            webview.findText(text, backwards, caseSensitive);
+            var flags;
+            if (backwards)
+                flags = WebEngineView.FindBackward
+            if (caseSensitive)
+                flags |= WebEngineView.FindCaseSensitively
+            webview.findText(text, flags);
         }
     }
 }
