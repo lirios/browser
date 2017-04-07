@@ -85,14 +85,7 @@ TabContent {
     Binding {
         target: content.tab
         property: "iconUrl"
-        // Workaround: it looks like QtWebEngine's icon provider (image://favicon/)
-        // is not 100% reliable
-        value: {
-            var s = webview.icon.toString();
-            if (s.indexOf("image://favicon/") === 0)
-                return Qt.resolvedUrl(s.slice(16));
-            else return webview.icon;
-        }
+        value: webview.icon
     }
 
     Binding {
