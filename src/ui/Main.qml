@@ -31,30 +31,14 @@ QtObject {
 
     property WebEngineProfile defaultProfile: WebEngineProfile {
         onDownloadRequested: {
-            // Accept download request, returns SlimeEngine Download item
-            var engineItem = request.accept();
-            // Create model representation
-            var modelItem = downloadsModel.add();
-            // Create download watcher
-            var watcher = downloadWatcherComponent.createObject(null, {
-                engineDownload: engineItem,
-                downloadModelItem: modelItem
-            });
+            __handleDownloadRequest(download);
         }
     }
 
     property WebEngineProfile incognitoProfile: WebEngineProfile {
         offTheRecord: true
         onDownloadRequested: {
-            // Accept download request, returns SlimeEngine Download item
-            var engineItem = request.accept();
-            // Create model representation
-            var modelItem = downloadsModel.add();
-            // Create download watcher
-            var watcher = downloadWatcherComponent.createObject(null, {
-                engineDownload: engineItem,
-                downloadModelItem: modelItem
-            });
+            __handleDownloadRequest(download);
         }
     }
 
@@ -73,14 +57,14 @@ QtObject {
             property var engineDownload
             property var downloadModelItem
 
+             property real progress: (engineDownload.receivedBytes/engineDownload.totalBytes) * 100
+
             Connections {
                 target: engineDownload
-                onFinished: {
-                    console.log("Download finished")
-                    downloadWatcher.downloadModelItem.finished = true;
-                }
-                onFailed: {
-                    console.log("Download failed");
+                onStateChanged: {
+                    if (state === WebEngineDownloadItem.DownloadCompleted) {
+                        downloadWatcher.downloadModelItem.finished = true;
+                    }
                 }
             }
 
@@ -94,7 +78,7 @@ QtObject {
             Binding {
                 target: downloadModelItem
                 property: "progress"
-                value: engineDownload.progress
+                value: progress
             }
 
             Binding {
@@ -121,6 +105,15 @@ QtObject {
         target: DarkThemeTimer
         property: "endTime"
         value: Settings.themeConfig.darkThemeEndTime
+    }
+
+    function __handleDownloadRequest(download) {
+        download.accept();
+        var modelItem = downloadsModel.add();
+        var watcher = downloadWatcherComponent.createObject(null, {
+            engineDownload: download,
+            downloadModelItem: modelItem
+        });
     }
 
     function openWindowRequest(request) {
