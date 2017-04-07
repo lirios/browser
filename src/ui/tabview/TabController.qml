@@ -59,7 +59,7 @@ QtObject {
     function openNewViewRequest(request) {
         addTab (
             TabType.webview, {
-                background: request.destination === NewViewRequest.NewViewInBackgroundTab,
+                background: request.destination === WebEngineView.NewViewInBackgroundTab,
                 properties: {
                     profile: profile,
                     request: request
