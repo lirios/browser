@@ -22,7 +22,7 @@
 */
 
 import QtQuick 2.7
-import SlimeEngine 0.2
+import QtWebEngine 1.4
 
 QtObject {
     property QtObject internal: QtObject {
@@ -40,12 +40,12 @@ QtObject {
 
     onNewWebViewRequested: {
         switch (request.destination) {
-            case NewViewRequest.NewViewInTab:
-            case NewViewRequest.NewViewInBackgroundTab:
+            case WebEngineView.NewViewInTab:
+            case WebEngineView.NewViewInBackgroundTab:
                 internal.tabController.openNewViewRequest(request);
                 break;
-            case NewViewRequest.NewViewInDialog:
-            case NewViewRequest.NewViewInWindow:
+            case WebEngineView.NewViewInDialog:
+            case WebEngineView.NewViewInWindow:
                 internal.tabController.newWindowRequested(request);
                 break;
         }

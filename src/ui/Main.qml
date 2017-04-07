@@ -22,17 +22,41 @@
 */
 
 import QtQuick 2.7
-import SlimeEngine 0.2
+import QtWebEngine 1.4
 import core 1.0
 import "."
 
 QtObject {
     id: root
 
-    property int webengine
+    property WebEngineProfile defaultProfile: WebEngineProfile {
+        onDownloadRequested: {
+            // Accept download request, returns SlimeEngine Download item
+            var engineItem = request.accept();
+            // Create model representation
+            var modelItem = downloadsModel.add();
+            // Create download watcher
+            var watcher = downloadWatcherComponent.createObject(null, {
+                engineDownload: engineItem,
+                downloadModelItem: modelItem
+            });
+        }
+    }
 
-    property WebProfile defaultProfile
-    property WebProfile incognitoProfile
+    property WebEngineProfile incognitoProfile: WebEngineProfile {
+        offTheRecord: true
+        onDownloadRequested: {
+            // Accept download request, returns SlimeEngine Download item
+            var engineItem = request.accept();
+            // Create model representation
+            var modelItem = downloadsModel.add();
+            // Create download watcher
+            var watcher = downloadWatcherComponent.createObject(null, {
+                engineDownload: engineItem,
+                downloadModelItem: modelItem
+            });
+        }
+    }
 
     property DownloadsModel downloadsModel: DownloadsModel {}
 
@@ -87,23 +111,6 @@ QtObject {
         }
     }
 
-    property Component webProfileComponent: Component {
-        WebProfile {
-            engine: webengine
-            onDownloadRequested: {
-                // Accept download request, returns SlimeEngine Download item
-                var engineItem = request.accept();
-                // Create model representation
-                var modelItem = downloadsModel.add();
-                // Create download watcher
-                var watcher = downloadWatcherComponent.createObject(null, {
-                    engineDownload: engineItem,
-                    downloadModelItem: modelItem
-                });
-            }
-        }
-    }
-
     property Binding darkStartTimeBinding: Binding {
         target: DarkThemeTimer
         property: "startTime"
@@ -136,10 +143,6 @@ QtObject {
     }
 
     function load() {
-        // Create the default profile after the webengine to use has been decided on the C++ side
-        defaultProfile = webProfileComponent.createObject(null, {});
-        // Create an incognito profile
-        incognitoProfile = webProfileComponent.createObject(null, {incognito: true});
         // Update dark theme timer
         DarkThemeTimer.update();
         // Create the first window and show it

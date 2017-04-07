@@ -30,7 +30,6 @@ Item {
     property var tab
     property var actionManager
     property var profile
-    property int webengine
     property url previousUrl
     property bool loading: false
 
@@ -73,7 +72,6 @@ Item {
             data["properties"] = {};
 
         data.properties["anchors.fill"] = contentContainer;
-        data.properties["webengine"] = webengine;
         data.properties["profile"] = profile;
         data.properties["url"] = data.url;
 

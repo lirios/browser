@@ -26,10 +26,10 @@ import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.0
 import QtQuick.Controls.Material 2.0
 import QtQuick.Window 2.0
+import QtWebEngine 1.4
 import Fluid.Core 1.0
 import Fluid.Controls 1.0
 import Fluid.Material 1.0
-import SlimeEngine 0.2
 import core 1.0
 import ".."
 
@@ -37,8 +37,8 @@ ApplicationWindow {
     id: window
 
     property var root
-    property WebProfile profile
-    property bool incognito: profile.incognito
+    property WebEngineProfile profile
+    property bool incognito: profile.offTheRecord
     property url startUrl: {
         if (incognito)
             return Settings.startConfig.incognitoStartUrl;
@@ -76,7 +76,6 @@ ApplicationWindow {
         tabContentView: tabContentView
         tabsModel: window.tabsModel
         profile: window.profile
-        webengine: root.webengine
         onNewWindowRequested: {
             root.openWindowRequest(request);
         }
@@ -108,7 +107,6 @@ ApplicationWindow {
         }
         // required to preserve focus on Mac platform
         window.requestActivate();
-
     }
 
     width: 1024

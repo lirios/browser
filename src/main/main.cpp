@@ -27,8 +27,8 @@
 #include <QQmlApplicationEngine>
 #include <QtQuickControls2/QQuickStyle>
 #include <QQmlContext>
+#include <QtWebEngine>
 #include <QDebug>
-#include <QIcon>
 
 #include "../core/models/tabsmodel.h"
 #include "../core/models/tab.h"
@@ -41,10 +41,6 @@
     #include "mac/MacOsEventListener.h"
 #endif
 
-// Include QtWebEngine if enabled (otherwise Oxide is expected)
-#if IS_QTWEBENGINE_ENABLED == 1
-    #include <QtWebEngine>
-#endif
 
 int main(int argc, char *argv[])
 {
@@ -56,8 +52,8 @@ int main(int argc, char *argv[])
         MacOsEventListener evListener;
         initMacOsEventListener(&evListener);
     #endif
-    app.setWindowIcon(QIcon(":/res/icons/iconx512.png"));
 
+    app.setWindowIcon(QIcon(":/res/icons/iconx512.png"));
 
     QQuickStyle::setStyle(QLatin1String("Material"));
 
@@ -97,15 +93,6 @@ int main(int argc, char *argv[])
 
     // load main ui
     engine.load(QUrl(QLatin1String("qrc:/ui/Main.qml")));
-
-    // set webengine property
-    #if IS_QTWEBENGINE_ENABLED == 1
-        qDebug() << "Using QtWebEngine";
-        engine.rootObjects()[0]->setProperty("webengine", 1);
-    #else
-        qDebug() << "Using Oxide engine";
-        engine.rootObjects()[0]->setProperty("webengine", 0);
-    #endif
 
     // load main
     QMetaObject::invokeMethod(engine.rootObjects()[0], "load");

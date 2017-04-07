@@ -22,6 +22,7 @@
 */
 
 import QtQuick 2.7
+import QtWebEngine 1.4
 import SlimeEngine 0.2
 import "../.."
 
@@ -31,15 +32,13 @@ TabContent {
     property var webview: webview
     property alias url: webview.url
     property alias profile: webview.profile
-    property alias request: webview.request
     property int webengine
 
     property bool hasThemeColor: false
     property color themeColor
 
-    WebView {
+    WebEngineView {
         id: webview
-        engine: webengine
         anchors.fill: parent
         onFullScreenRequested: {
             actionManager.fullScreenRequested(request);
@@ -48,11 +47,11 @@ TabContent {
         onNewViewRequested: {
             actionManager.newWebViewRequested(request);
         }
-        onCloseRequested: {
+        onWindowCloseRequested: {
             actionManager.closeRequested();
         }
-        onLoadStatusChanged: {
-            if (loadStatus === LoadStatus.LoadSucceeded) {
+        onLoadingChanged: {
+            if (loadRequest.status === WebEngineView.LoadSucceededStatus) {
                 // Search for theme color
                 runJavaScript("
                     function getThemeColor () {
@@ -160,7 +159,8 @@ TabContent {
             webview.goForward();
         }
         onUrlChanged: {
-            webview.url = url;
+            if (webview.url !== url)
+                webview.url = url;
         }
         onStop: {
             webview.stop();
