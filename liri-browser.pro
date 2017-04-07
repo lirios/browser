@@ -34,15 +34,6 @@ unix:!android {
     INSTALLS += target desktop
 }
 
-# Specify CONFIG+=QTWEBENGINE_ENABLED when running qmake.
-# Otherwise, Liri Browser expects the Oxide web engine.
-contains(CONFIG, QTWEBENGINE_ENABLED) {
-    message("Found QTWEBENGINE_ENABLED in CONFIG")
-    QT += webengine
-    DEFINES += IS_QTWEBENGINE_ENABLED
-    message("Using QtWebEngine")
-}
-
 # Include sub project include files
 include(src/3rdparty/3rdparty.pri)
 include(src/core/core.pri)
