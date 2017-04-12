@@ -132,6 +132,10 @@ ApplicationWindow {
     Material.theme: darkThemeActive || incognito ? Material.Dark : Material.Light
     Material.accent: defaultAccentColor
 
+    onClosing: {
+        Session.save(tabsModel);
+    }
+
     MouseArea {
         id: topAreaTrigger
         parent: window.overlay
@@ -490,7 +494,14 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
-        if (openStartUrl)
+        var restoreTabs = Session.getTabsToRestore();
+        if (Settings.startConfig.startupType === StartConfig.StartFromPreviouslyOpenedTabs &&
+                restoreTabs.length > 0) {
+            for(var i = 0; i < restoreTabs.length; ++i) {
+                tabController.openUrl(restoreTabs[i].url, false);
+            }
+        } else if (openStartUrl) {
             tabController.openUrl(startUrl);
+        }
     }
 }

@@ -36,8 +36,15 @@ class StartConfig : public QObject
     Q_PROPERTY(QUrl defaultDarkStartUrl MEMBER m_defaultDarkStartUrl NOTIFY defaultDarkStartUrlChanged)
     Q_PROPERTY(QUrl incognitoStartUrl READ incognitoStartUrl WRITE setIncognitoStartUrl NOTIFY incognitoStartUrlChanged)
     Q_PROPERTY(QUrl defaultIncognitoStartUrl MEMBER m_defaultIncognitoStartUrl NOTIFY defaultIncognitoStartUrlChanged)
+    Q_PROPERTY(StartupType startupType MEMBER m_startupType NOTIFY startupTypeChanged)
+    Q_ENUMS(StartupType)
 public:
     explicit StartConfig(QObject *parent = nullptr);
+
+    enum StartupType {
+        StartFromNewPage,
+        StartFromPreviouslyOpenedTabs,
+    };
 
     QUrl primaryStartUrl() const { return m_primaryStartUrl; }
     void setPrimaryStartUrl(QUrl url) { primaryStartUrlChanged(m_primaryStartUrl = url); }
@@ -52,6 +59,9 @@ public:
     QUrl defaultIncognitoStartUrl() const { return m_defaultIncognitoStartUrl; }
     QUrl defaultDarkStartUrl() const { return m_defaultDarkStartUrl; }
 
+    StartupType startupType() const { return m_startupType; }
+    void setStartupType(const StartupType &startupType) { startupTypeChanged(m_startupType = startupType); }
+
 signals:
     void primaryStartUrlChanged(QUrl url);
     void defaultPrimaryStartUrlChanged(QUrl url);
@@ -59,6 +69,7 @@ signals:
     void defaultDarkStartUrlChanged(QUrl url);
     void incognitoStartUrlChanged(QUrl url);
     void defaultIncognitoStartUrlChanged(QUrl url);
+    void startupTypeChanged(StartupType url);
 
 private:
     QUrl m_primaryStartUrl;
@@ -67,6 +78,7 @@ private:
     QUrl m_defaultIncognitoStartUrl;
     QUrl m_darkStartUrl;
     QUrl m_defaultDarkStartUrl;
+    StartupType m_startupType;
 
 };
 

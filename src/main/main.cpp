@@ -38,6 +38,7 @@
 #include "../core/models/tab.h"
 #include "../core/models/downloadsmodel.h"
 #include "../core/settings/settings.h"
+#include "../core/session/session.h"
 #include "../core/utils/darkthemetimer.h"
 
 #ifdef Q_OS_MACOS
@@ -96,6 +97,8 @@ int main(int argc, char *argv[])
     Settings settings;
     settings.load();
 
+    Session session;
+
     // Create and start dark theme time
     DarkThemeTimer darkThemeTimer;
     darkThemeTimer.start();
@@ -108,6 +111,7 @@ int main(int argc, char *argv[])
 
     // register core types
     qmlRegisterUncreatableType<SearchConfig>("core", 1, 0, "SearchConfig", "SearchConfig (from module core) may not be created directly.");
+    qmlRegisterUncreatableType<StartConfig>("core", 1, 0, "StartConfig", "StartConfig (from module core) may not be created directly.");
 
     qmlRegisterUncreatableType<Tab>("core", 1, 0, "Tab", "Tab (from module core) may not be created directly.");
     qmlRegisterType<TabsModel>("core", 1, 0, "TabsModel");
@@ -116,6 +120,7 @@ int main(int argc, char *argv[])
 
     // Register context properties
     engine.rootContext()->setContextProperty("Settings", &settings);
+    engine.rootContext()->setContextProperty("Session", &session);
     engine.rootContext()->setContextProperty("DarkThemeTimer", &darkThemeTimer);
     #ifdef Q_OS_MACOS
         engine.rootContext()->setContextProperty("MacEvents", &evListener);

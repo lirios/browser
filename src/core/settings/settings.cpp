@@ -82,6 +82,17 @@ void Settings::load()
     m_startConfig->setPrimaryStartUrl(QUrl(dataStart["primary_url"].toString()));
     m_startConfig->setDarkStartUrl(QUrl(dataStart["dark_theme_url"].toString()));
     m_startConfig->setIncognitoStartUrl(QUrl(dataStart["incognito_url"].toString()));
+
+    StartConfig::StartupType startupType;
+    QString startupTypeString = dataStart["startupType"].toString();
+
+    if (startupTypeString == "start_from_new_page")
+        startupType = StartConfig::StartupType::StartFromNewPage;
+    else if (startupTypeString == "start_from_previously_opened_tabs")
+        startupType = StartConfig::StartupType::StartFromPreviouslyOpenedTabs;
+
+    m_startConfig->setStartupType(startupType);
+
     QJsonObject dataSearch = data["search"].toObject();
     QString searchEngineString = dataSearch["engine"].toString();
     SearchConfig::SearchEngine searchEngine;
@@ -133,7 +144,8 @@ QByteArray Settings::defaultJSON()
     QJsonObject dataStart {
         {"primary_url", m_startConfig->defaultPrimaryStartUrl().toString()},
         {"dark_theme_url", m_startConfig->defaultDarkStartUrl().toString()},
-        {"incognito_url", m_startConfig->defaultIncognitoStartUrl().toString()}
+        {"incognito_url", m_startConfig->defaultIncognitoStartUrl().toString()},
+        {"startupType", "start_from_new_page"}
     };
     QJsonObject dataSearch {
         {"engine", "duckduckgo"},
@@ -163,11 +175,25 @@ QByteArray Settings::json()
     QJsonObject meta {
         {"schema", "0.1"}
     };
+
+    QString startupTypeString;
+
+    switch (m_startConfig->startupType()) {
+        case StartConfig::StartupType::StartFromNewPage:
+            startupTypeString = "start_from_new_page";
+            break;
+        case StartConfig::StartupType::StartFromPreviouslyOpenedTabs:
+            startupTypeString = "start_from_previously_opened_tabs";
+            break;
+    }
+
     QJsonObject dataStart {
         {"primary_url", m_startConfig->primaryStartUrl().toString()},
         {"dark_theme_url", m_startConfig->darkStartUrl().toString()},
         {"incognito_url", m_startConfig->incognitoStartUrl().toString()},
+        {"startupType", startupTypeString},
     };
+
     QString searchEngineString;
     switch (m_searchConfig->searchEngine()) {
         case SearchConfig::SearchEngine::DuckDuckGo:
