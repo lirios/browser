@@ -1,13 +1,14 @@
 /*
  * This file is part of Liri Browser
  *
- * Copyright (C) 2017 Ivan Fateev <johnny.j.poision@gmail.com>
+ * Copyright (C) 2017 Ivan Fateev <johnny.j.poison@gmail.com>
  *
  * $BEGIN_LICENSE:GPL3+$
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
+ * the Free Software Foundation, either version 3 of theion@gmail.com>
+ * License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
