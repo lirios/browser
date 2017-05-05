@@ -23,14 +23,14 @@ script:
   - ./scripts/fetch_icons.sh
   - mkdir build
   - cd build
-  - qmake CONFIG+=use_qt_paths ..
+  - qmake CONFIG+=install_under_qt ../fluid.pro
   - make -j4
   - sudo make install
   - # sudo make INSTALL_ROOT=../../appdir install ; sudo chown -R $USER ../../appdir ; find ../../appdir/
   - cd ../../
   - mkdir build
   - cd build
-  - qmake LIRI_INSTALL_PREFIX=/usr CONFIG+=QTWEBENGINE_ENABLED ..
+  - qmake LIRI_INSTALL_PREFIX=/usr ..
   - make -j4
   - sudo make INSTALL_ROOT=../appdir install ; sudo chown -R $USER ../appdir ; find ../appdir/
   - cd ../

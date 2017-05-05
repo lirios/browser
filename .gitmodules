@@ -1,0 +1,5 @@
+[submodule "features"]
+	path = features
+	url = https://github.com/lirios/qmake-features
+	branch = master
+
