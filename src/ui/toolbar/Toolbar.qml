@@ -21,8 +21,8 @@
  * $END_LICENSE$
 */
 
-import QtQuick 2.7
-import QtQuick.Layouts 1.1
+import QtQuick 2.0
+import QtQuick.Layouts 1.0
 import Fluid.Controls 1.0
 import core 1.0
 import ".."

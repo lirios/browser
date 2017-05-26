@@ -21,7 +21,7 @@
  * $END_LICENSE$
 */
 
-import QtQuick 2.7
+import QtQuick 2.0
 
 Rectangle {
     implicitHeight: 2

@@ -21,7 +21,7 @@
  * $END_LICENSE$
 */
 
-import QtQuick 2.7
+import QtQuick 2.5
 import QtQuick.Window 2.0
 import core 1.0
 import ".."

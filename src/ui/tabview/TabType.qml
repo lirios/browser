@@ -22,7 +22,7 @@
 */
 
 pragma Singleton
-import QtQuick 2.7
+import QtQuick 2.0
 import "../utils"
 
 QtObject {

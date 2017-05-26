@@ -21,8 +21,8 @@
  * $END_LICENSE$
 */
 
-import QtQuick 2.7
-import QtWebEngine 1.4
+import QtQuick 2.0
+import QtWebEngine 1.1
 import core 1.0
 import "."
 
