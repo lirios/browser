@@ -11,12 +11,12 @@ A cross-platform material design web browser
 
 ## Dependencies
 * Qt >= 5.8.0 with at least the following modules is required:
- * [qtbase](http://code.qt.io/cgit/qt/qtbase.git)
- * [qtdeclarative](http://code.qt.io/cgit/qt/qtdeclarative.git)
- * [qtquickcontrols2](http://code.qt.io/cgit/qt/qtquickcontrols2.git)
- * [qtwebengine](http://code.qt.io/cgit/qt/qtwebengine.git/)
- * [qtsvg](http://code.qt.io/cgit/qt/qtsvg.git/)
- * [qtgraphicaleffects](http://code.qt.io/cgit/qt/qtgraphicaleffects.git/)
+  * [qtbase](http://code.qt.io/cgit/qt/qtbase.git)
+  * [qtdeclarative](http://code.qt.io/cgit/qt/qtdeclarative.git)
+  * [qtquickcontrols2](http://code.qt.io/cgit/qt/qtquickcontrols2.git)
+  * [qtwebengine](http://code.qt.io/cgit/qt/qtwebengine.git/)
+  * [qtsvg](http://code.qt.io/cgit/qt/qtsvg.git/)
+  * [qtgraphicaleffects](http://code.qt.io/cgit/qt/qtgraphicaleffects.git/)
 
 The following modules and their dependencies are required:
 * [Fluid](https://github.com/lirios/fluid) from develop branch
