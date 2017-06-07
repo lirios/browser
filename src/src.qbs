@@ -2,6 +2,7 @@ import qbs 1.0
 
 QtGuiApplication {
     name: "liri-browser"
+    consoleApplication: false
 
     Depends { name: "lirideployment" }
     Depends { name: "Qt"; submodules: ["qml", "quick", "quickcontrols2", "webengine"] }
