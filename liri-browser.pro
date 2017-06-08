@@ -26,10 +26,13 @@ unix:!android {
     INSTALLS += target desktop
 }
 
+RESOURCES += res/icons/icons.qrc
+
+TRANSLATIONS += res/translations/browser.ts
+OTHER_FILES += $$TRANSLATIONS
+
 # Include sub project include files
 include(src/3rdparty/3rdparty.pri)
 include(src/core/core.pri)
 include(src/main/main.pri)
 include(src/ui/ui.pri)
-
-RESOURCES += res/icons/icons.qrc
