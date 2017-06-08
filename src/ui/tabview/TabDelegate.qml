@@ -79,7 +79,7 @@ Rectangle {
 
         Label {
             Layout.fillWidth: true
-            text: title || "New tab"
+            text: title || qsTr("New tab")
             color: active ? foregroundColor : ColorUtils.shadeColor(foregroundColor, 0.5)
             elide: Text.ElideRight
 

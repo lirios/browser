@@ -57,15 +57,15 @@ TabContent {
                 spacing: 2 * Units.smallSpacing
 
                 HeadlineLabel {
-                    text: "Settings"
+                    text: qsTr("Settings")
                 }
 
                 TitleLabel {
-                    text: "Start"
+                    text: qsTr("Start")
                 }
 
                 Label {
-                    text: "Start url"
+                    text: qsTr("Start url")
                     font.pixelSize: 16
                 }
 
@@ -74,7 +74,7 @@ TabContent {
                     columnSpacing: 2 * Units.smallSpacing
 
                     Label {
-                        text: "Primary"
+                        text: qsTr("Primary")
                     }
 
                     TextField {
@@ -89,7 +89,7 @@ TabContent {
                     }
 
                     Label {
-                        text: "Dark theme"
+                        text: qsTr("Dark theme")
                     }
 
                     TextField {
@@ -104,7 +104,7 @@ TabContent {
                     }
 
                     Label {
-                        text: "Incognito"
+                        text: qsTr("Incognito")
                     }
 
                     TextField {
@@ -120,7 +120,7 @@ TabContent {
                 }
 
                 TitleLabel {
-                    text: "Search"
+                    text: qsTr("Search")
                 }
 
                 ColumnLayout {
@@ -171,7 +171,7 @@ TabContent {
                     ColumnLayout {
                         RowLayout {
                             RadioButton {
-                                text: "Custom"
+                                text: qsTr("Custom")
                                 checked: Settings.searchConfig.searchEngine == SearchConfig.Custom
                                 onClicked: {
                                     if (Settings.searchConfig.searchEngine != SearchConfig.Custom) {
@@ -185,7 +185,7 @@ TabContent {
                                 Layout.minimumWidth: 256
                                 enabled: Settings.searchConfig.searchEngine == SearchConfig.Custom
                                 text: Settings.searchConfig.customSearchUrl
-                                placeholderText: "e.g https://example.com/?q="
+                                placeholderText: qsTr("e.g https://example.com/?q=")
                                 onEditingFinished: {
                                     if (Settings.searchConfig.customSearchUrl != text) {
                                         Settings.searchConfig.customSearchUrl = text;
@@ -198,9 +198,8 @@ TabContent {
                 }
 
                 TitleLabel {
-                    text: "Theme"
+                    text: qsTr("Theme")
                 }
-
 
                 ButtonGroup {
                     buttons: [
@@ -212,7 +211,7 @@ TabContent {
 
                 ColumnLayout {
                     CheckBox {
-                        text: "Adapt to website theme colors"
+                        text: qsTr("Adapt to website theme colors")
                         checked: Settings.themeConfig.themeColorEnabled
                         onClicked: {
                             if (Settings.themeConfig.themeColorEnabled !== checked) {
@@ -224,7 +223,7 @@ TabContent {
 
                     RadioButton {
                         id: radioButtonLightTheme
-                        text: "Light theme"
+                        text: qsTr("Light theme")
                         checked: !Settings.themeConfig.darkThemeEnabled
                         onClicked: {
                             if (Settings.themeConfig.darkThemeEnabled === checked) {
@@ -236,7 +235,7 @@ TabContent {
 
                     RadioButton {
                         id: radioButtonAlwaysDark
-                        text: "Dark theme (always on)"
+                        text: qsTr("Dark theme (always on)")
                         checked: Settings.themeConfig.darkThemeEnabled
                                  && (timeString(Settings.themeConfig.darkThemeStartTime)
                                  === timeString(Settings.themeConfig.darkThemeEndTime))
@@ -251,7 +250,7 @@ TabContent {
                     RowLayout {
                         RadioButton {
                             id: radioButtonDarkBetween
-                            text: "Dark between"
+                            text: qsTr("Dark between")
                             checked: Settings.themeConfig.darkThemeEnabled
                                      && (timeString(Settings.themeConfig.darkThemeStartTime)
                                          !== timeString(Settings.themeConfig.darkThemeEndTime))
@@ -286,7 +285,7 @@ TabContent {
                         }
 
                         Label {
-                            text: "and"
+                            text: qsTr("and")
                         }
 
                         TextField {

@@ -53,7 +53,7 @@ BaseOverlay {
             id: searchField
             selectByMouse: true
             enabled: searchEnabled
-            placeholderText: "Find in page"
+            placeholderText: qsTr("Find in page")
             onAccepted: {
                 searchRequested(searchField.text, false);
             }

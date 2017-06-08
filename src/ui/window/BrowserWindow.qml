@@ -112,9 +112,9 @@ ApplicationWindow {
     width: 1024
     height: 640
 
-    title: "%1 - Liri Browser %2".arg(tabController.tabsModel.empty ? "New window"
-                                                                    : tabsModel.active.title || "New tab")
-                                 .arg(incognito ? "(Private mode)" : "")
+    title: "%1 - Liri Browser %2".arg(tabController.tabsModel.empty ? qsTr("New window")
+                                                                    : tabsModel.active.title || qsTr("New tab"))
+                                 .arg(incognito ? "(%1)".arg(qsTr("Private mode")) : "")
 
     Material.theme: darkThemeActive || incognito ? Material.Dark : Material.Light
 
@@ -398,7 +398,7 @@ ApplicationWindow {
         }
 
         MenuItem {
-            text: "New Window"
+            text: qsTr("New Window")
             iconName: "action/open_in_new"
             onClicked: {
                 var window = root.newWindow();
@@ -407,7 +407,7 @@ ApplicationWindow {
         }
 
         MenuItem {
-            text: "Private Window"
+            text: qsTr("Private Window")
             iconName: "hardware/security"
             onClicked: {
                 var window = root.newIncognitoWindow();
@@ -416,7 +416,7 @@ ApplicationWindow {
         }
 
         MenuItem {
-            text: "Find in page"
+            text: qsTr("Find in page")
             iconName: "action/find_in_page"
             // Disable find in page overlay when there is no open tab
             enabled: !tabController.tabsModel.empty
@@ -426,7 +426,7 @@ ApplicationWindow {
         }
 
         MenuItem {
-            text: "Downloads"
+            text: qsTr("Downloads")
             iconName: "file/file_download"
             onClicked: {
                 rightDrawer.loadContent(rightDrawer.downloads);
@@ -435,7 +435,7 @@ ApplicationWindow {
         }
 
         MenuItem {
-            text: window.isFullScreen? "Exit fullscreen" : "Fullscreen"
+            text: window.isFullScreen? qsTr("Exit fullscreen") : qsTr("Fullscreen")
             iconName: !window.isFullScreen ? "navigation/fullscreen" : "navigation/fullscreen_exit"
             onClicked: {
                 toggleFullScreen();
@@ -443,7 +443,7 @@ ApplicationWindow {
         }
 
         MenuItem {
-            text: "Settings"
+            text: qsTr("Settings")
             iconName: "action/settings"
             onClicked: {
                 tabController.openUrl("liri://settings");
