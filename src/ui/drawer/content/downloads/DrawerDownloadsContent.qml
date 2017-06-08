@@ -30,7 +30,7 @@ import "../../.."
 
 DrawerContentItem {
     id: drawerContentItem
-    title: "Downloads"
+    title: qsTr("Downloads")
 
     property DownloadsModel downloadsModel
 
@@ -48,7 +48,7 @@ DrawerContentItem {
         anchors.top: parent.top
 
         visible: downloadsModel.count === 0
-        text: "No downloads for this session"
+        text: qsTr("No downloads for this session")
         wrapMode: Text.WordWrap
         width: Math.min(noDownloadsMetrics.width, parent.width)
 
