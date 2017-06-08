@@ -100,7 +100,10 @@ Item {
 
     Shortcut {
         autoRepeat: false
-        sequence: StandardKey.AddTab
+        // Ctrl+t is hard-coded as keyboard shorcut
+        // for adding new tabs regardless
+        // of the platform to avoid user confusion.
+        sequence: "Ctrl+t"
         onActivated: {
             tabBar.newTab();
         }
