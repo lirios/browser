@@ -28,7 +28,7 @@ Liri Browser uses [Qbs](http://doc.qt.io/qbs/) as build system.
 If you haven't already, start by setting up a `qt5` profile for `qbs`:
 ```sh
 qbs setup-toolchains --type gcc /usr/bin/g++ gcc
-qbs setup-qt /usr/bin/qmake-qt5 qt5
+qbs setup-qt $(which qmake) qt5 # make sure that qmake is in PATH
 qbs config profiles.qt5.baseProfile gcc
 ```
 Then, from the root of the repository, run:
