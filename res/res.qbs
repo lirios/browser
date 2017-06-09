@@ -68,4 +68,12 @@ Product {
         qbs.install: true
         qbs.installDir: lirideployment.dataDir + "/icons/hicolor/512x512/apps"
     }
+
+    Group {
+        condition: qbs.hostOS.contains("linux")
+        name: "Icon scalable"
+        files: ["icons/scalable/io.liri.Browser.svg"]
+        qbs.install: true
+        qbs.installDir: lirideployment.dataDir + "/icons/hicolor/512x512/apps"
+    }
 }

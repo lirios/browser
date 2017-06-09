@@ -4,25 +4,52 @@ QtGuiApplication {
     name: "liri-browser"
     consoleApplication: false
 
+    Qt.core.resourcePrefix: "/"
+    Qt.core.resourceSourceBase: "../src"
+
     Depends { name: "lirideployment" }
     Depends { name: "Qt"; submodules: ["qml", "quick", "quickcontrols2", "webengine"] }
 
-    files: [
-        "3rdparty/regex-weburl/*.qrc",
-        "core/models/*.cpp",
-        "core/models/*.h",
-        "core/settings/*.cpp",
-        "core/settings/*.h",
-        "core/global/*.cpp",
-        "core/global/*.h",
-        "core/utils/*.cpp",
-        "core/utils/*.h",
-        "main/*.cpp",
-        "main/*.h",
-        "ui/*.qrc",
-        "../res/icons/*.qrc"
-    ]
-// TODO: mac
+    Group {
+        name: "Core"
+        prefix: "core/"
+        files: ["**"]
+    }
+
+    Group {
+        name: "Main"
+        files: ["main/main.cpp"]
+    }
+
+    Group {
+        condition: qbs.targetOS.contains("darwin")
+        name: "macOS"
+        files: ["main/mac/**"]
+    }
+
+    Group {
+        name: "Third party"
+        prefix: "3rdparty/"
+        files: ["**"]
+    }
+
+    Group {
+        name: "UI"
+        prefix: "ui/"
+        files: ["**"]
+        fileTags: ["qt.core.resource_data"]
+    }
+
+    Group {
+        name: "In-app icons"
+        prefix: "../res/icons/"
+        files: [
+            "256x256/io.liri.Browser.png",
+            "512x512/io.liri.Browser.png",
+            "scalable/io.liri.Browser.svg",
+        ]
+        fileTags: ["qt.core.resource_data"]
+    }
 
     Group {
         qbs.install: true

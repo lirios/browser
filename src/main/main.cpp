@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
         initMacOsEventListener(&evListener);
     #endif
 
-    app.setWindowIcon(QIcon(":/res/icons/iconx512.png"));
+    app.setWindowIcon(QIcon(":/res/icons/512x512/io.liri.Browser.png"));
 
     QQuickStyle::setStyle(QLatin1String("Material"));
 
