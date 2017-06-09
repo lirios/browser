@@ -12,11 +12,14 @@ before_install:
   - sudo apt-get update -qq
     
 install:
-  - sudo apt-get -y install qt58base qt58declarative qt58quickcontrols2 qt58svg qt58webengine qt58graphicaleffects
+  - sudo apt-get -y -qq install qt58base qt58declarative qt58quickcontrols2 qt58svg qt58webengine qt58graphicaleffects qt58qbs
   - source /opt/qt58/bin/qt58-env.sh
 
 script:
   - mkdir -p ./appdir
+  - git submodule update --init --recursive
+  - mkdir deps
+  - cd deps
   - git clone -b develop https://github.com/lirios/fluid
   - cd fluid
   - git submodule update --init
@@ -26,14 +29,13 @@ script:
   - qmake CONFIG+=install_under_qt ../fluid.pro
   - make -j4
   - sudo make install
-  - # sudo make INSTALL_ROOT=../../appdir install ; sudo chown -R $USER ../../appdir ; find ../../appdir/
-  - cd ../../
+  - cd ../../../
   - mkdir build
-  - cd build
-  - qmake LIRI_INSTALL_PREFIX=/usr ..
-  - make -j4
-  - sudo make INSTALL_ROOT=../appdir install ; sudo chown -R $USER ../appdir ; find ../appdir/
-  - cd ../
+  - qbs setup-toolchains --type gcc /usr/bin/g++ gcc
+  - qbs setup-qt $(which qmake) travis-qt5
+  - qbs config profiles.travis-qt5.baseProfile gcc
+  - qbs -d build -j $(nproc) profile:travis-qt5 project.withFluid:false qbs.installRoot:appdir qbs.installPrefix:usr
+  - sudo chown -R $USER appdir ; find appdir/
   - wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" 
   - chmod a+x linuxdeployqt*.AppImage
   - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
@@ -42,4 +44,3 @@ script:
   - ./linuxdeployqt*.AppImage ./appdir/usr/share/applications/*.desktop -appimage -qmldir=. -verbose=2
   - find ./appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f 2-3 | sort | uniq
   - curl --upload-file ./Liri_Browser*.AppImage https://transfer.sh/Liri_Browser-git.$(git rev-parse --short HEAD)-x86_64.AppImage
-
