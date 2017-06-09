@@ -23,27 +23,28 @@ The following modules and their dependencies are required:
 
 ## Build
 
-From the root of the repository, run:
+Liri Browser uses [Qbs](http://doc.qt.io/qbs/) as build system.
+
+If you haven't already, start by setting up a `qt5` profile for `qbs`:
 ```sh
-mkdir build && cd build
-qmake ..
-make
+qbs setup-toolchains --type gcc /usr/bin/g++ gcc
+qbs setup-qt /usr/bin/qmake-qt5 qt5
+qbs config profiles.qt5.baseProfile gcc
+```
+Then, from the root of the repository, run:
+```sh
+qbs -d build -j $(nproc) profile:qt5 # use sudo if necessary
+```
+To the `qbs` call above you can append additional configuration parameters:
+```sh
+... project.withFluid:true # use git submodule for Fluid
+... qbs.installRoot:/install/root # e.g. /
+... qbs.installPrefix:path/to/install # e.g. opt/liri or usr
 ```
 
-Use `make distclean` from inside your `build` directory to clean up.
-You need to do this before rerunning `qmake` with different options.
+## Documentation
 
-## Install
-
-From your build directory, run:
-```sh
-sudo make install
-```
-The browser will be installed to `/usr/local` by default. To specify a custom installation prefix,
-set the `LIRI_INSTALL_PREFIX` option when running `qmake`. For example:
-```sh
-qmake .. LIRI_INSTALL_PREFIX=/opt
-```
+Find more information in the [Liri Browser wiki](https://github.com/lirios/browser/wiki).
 
 ## Credits
 Many thanks to ...
