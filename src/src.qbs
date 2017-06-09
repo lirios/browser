@@ -41,6 +41,18 @@ QtGuiApplication {
     }
 
     Group {
+        name: "Translations"
+        files: ["*_*.ts"]
+        prefix: "../res/translations/"
+    }
+
+    Group {
+        qbs.install: true
+        qbs.installDir: lirideployment.dataDir + "/liri-browser/translations"
+        fileTagsFilter: "qm"
+    }
+
+    Group {
         name: "In-app icons"
         prefix: "../res/icons/"
         files: [
