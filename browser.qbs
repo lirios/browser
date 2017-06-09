@@ -30,4 +30,13 @@ Project {
             withDemo: false
         }
     }
+
+    Product {
+        name: "Documents"
+        files: [
+            "AUTHORS.md",
+            "README.md",
+            "LICENSE.*"
+        ]
+    }
 }
