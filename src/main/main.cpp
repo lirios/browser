@@ -28,6 +28,10 @@
 #include <QtQuickControls2/QQuickStyle>
 #include <QQmlContext>
 #include <QtWebEngine>
+#include <QStandardPaths>
+#ifndef QT_NO_TRANSLATION
+    #include <QtCore/QTranslator>
+#endif
 #include <QDebug>
 
 #include "../core/models/tabsmodel.h"
@@ -40,6 +44,29 @@
     #include "mac/MacOsEventListener.h"
 #endif
 
+static void loadTranslations()
+{
+    #ifndef QT_NO_TRANSLATION
+        QString locale = QLocale::system().name();
+
+        // Find the translations directory
+        const QString path = QLatin1String("liri-browser/translations");
+        const QString translationsDir =
+            QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                   path,
+                                   QStandardPaths::LocateDirectory);
+
+        // Load translations
+        QTranslator *appTranslator = new QTranslator(qGuiApp);
+        if (appTranslator->load(QStringLiteral("%1/browser_%3").arg(translationsDir, locale))) {
+            QCoreApplication::installTranslator(appTranslator);
+        } else if (locale == QLatin1String("C") ||
+                    locale.startsWith(QLatin1String("en"))) {
+            // English is the default, it's translated anyway
+            delete appTranslator;
+        }
+    #endif
+}
 
 int main(int argc, char *argv[])
 {
@@ -65,6 +92,9 @@ int main(int argc, char *argv[])
     // Create and start dark theme time
     DarkThemeTimer darkThemeTimer;
     darkThemeTimer.start();
+
+    // Load translations
+    loadTranslations();
 
     // create qml app engine
     QQmlApplicationEngine engine;
