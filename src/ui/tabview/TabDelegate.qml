@@ -79,6 +79,8 @@ Rectangle {
 
         Label {
             Layout.fillWidth: true
+            // Use translation id to fix duplicate strings
+            //= new-tab
             text: title || qsTr("New tab")
             color: active ? foregroundColor : ColorUtils.shadeColor(foregroundColor, 0.5)
             elide: Text.ElideRight

@@ -113,7 +113,10 @@ ApplicationWindow {
     height: 640
 
     title: "%1 - Liri Browser %2".arg(tabController.tabsModel.empty ? qsTr("New window")
-                                                                    : tabsModel.active.title || qsTr("New tab"))
+                                                                    : tabsModel.active.title
+                                                                      // Use translation id to fix duplicate strings
+                                                                      //= new-tab
+                                                                      || qsTr("New tab"))
                                  .arg(incognito ? "(%1)".arg(qsTr("Private mode")) : "")
 
     Material.theme: darkThemeActive || incognito ? Material.Dark : Material.Light
