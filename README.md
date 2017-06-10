@@ -7,7 +7,7 @@ Liri Browser
 [![GitHub issues](https://img.shields.io/github/issues/lirios/browser.svg)](https://github.com/lirios/browser/issues)
 [![Maintained](https://img.shields.io/maintenance/yes/2017.svg)](https://github.com/lirios/browser/commits/develop)
 
-A cross-platform material design web browser
+A cross-platform Material design web browser
 
 ## Dependencies
 * Qt >= 5.8.0 with at least the following modules is required:
