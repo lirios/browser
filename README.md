@@ -42,6 +42,9 @@ To the `qbs` call above you can append additional configuration parameters:
 ... qbs.installPrefix:path/to/install # e.g. opt/liri or usr
 ```
 
+If you are looking for more detailed setup instructions, please head over to 
+[the Development Setup wiki page](https://github.com/lirios/browser/wiki/Development-Setup).
+
 ## Documentation
 
 Find more information in the [Liri Browser wiki](https://github.com/lirios/browser/wiki).
