@@ -1,7 +1,7 @@
 /*
  * This file is part of Liri Browser
  *
- * Copyright (C) 2016 Tim Süberkrüb (https://github.com/tim-sueberkrueb)
+ * Copyright (C) 2017 Tim Süberkrüb <dev@timsueberkrueb.io>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 #define DOWNLOADSMODEL_H
 
 #include <QAbstractListModel>
-#include "webdownload.h"
+#include <QtWebEngine/QQuickWebEngineProfile>
 
 class DownloadsModel : public QAbstractListModel
 {
@@ -34,22 +34,25 @@ public:
         Path,
         MimeType,
         Progress,
-        Invalid
+        Status
     };
 
     int rowCount(const QModelIndex &parent=QModelIndex()) const;
-    QHash<int, QByteArray> roleNames();
-    Q_INVOKABLE QVariant data(const QModelIndex &index, int role) const;
+    QHash<int, QByteArray> roleNames() { return QHash<int, QByteArray>(); }
+    Q_INVOKABLE QVariant data(const QModelIndex &index, int role) const {
+        Q_UNUSED(index)
+        Q_UNUSED(role)
+        return QVariant();
+    }
 
     Q_INVOKABLE int count() const;
-    Q_INVOKABLE WebDownload* add();
-    Q_INVOKABLE WebDownload* get(const int index) const;
-    Q_INVOKABLE bool remove(WebDownload* download);
+    Q_INVOKABLE void add(QQuickWebEngineDownloadItem* download);
+    Q_INVOKABLE QQuickWebEngineDownloadItem* get(const int index) const;
+    Q_INVOKABLE bool remove(QQuickWebEngineDownloadItem* download);
     Q_INVOKABLE bool remove(const int index);
 
 private:
-    WebDownload* m_invalid_download;
-    QList<WebDownload*> m_downloads_list;
+    QList<QQuickWebEngineDownloadItem*> m_downloads_list;
 
 signals:
     void countChanged(int count);

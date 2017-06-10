@@ -1,7 +1,7 @@
 /*
  * This file is part of Liri Browser
  *
- * Copyright (C) 2016 Tim Süberkrüb (https://github.com/tim-sueberkrueb)
+ * Copyright (C) 2017 Tim Süberkrüb <dev@timsueberkrueb.io>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,8 +22,6 @@
 DownloadsModel::DownloadsModel(QObject* parent)
     : QAbstractListModel(parent)
 {
-    m_invalid_download = new WebDownload(this);
-    m_invalid_download->setInvalid(true);
 }
 
 int DownloadsModel::rowCount(const QModelIndex &parent) const
@@ -32,55 +30,28 @@ int DownloadsModel::rowCount(const QModelIndex &parent) const
     return m_downloads_list.length();
 }
 
-QHash<int, QByteArray> DownloadsModel::roleNames()
-{
-    QHash<int, QByteArray> roles;
-    roles[Path] = "path";
-    roles[MimeType] = "mimeType";
-    roles[Progress] = "progress";
-    return roles;
-}
-
-QVariant DownloadsModel::data(const QModelIndex &index, int role) const
-{
-    WebDownload* download = get(index.row());
-    switch (role) {
-        case Path:
-            return QVariant(download->path());
-        case MimeType:
-            return QVariant(download->mimeType());
-        case Progress:
-            return QVariant(download->progress());
-        case Invalid:
-            return QVariant(download->invalid());
-    }
-    return QVariant();
-}
-
 int DownloadsModel::count() const
 {
     return m_downloads_list.length();
 }
 
-WebDownload* DownloadsModel::add()
+void DownloadsModel::add(QQuickWebEngineDownloadItem* download)
 {
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
-    WebDownload* download = new WebDownload(this);
     m_downloads_list.append(download);
     countChanged(count());
     endInsertRows();
-    return download;
 }
 
-WebDownload* DownloadsModel::get(const int index) const
+QQuickWebEngineDownloadItem* DownloadsModel::get(const int index) const
 {
     if (index < 0 || index >= rowCount()) {
-        return m_invalid_download;
+        return nullptr;
     }
     return m_downloads_list.at(index);
 }
 
-bool DownloadsModel::remove(WebDownload *download)
+bool DownloadsModel::remove(QQuickWebEngineDownloadItem *download)
 {
     int index = m_downloads_list.indexOf(download);
     if (index == -1)

@@ -1,7 +1,7 @@
 /*
  * This file is part of Liri Browser
  *
- * Copyright (C) 2016 Tim Süberkrüb <tim.sueberkrueb@web.de>
+ * Copyright (C) 2017 Tim Süberkrüb <tim.sueberkrueb@web.de>
  *
  * $BEGIN_LICENSE:GPL3+$
  *
@@ -25,11 +25,15 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.0
 import QtQuick.Controls 2.0
 import Fluid.Controls 1.0
+import QtWebEngine 1.1
 
 
 BaseListItem {
     property var downloadsModel
-    property var download: downloadsModel.get(index)
+    readonly property var download: downloadsModel.get(index)
+
+    readonly property bool finished: download.state === WebEngineDownloadItem.DownloadCompleted
+    readonly property real progress: download.receivedBytes / download.totalBytes
 
     implicitHeight: 74
 
@@ -59,13 +63,13 @@ BaseListItem {
 
             ProgressBar {
                 Layout.fillWidth: true
-                visible: !download.finished
-                height: download.finished ? 0 : implicitHeight
-                value: download.progress/100
+                visible: !finished
+                height: finished ? 0 : implicitHeight
+                value: progress
             }
 
             CaptionLabel {
-                text: download.finished ? "Finished" : "%1%".arg(download.progress.toString())
+                text: finished ? "Finished" : "%1%".arg(Math.round(progress * 100).toString())
             }
         }
 
@@ -75,14 +79,14 @@ BaseListItem {
                 // Cancel engine download
                 download.cancel();
                 // Remove from model
-                downloadsModel.remove(index)
+                downloadsModel.remove(index);
             }
         }
     }
 
     onClicked: {
         // Open download file externally
-        if (download.finished)
+        if (finished)
             Qt.openUrlExternally("file://" + download.path);
     }
 }

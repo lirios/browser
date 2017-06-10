@@ -51,50 +51,6 @@ QtObject {
         }
     }
 
-    property Component downloadWatcherComponent: Component {
-        Item {
-            id: downloadWatcher
-            property var engineDownload
-            property var downloadModelItem
-
-             property real progress: (engineDownload.receivedBytes/engineDownload.totalBytes) * 100
-
-            Connections {
-                target: engineDownload
-                onStateChanged: {
-                    if (state === WebEngineDownloadItem.DownloadCompleted) {
-                        downloadWatcher.downloadModelItem.finished = true;
-                    }
-                }
-            }
-
-            Connections {
-                target: downloadModelItem
-                onCancel: {
-                    engineDownload.cancel();
-                }
-            }
-
-            Binding {
-                target: downloadModelItem
-                property: "progress"
-                value: progress
-            }
-
-            Binding {
-                target: downloadModelItem
-                property: "path"
-                value: engineDownload.path
-            }
-
-            Binding {
-                target: downloadModelItem
-                property: "mimeType"
-                value: engineDownload.mimeType
-            }
-        }
-    }
-
     property Binding darkStartTimeBinding: Binding {
         target: DarkThemeTimer
         property: "startTime"
@@ -109,11 +65,7 @@ QtObject {
 
     function __handleDownloadRequest(download) {
         download.accept();
-        var modelItem = downloadsModel.add();
-        var watcher = downloadWatcherComponent.createObject(null, {
-            engineDownload: download,
-            downloadModelItem: modelItem
-        });
+        downloadsModel.add(download);
     }
 
     function openWindowRequest(request) {

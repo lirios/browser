@@ -33,7 +33,6 @@
 #include "../core/models/tabsmodel.h"
 #include "../core/models/tab.h"
 #include "../core/models/downloadsmodel.h"
-#include "../core/models/webdownload.h"
 #include "../core/settings/settings.h"
 #include "../core/utils/darkthemetimer.h"
 
@@ -76,7 +75,6 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<Tab>("core", 1, 0, "Tab", "Tab (from module core) may not be created directly.");
     qmlRegisterType<TabsModel>("core", 1, 0, "TabsModel");
 
-    qmlRegisterUncreatableType<WebDownload>("core", 1, 0, "WebDownload", "WebDownload (from module core) may not be created directly.");
     qmlRegisterType<DownloadsModel>("core", 1, 0, "DownloadsModel");
 
     // Register context properties
