@@ -398,7 +398,7 @@ ApplicationWindow {
         }
 
         MenuItem {
-            text: qsTr("New Window")
+            text: qsTr("New window")
             iconName: "action/open_in_new"
             onClicked: {
                 var window = root.newWindow();
