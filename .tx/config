@@ -1,0 +1,9 @@
+[main]
+host = https://www.transifex.com
+
+[liri-browser.browser]
+file_filter = res/translations/browser_<lang>.ts
+source_file = res/translations/browser.ts
+source_lang = en
+type = QT
+
