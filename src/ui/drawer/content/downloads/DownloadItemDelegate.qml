@@ -74,9 +74,9 @@ BaseListItem {
                 elide: Text.ElideRight
                 text: {
                     if (finished) {
-                        return "Finished";
+                        return qsTr("Finished");
                     } else if (failed) {
-                        return "Failed: %1".arg(download.interruptReasonString);
+                        return qsTr("Failed") + ": %1".arg(download.interruptReasonString);
                     } else {
                         return "%1%".arg(Math.round(progress * 100).toString());
                     }
