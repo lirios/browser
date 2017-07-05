@@ -25,7 +25,7 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.0
 import QtQuick.Controls 2.0
 import Fluid.Controls 1.0
-import QtWebEngine 1.1
+import QtWebEngine 1.5
 
 
 BaseListItem {
@@ -33,6 +33,7 @@ BaseListItem {
     readonly property var download: downloadsModel.get(index)
 
     readonly property bool finished: download.state === WebEngineDownloadItem.DownloadCompleted
+    readonly property bool failed: download.state === WebEngineDownloadItem.DownloadInterrupted
     readonly property real progress: download.receivedBytes / download.totalBytes
 
     implicitHeight: 74
@@ -69,7 +70,17 @@ BaseListItem {
             }
 
             CaptionLabel {
-                text: finished ? "Finished" : "%1%".arg(Math.round(progress * 100).toString())
+                Layout.fillWidth: true
+                elide: Text.ElideRight
+                text: {
+                    if (finished) {
+                        return "Finished";
+                    } else if (failed) {
+                        return "Failed: %1".arg(download.interruptReasonString);
+                    } else {
+                        return "%1%".arg(Math.round(progress * 100).toString());
+                    }
+                }
             }
         }
 
