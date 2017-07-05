@@ -32,6 +32,10 @@ QtObject {
         return url.match(webUrlRegex) !== null;
     }
 
+    function isFileUrl(url) {
+        return url.toString().indexOf("file://") === 0;
+    }
+
     function isLiriUrl(url) {
         return url.toString().indexOf("liri://") === 0;
     }
@@ -42,6 +46,10 @@ QtObject {
         var httpedUrl = isHttped ? url : "http://%1".arg(url);
         if (isHttped || isWebUrl(httpedUrl)) {
             return httpedUrl;
+        }
+        // File url
+        else if (isFileUrl(url)) {
+            return url;
         }
         // Liri url
         else if (isLiriUrl(url)) {
