@@ -32,9 +32,9 @@ BaseListItem {
     property var downloadsModel
     readonly property var download: downloadsModel.get(index)
 
-    readonly property bool finished: download.state === WebEngineDownloadItem.DownloadCompleted
-    readonly property bool failed: download.state === WebEngineDownloadItem.DownloadInterrupted
-    readonly property real progress: download.receivedBytes / download.totalBytes
+    readonly property bool finished: download ? download.state === WebEngineDownloadItem.DownloadCompleted : false
+    readonly property bool failed: download ? download.state === WebEngineDownloadItem.DownloadInterrupted : false
+    readonly property real progress: download ? download.receivedBytes / download.totalBytes : 0
 
     implicitHeight: 74
 
@@ -58,7 +58,7 @@ BaseListItem {
 
             Label {
                 Layout.fillWidth: true
-                text: download.path
+                text: download ? download.path : ""
                 elide: Text.ElideLeft
             }
 
