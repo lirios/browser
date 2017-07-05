@@ -33,6 +33,8 @@ QtObject {
     signal newWebViewRequested(var request)
     signal closeRequested()
     signal fullScreenRequested(var request)
+    signal openUrlInNewTabRequested(var url)
+    signal openUrlInNewPrivateWindowRequested(var url)
 
     onFullScreenRequested: {
         internal.tabController.fullScreenRequested(request);
@@ -49,6 +51,14 @@ QtObject {
                 internal.tabController.newWindowRequested(request);
                 break;
         }
+    }
+
+    onOpenUrlInNewTabRequested: {
+        internal.tabController.openUrl(url);
+    }
+
+    onOpenUrlInNewPrivateWindowRequested: {
+        internal.tabController.openUrlInNewPrivateWindowRequested(url);
     }
 
     onCloseRequested: {

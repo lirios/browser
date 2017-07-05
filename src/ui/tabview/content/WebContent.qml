@@ -22,7 +22,8 @@
 */
 
 import QtQuick 2.0
-import QtWebEngine 1.3
+import QtQuick.Controls 2.0
+import QtWebEngine 1.4
 import "../.."
 
 TabContent {
@@ -72,6 +73,229 @@ TabContent {
                         hasThemeColor = false;
                     }
                 });
+            }
+        }
+        onContextMenuRequested: {
+            var contextMenu;
+            if (request.linkUrl != "" || request.selectedText != "" || request.isContentEditable) {
+                contextMenu = textContextMenu;
+            } else if (mediaContextMenu.isSupported(request.mediaType)) {
+                contextMenu = mediaContextMenu;
+            } else {
+                contextMenu = defaultContextMenu;
+            }
+            contextMenu.request = request;
+            contextMenu.x = request.x;
+            contextMenu.y = request.y;
+            contextMenu.open();
+            request.accepted = true;
+        }
+    }
+
+    Menu {
+        id: defaultContextMenu
+
+        property var request
+
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+
+        MenuItem {
+            enabled: webview.canGoBack
+            text: qsTr("Back")
+            onClicked: webview.goBack()
+        }
+
+        MenuItem {
+            enabled: webview.canGoForward
+            text: qsTr("Forward")
+            onClicked: webview.goForward()
+        }
+
+        MenuItem {
+            text: qsTr("Reload")
+            onClicked: webview.reload()
+        }
+
+        MenuItem {
+            text: qsTr("View page source")
+            onClicked: webview.triggerWebAction(WebEngineView.ViewSource)
+        }
+
+        Connections {
+            target: webview
+            onScrollPositionChanged: {
+                defaultContextMenu.close();
+            }
+        }
+    }
+
+    Menu {
+        id: textContextMenu
+
+        property var request
+        property bool isLink: textContextMenu.request ? textContextMenu.request.linkUrl != "" : false
+        property bool isTextSelected: textContextMenu.request ? textContextMenu.request.selectedText !== "" : false
+        property bool isEditable: textContextMenu.request ? textContextMenu.request.isContentEditable : false
+
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+
+        MenuItem {
+            visible: textContextMenu.isLink
+            height: visible ? MenuItem.implicitHeight : 0
+            text: qsTr("Open in new tab")
+            onClicked: webview.triggerWebAction(WebEngineView.OpenLinkInNewTab)
+        }
+
+        MenuItem {
+            visible: textContextMenu.isLink
+            height: visible ? MenuItem.implicitHeight : 0
+            text: qsTr("Open in new window")
+            onClicked: webview.triggerWebAction(WebEngineView.OpenLinkInNewWindow)
+        }
+
+        MenuItem {
+            visible: textContextMenu.isLink
+            height: visible ? MenuItem.implicitHeight : 0
+            text: qsTr("Open in  private window")
+            onClicked: actionManager.openUrlInNewPrivateWindowRequested(textContextMenu.request.linkUrl)
+        }
+
+        MenuItem {
+            visible: textContextMenu.isLink
+            height: visible ? MenuItem.implicitHeight : 0
+            text: qsTr("Copy link location")
+            onClicked: webview.triggerWebAction(WebEngineView.CopyLinkToClipboard)
+        }
+
+        MenuItem {
+            visible: textContextMenu.isLink
+            height: visible ? MenuItem.implicitHeight : 0
+            text: qsTr("Download link location")
+            onClicked: webview.triggerWebAction(WebEngineView.DownloadLinkToDisk)
+        }
+
+        MenuItem {
+            visible: textContextMenu.isEditable
+            enabled: textContextMenu.isTextSelected
+            height: visible ? MenuItem.implicitHeight : 0
+            text: qsTr("Cut")
+            onClicked: webview.triggerWebAction(WebEngineView.Cut)
+        }
+
+        MenuItem {
+            visible: textContextMenu.isTextSelected || textContextMenu.isEditable
+            enabled: textContextMenu.isTextSelected
+            height: visible ? MenuItem.implicitHeight : 0
+            text: qsTr("Copy")
+            onClicked: webview.triggerWebAction(WebEngineView.Copy)
+        }
+
+        MenuItem {
+            visible: textContextMenu.isEditable
+            height: visible ? MenuItem.implicitHeight : 0
+            text: qsTr("Paste")
+            onClicked: webview.triggerWebAction(WebEngineView.Paste)
+        }
+
+        MenuItem {
+            visible: textContextMenu.isTextSelected || textContextMenu.isEditable
+            height: visible ? MenuItem.implicitHeight : 0
+            text: qsTr("Select all")
+            onClicked: webview.triggerWebAction(WebEngineView.SelectAll)
+        }
+
+        Connections {
+            target: webview
+            onScrollPositionChanged: {
+                textContextMenu.close();
+            }
+        }
+    }
+
+    Menu {
+        id: mediaContextMenu
+
+        property var request
+
+        property bool isImage: typeof mediaContextMenu.request !== "undefined"
+                               && mediaContextMenu.request.mediaType === ContextMenuRequest.MediaTypeImage
+
+        function isSupported(mediaType) {
+            return [
+                ContextMenuRequest.MediaTypeImage,
+                ContextMenuRequest.MediaTypeVideo,
+                ContextMenuRequest.MediaTypeAudio,
+            ].indexOf(mediaType) !== -1;
+        }
+
+        function mediaTypeToString(mediaType) {
+            switch(mediaType) {
+                case ContextMenuRequest.MediaTypeImage:
+                    return qsTr("image");
+                case ContextMenuRequest.MediaTypeVideo:
+                    return qsTr("video");
+                case ContextMenuRequest.MediaTypeAudio:
+                    return qsTr("audio");
+                default:
+                    return qsTr("unknown");
+            }
+        }
+
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+
+        MenuItem {
+            text: {
+                return qsTr("Open %1 in new tab").arg(
+                    mediaContextMenu.request ? mediaContextMenu.mediaTypeToString(mediaContextMenu.request.mediaType)
+                                             : ""
+                )
+            }
+            onClicked: {
+                actionManager.openUrlInNewTabRequested(mediaContextMenu.request.mediaUrl);
+            }
+        }
+
+        MenuItem {
+            text: {
+                return qsTr("Copy %1 location").arg(
+                    mediaContextMenu.request ? mediaContextMenu.mediaTypeToString(mediaContextMenu.request.mediaType)
+                                             : ""
+                )
+            }
+            onClicked: {
+                if (mediaContextMenu.isImage) {
+                    webview.triggerWebAction(WebEngineView.CopyImageUrlToClipboard);
+                } else {
+                    webview.triggerWebAction(WebEngineView.CopyMediaUrlToClipboard);
+                }
+            }
+        }
+
+        MenuItem {
+            visible: mediaContextMenu.isImage
+            height: visible ? MenuItem.implicitHeight : 0
+            text: qsTr("Copy image")
+            onClicked: {
+                webview.triggerWebAction(WebEngineView.CopyImageToClipboard);
+            }
+        }
+
+        MenuItem {
+            text: {
+                return qsTr("Download %1").arg(
+                    mediaContextMenu.request ? mediaContextMenu.mediaTypeToString(mediaContextMenu.request.mediaType)
+                                             : ""
+                )
+            }
+            onClicked: {
+                webview.triggerWebAction(WebEngineView.DownloadMediaToDisk);
+            }
+        }
+
+        Connections {
+            target: webview
+            onScrollPositionChanged: {
+                mediaContextMenu.close();
             }
         }
     }

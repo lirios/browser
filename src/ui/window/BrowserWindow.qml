@@ -26,7 +26,7 @@ import QtQuick.Layouts 1.0
 import QtQuick.Controls 2.0
 import QtQuick.Controls.Material 2.0
 import QtQuick.Window 2.0
-import QtWebEngine 1.1
+import QtWebEngine 1.2
 import Fluid.Core 1.0
 import Fluid.Controls 1.0
 import Fluid.Material 1.0
@@ -83,6 +83,9 @@ ApplicationWindow {
             setFullScreen(fullScreenUserChoice || request.toggleOn)
             request.accept();
         }
+        onOpenUrlInNewPrivateWindowRequested: {
+            root.openUrl(url, true);
+        }
     }
 
     function timeString(time) {
@@ -90,8 +93,11 @@ ApplicationWindow {
     }
 
     function openRequest(request) {
-        request.destination = NewViewRequest.NewViewInTab;
-        tabController.openNewViewRequest(request);
+        openUrl(request.requestedUrl);
+    }
+
+    function openUrl(url, background) {
+        tabController.openUrl(url, background);
     }
 
     function toggleFullScreen() {

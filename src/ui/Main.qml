@@ -74,6 +74,12 @@ QtObject {
         window.showNormal();
     }
 
+    function openUrl(url, incognito) {
+        var window = newWindow(incognito, false);
+        window.openUrl(url, false);
+        window.showNormal();
+    }
+
     function newWindow(incognito, openStartUrl) {
         var properties = {root: root}
         if (incognito)
