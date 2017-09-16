@@ -7,7 +7,7 @@ Project {
 
     property bool withFluid: false
 
-    minimumQbsVersion: "1.8.0"
+    minimumQbsVersion: "1.6"
 
     qbsSearchPaths: "qbs/shared"
 
