@@ -28,7 +28,7 @@ import Fluid.Controls 1.0
 import QtWebEngine 1.1
 
 
-BaseListItem {
+ListItem {
     property var downloadsModel
     readonly property var download: downloadsModel.get(index)
 
@@ -38,7 +38,7 @@ BaseListItem {
 
     implicitHeight: 74
 
-    RowLayout {
+    contentItem: RowLayout {
         anchors {
             fill: parent
             topMargin: Units.smallSpacing
