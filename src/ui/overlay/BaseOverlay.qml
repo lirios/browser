@@ -24,7 +24,7 @@
 import QtQuick 2.0
 import QtQuick.Controls.Material 2.0
 import Fluid.Controls 1.0
-import Fluid.Material 1.0
+import Fluid.Effects 1.0 as FluidEffects
 
 Rectangle {
     id: baseOverlay
@@ -47,7 +47,7 @@ Rectangle {
     visible: height > 0
 
     layer.enabled: true
-    layer.effect: ElevationEffect { elevation: 2 }
+    layer.effect: FluidEffects.Elevation { elevation: 2 }
 
     implicitWidth: 300
     height: 0

@@ -27,7 +27,6 @@ import QtQuick.Controls 2.0
 import QtQuick.Controls.Material 2.0
 import Fluid.Controls 1.0
 import Fluid.Core 1.0
-import Fluid.Material 1.0
 import dperini.regexweburl 1.0
 import core 1.0
 import ".."

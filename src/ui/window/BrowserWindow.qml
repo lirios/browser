@@ -29,7 +29,6 @@ import QtQuick.Window 2.0
 import QtWebEngine 1.2
 import Fluid.Core 1.0
 import Fluid.Controls 1.0
-import Fluid.Material 1.0
 import core 1.0
 import ".."
 
