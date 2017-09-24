@@ -128,6 +128,8 @@ ApplicationWindow {
                                                                       || qsTr("New tab"))
                                  .arg(incognito ? "(%1)".arg(qsTr("Private mode")) : "")
 
+    decorationColor: toolbarContainer.backgroundColor
+
     Material.theme: darkThemeActive || incognito ? Material.Dark : Material.Light
     Material.accent: defaultAccentColor
 
