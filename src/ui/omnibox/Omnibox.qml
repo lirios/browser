@@ -37,6 +37,7 @@ Item {
     property TabsModel tabsModel
     property string searchUrl
     property alias editingUrl: showUrlField.editActive
+    property color defaultAccentColor
 
     function focusUrlField() {
         showUrlField.forceActiveFocus();
@@ -52,7 +53,7 @@ Item {
         anchors.fill: parent
 
         radius: 2
-        color: Utils.lightDark(Material.background, "#eeeeee", "white")
+        color: Utils.lightDark(Material.background, Material.color(Material.Grey, Material.Shade200), "white")
 
         RowLayout {
             anchors {
@@ -69,8 +70,8 @@ Item {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
 
-                Material.foreground: "#212121"
-                Material.accent: Material.color(Material.Pink)
+                Material.foreground: Material.color(Material.Grey, Material.Shade900)
+                Material.accent: Utils.lightDark(Material.background, defaultAccentColor, Material.background)
 
                 bottomPadding: Units.smallSpacing
 
@@ -92,7 +93,7 @@ Item {
                     anchors.fill: parent
                     visible: showUrlField.editActive
 
-                    selectionColor: tabsModel.active.hasThemeColor ? tabsModel.active.themeColor : Material.accent
+                    selectionColor: Material.accent
                     selectByMouse: true
                     bottomPadding: Units.smallSpacing
                     background: Rectangle { color: container.color }
@@ -130,7 +131,7 @@ Item {
 
             height: 2
             width: parent.width * (tabsModel.active.loadProgress / 100)
-            color: "red"
+            color: Utils.lightDark(Material.background, defaultAccentColor, Material.background)
 
             Behavior on width {
                 enabled: tabsModel.active.loading

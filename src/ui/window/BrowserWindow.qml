@@ -61,6 +61,10 @@ ApplicationWindow {
         return false;
     }
 
+    property color defaultAccentColor: Material.color(Material.Green)
+    property color incognitoColor: Material.color(Material.BlueGrey, Material.Shade900)
+    property color darkThemeColor: Material.color(Material.Grey, Material.Shade900)
+
     property TabsModel tabsModel: TabsModel {}
     property DownloadsModel downloadsModel
 
@@ -125,6 +129,7 @@ ApplicationWindow {
                                  .arg(incognito ? "(%1)".arg(qsTr("Private mode")) : "")
 
     Material.theme: darkThemeActive || incognito ? Material.Dark : Material.Light
+    Material.accent: defaultAccentColor
 
     MouseArea {
         id: topAreaTrigger
@@ -174,15 +179,12 @@ ApplicationWindow {
     header: ToolBar {
         id: toolbarContainer
 
-        property color incognitoColor: "#263238"
-        property color darkThemeColor: "#212121"
-
         property color backgroundColor: {
             if (incognito) {
                 return incognitoColor;
             }
             else if (darkThemeActive) {
-                return darkThemeColor
+                return darkThemeColor;
             }
             else if (!tabsModel.active.invalid && tabsModel.active.hasThemeColor && themeColorEnabled) {
                 return tabsModel.active.themeColor;
@@ -191,14 +193,11 @@ ApplicationWindow {
                 return "white";
             }
         }
-        property color foregroundColor: Utils.lightDark(backgroundColor, "#212121", "white")
+        property color foregroundColor: Utils.lightDark(backgroundColor, Material.color(Material.Grey, Material.Shade900), "white")
         property color accentColor: Utils.lightDark(backgroundColor, defaultAccentColor, "white")
-        property color defaultAccentColor: Material.color(Material.Pink)
         property bool hidden: isFullScreen
                               && !(topAreaTrigger.containsMouse || isOnToolbarTrigger.containsMouse)
                               && !toolbar.omnibox.editingUrl
-
-
 
         Layout.fillWidth: true
         Material.elevation: 0
@@ -251,6 +250,8 @@ ApplicationWindow {
                     tabController: tabController
                     tabsModel: tabController.tabsModel
                     searchUrl: window.searchUrl
+                    defaultAccentColor: window.defaultAccentColor
+
                     leftActions: [
                         Action {
                             iconName: "navigation/arrow_back"

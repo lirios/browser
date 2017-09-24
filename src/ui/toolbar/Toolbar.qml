@@ -33,6 +33,7 @@ Item {
     property TabsModel tabsModel
     property string searchUrl
     property alias omnibox: omnibox
+    property color defaultAccentColor
 
     property list<Action> leftActions
     property list<Action> rightActions
@@ -62,6 +63,7 @@ Item {
             tabsModel: toolbar.tabsModel
             tabController: toolbar.tabController
             searchUrl: toolbar.searchUrl
+            defaultAccentColor: toolbar.defaultAccentColor
         }
 
         ActionBar {
