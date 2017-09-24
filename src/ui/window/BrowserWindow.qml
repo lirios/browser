@@ -136,12 +136,13 @@ ApplicationWindow {
     MouseArea {
         id: topAreaTrigger
         parent: window.overlay
-        anchors.left: parent.left
-        anchors.right: parent.right
-        hoverEnabled: true
-
+        anchors {
+            left: parent.left
+            right: parent.right
+        }
         z:100
         height: 15
+        hoverEnabled: true
         enabled: window.isFullScreen
         onClicked: mouse.accepted = false;
         onPressed: mouse.accepted = false;
@@ -157,12 +158,12 @@ ApplicationWindow {
     }
 
     MouseArea {
-        z:100
         id: isOnToolbarTrigger
+        parent: window.overlay
+        z:100
         width: toolbarContainer.width
         height: headColumn.implicitHeight
         hoverEnabled: true
-        parent: window.overlay
         onClicked: mouse.accepted = false;
         onPressed: mouse.accepted = false;
         onReleased: mouse.accepted = false;
@@ -170,8 +171,7 @@ ApplicationWindow {
         onPositionChanged: mouse.accepted = false;
         onPressAndHold: mouse.accepted = false;
         onContainsMouseChanged: {
-            if (!containsMouse)
-            {
+            if (!containsMouse) {
                 enabled = false;
             }
         }
