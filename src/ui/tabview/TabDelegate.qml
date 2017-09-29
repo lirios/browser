@@ -55,8 +55,14 @@ Rectangle {
 
         Image {
             id: icon
-            Layout.preferredHeight: Units.iconSizes.small
-            Layout.preferredWidth: Units.iconSizes.small
+
+            property bool ready: status === Image.Ready
+
+            Layout.preferredHeight: height
+            Layout.preferredWidth: width
+
+            width: icon.ready ? sourceSize.width : 0
+            height: icon.ready ? sourceSize.height : 0
             source: iconSource
             clip: true
             sourceSize.width: Units.iconSizes.small
@@ -69,10 +75,23 @@ Rectangle {
                 color: {
                     if (adaptIconColor) {
                         return Utils.lightDark(backgroundColor, "transparent", "white");
-                    }
-                    else {
+                    } else {
                         return iconColor;
                     }
+                }
+            }
+
+            Behavior on height {
+                NumberAnimation {
+                    duration: Units.shortDuration
+                    easing.type: Easing.InOutQuad
+                }
+            }
+
+            Behavior on width {
+                NumberAnimation {
+                    duration: Units.shortDuration
+                    easing.type: Easing.InOutQuad
                 }
             }
         }
