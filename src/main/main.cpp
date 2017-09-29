@@ -71,17 +71,21 @@ static void loadTranslations()
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QQuickStyle::setStyle(QLatin1String("Material"));
 
     QGuiApplication app(argc, argv);
+
+    // Set app info
+    app.setOrganizationName(QStringLiteral("Liri"));
+    app.setOrganizationDomain(QStringLiteral("liri.io"));
+    app.setApplicationName(QStringLiteral("Browser"));
+    app.setDesktopFileName(QStringLiteral("io.liri.Browser.desktop"));
+    app.setWindowIcon(QIcon(":/res/icons/512x512/io.liri.Browser.png"));
 
     #ifdef Q_OS_MACOS
         MacOsEventListener evListener;
         initMacOsEventListener(&evListener);
     #endif
-
-    app.setWindowIcon(QIcon(":/res/icons/512x512/io.liri.Browser.png"));
-
-    QQuickStyle::setStyle(QLatin1String("Material"));
 
     QtWebEngine::initialize();
 
