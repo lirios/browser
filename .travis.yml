@@ -12,29 +12,35 @@ before_install:
   - sudo apt-get update -qq
     
 install:
-  - sudo apt-get -y -qq install qt58base qt58declarative qt58quickcontrols2 qt58svg qt58webengine qt58graphicaleffects qt58qbs
+  - sudo apt-get -y install qt58base qt58declarative qt58quickcontrols2 qt58svg qt58webengine qt58graphicaleffects qt58qbs qt58tools
   - source /opt/qt58/bin/qt58-env.sh
 
 script:
-  - mkdir -p ./appdir
-  - git submodule update --init --recursive
-  - mkdir deps
-  - cd deps
-  - git clone -b develop https://github.com/lirios/fluid
-  - cd fluid
-  - git submodule update --init
-  - ./scripts/fetch_icons.sh
-  - mkdir build
-  - cd build
-  - qmake CONFIG+=install_under_qt ../fluid.pro
-  - make -j4
-  - sudo make install
-  - cd ../../../
-  - mkdir build
+  # Configure qbs
   - qbs setup-toolchains --type gcc /usr/bin/g++ gcc
   - qbs setup-qt $(which qmake) travis-qt5
   - qbs config profiles.travis-qt5.baseProfile gcc
+
+  # Build and install Fluid
+  - cd fluid
+  - sudo $(which qbs) -d build -j $(nproc) profile:travis-qt5 qbs.installRoot:/opt qbs.installPrefix:qt58 lirideployment.qmlDir:qml project.withDocumentation:false project.withDemo:false
+  - sudo rm -fr build
+
+  # Build and install qbs-shared
+  - cd qbs/shared
+  # Replace Qbs version requirement (we don't use any Qbs >= 1.8.0 feature here)
+  # We have to stick with Qt 5.8 and thus qt58qbs (currently Qbs 1.7.2)
+  # for now because of https://github.com/lirios/browser/issues/62
+  - sed -i '/minimumQbsVersion/g' qbs-shared.qbs
+  - sudo $(which qbs) -d build -j $(nproc) profile:travis-qt5 qbs.installRoot:/opt qbs.installPrefix:qt58
+  - sudo rm -fr build
+
+  # Build and install app
+  - cd ../../../
+  - mkdir -p appdir
   - qbs -d build -j $(nproc) profile:travis-qt5 project.withFluid:false qbs.installRoot:appdir qbs.installPrefix:usr
+
+  # Create AppImage
   - sudo chown -R $USER appdir ; find appdir/
   - wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" 
   - chmod a+x linuxdeployqt*.AppImage
