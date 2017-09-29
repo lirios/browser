@@ -7,7 +7,9 @@ Project {
 
     property bool useStaticAnalyzer: false
 
-    property bool withFluid: false
+    property bool withFluid: qbs.targetOS.contains("windows") ||
+                             qbs.targetOS.contains("macos") ||
+                             qbs.targetOS.contains("android")
 
     minimumQbsVersion: "1.6"
 
@@ -27,10 +29,7 @@ Project {
         filePath: "fluid/fluid.qbs"
 
         Properties {
-            condition: withFluid ||
-                       qbs.targetOS.contains("windows") ||
-                       qbs.targetOS.contains("macos") ||
-                       qbs.targetOS.contains("android")
+            condition: withFluid
             autotestEnabled: false
             deploymentEnabled: false
             withDocumentation: false
