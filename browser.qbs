@@ -5,6 +5,8 @@ Project {
 
     readonly property string version: "0.0.0"
 
+    property bool useStaticAnalyzer: false
+
     property bool withFluid: false
 
     minimumQbsVersion: "1.6"
