@@ -44,3 +44,7 @@ script:
   - ./linuxdeployqt*.AppImage ./appdir/usr/share/applications/*.desktop -appimage -qmldir=. -verbose=2
   - find ./appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f 2-3 | sort | uniq
   - curl --upload-file ./Liri_Browser*.AppImage https://transfer.sh/Liri_Browser-git.$(git rev-parse --short HEAD)-x86_64.AppImage
+
+notifications:
+  email: false
+  slack: lirios:fdUqVmPzqPskEL1UBhqapZ0w
