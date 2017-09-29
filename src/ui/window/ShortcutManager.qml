@@ -111,7 +111,6 @@ Item {
 
     Shortcut {
         autoRepeat: false
-        context: Qt.ApplicationShortcut
         // for Mac it's handled via macEvents
         // due to bug https://bugreports.qt.io/browse/QTBUG-8596
         sequence: "Ctrl+Shift+Tab"
