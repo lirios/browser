@@ -1,7 +1,3 @@
-[submodule "qbs/shared"]
-	path = qbs/shared
-	url = git://github.com/lirios/qbs-shared.git
-	branch = master
 [submodule "fluid"]
 	path = fluid
 	url = git://github.com/lirios/fluid.git

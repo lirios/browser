@@ -11,7 +11,12 @@ Project {
 
     minimumQbsVersion: "1.6"
 
-    qbsSearchPaths: "qbs/shared"
+    qbsSearchPaths: {
+        var paths = [];
+        if (withFluid)
+            paths.push("fluid/qbs/shared");
+        return paths;
+    }
 
     references: [
         "res/res.qbs",
