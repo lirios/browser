@@ -34,7 +34,10 @@ Item {
 
     property var tabController
     property TabsModel tabsModel
-    property int tabWidth: 200
+    property int maxTabWidth: 200
+    property int minTabWidth: 130
+    property int tabWidth: Math.round(Math.min(Math.max(tabsListView.width / tabsListView.count, minTabWidth), maxTabWidth))
+    property bool overflow: tabWidth === minTabWidth
     property int tabHeight: 38
     property bool dragActive: false
     property color indicatorColor: Material.accent
@@ -48,7 +51,7 @@ Item {
 
     property list<Action> leftActions: [
         Action {
-            visible: tabsListView.contentWidth > tabsListView.width
+            visible: tabBar.overflow
             enabled: tabsListView.contentX > 0
             iconName: "navigation/chevron_left"
             onTriggered: {
@@ -68,7 +71,7 @@ Item {
 
     property list<Action> rightActions: [
         Action {
-            visible: tabsListView.contentWidth > tabsListView.width
+            visible: tabBar.overflow
             enabled: tabsListView.contentX + tabsListView.width < tabsListView.contentWidth
             iconName: "navigation/chevron_right"
             onTriggered: {
@@ -76,7 +79,7 @@ Item {
             }
         },
         Action {
-            visible: !floationActionBar.canShow
+            visible: !floatingActionBar.canShow
             iconName: "content/add"
             onTriggered: {
                 newTab();
@@ -118,7 +121,7 @@ Item {
                 id: delegateMouseArea
 
                 property bool dragActive: drag.active
-                property bool active: tabsModel.active.uid == uid
+                property bool active: tabsModel.active.uid === uid
                 property int visualIndex: index
 
                 width: tabBar.tabWidth
@@ -278,7 +281,7 @@ Item {
             }
 
             TabBarActionBar {
-                id: floationActionBar
+                id: floatingActionBar
                 anchors {
                     top: parent.top
                     bottom: parent.bottom
