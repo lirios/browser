@@ -82,6 +82,9 @@ int main(int argc, char *argv[])
     app.setDesktopFileName(QStringLiteral("io.liri.Browser.desktop"));
     app.setWindowIcon(QIcon(":/res/icons/512x512/io.liri.Browser.png"));
 
+    // Set the X11 WM_CLASS so X11 desktops can find the desktop file
+    qputenv("RESOURCE_NAME", "io.liri.Browser");
+
     #ifdef Q_OS_MACOS
         MacOsEventListener evListener;
         initMacOsEventListener(&evListener);
