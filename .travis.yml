@@ -1,55 +1,51 @@
-cache:
-  directories:
-    - /var/cache/apt/archives/*.deb
-  
 language: cpp
-compiler: gcc
-sudo: require
-dist: trusty
+
+matrix:
+  include:
+    - os: linux
+      cache:
+        directories:
+          - /var/cache/apt/archives/*.deb
+      compiler: gcc
+      sudo: require
+      dist: trusty
+    - os: osx
 
 before_install:
-  - sudo add-apt-repository ppa:beineri/opt-qt58-trusty -y
-  - sudo apt-get update -qq
-    
+  - ./.travis/update.sh
+
 install:
-  - sudo apt-get -y install qt58base qt58declarative qt58quickcontrols2 qt58svg qt58webengine qt58graphicaleffects qt58qbs qt58tools
-  - source /opt/qt58/bin/qt58-env.sh
+  - . ./.travis/install.sh
 
 script:
-  # Configure qbs
-  - qbs setup-toolchains --type gcc /usr/bin/g++ gcc
-  - qbs setup-qt $(which qmake) travis-qt5
-  - qbs config profiles.travis-qt5.baseProfile gcc
+  - ./.travis/build.sh && ./.travis/package.sh
 
-  # Build and install Fluid
-  - cd fluid
-  - sudo $(which qbs) -d build -j $(nproc) profile:travis-qt5 qbs.installRoot:/opt qbs.installPrefix:qt58 lirideployment.qmlDir:qml project.withDocumentation:false project.withDemo:false
-  - sudo rm -fr build
+before_deploy:
+  - git fetch --unshallow
+  - if [[ $TRAVIS_OS_NAME == 'linux' ]]; then packagetype=appimage ; fi
+  - if [[ $TRAVIS_OS_NAME == 'osx'   ]]; then packagetype=macos ; fi
+  - gittag=$(git describe --tags --abbrev=0)
+  - today=$(date +"%Y-%m-%d")
+  - gitrev=$(git log -1 --format="%h")
+  - gitdate=$(git log -1 --format="%aI")
+  - cat .travis/bintray.json.in |
+    sed -e "s,@BINTRAY_REPO@,$packagetype,g"
+        -e "s,@PKGVER@,$gittag,g"
+        -e "s,@GITTAG@,$gittag,g"
+        -e "s,@TODAY@,$today,g"
+        -e "s,@GITREV@,$gitrev,g"
+        -e "s,@GITDATE@,$gitdate,g"
+        > .travis/bintray.json
 
-  # Build and install qbs-shared
-  - cd qbs/shared
-  # Replace Qbs version requirement (we don't use any Qbs >= 1.8.0 feature here)
-  # We have to stick with Qt 5.8 and thus qt58qbs (currently Qbs 1.7.2)
-  # for now because of https://github.com/lirios/browser/issues/62
-  - sed -i '/minimumQbsVersion/g' qbs-shared.qbs
-  - sudo $(which qbs) -d build -j $(nproc) profile:travis-qt5 qbs.installRoot:/opt qbs.installPrefix:qt58
-  - sudo rm -fr build
-
-  # Build and install app
-  - cd ../../../
-  - mkdir -p appdir
-  - qbs -d build -j $(nproc) profile:travis-qt5 project.withFluid:false qbs.installRoot:appdir qbs.installPrefix:usr
-
-  # Create AppImage
-  - sudo chown -R $USER appdir ; find appdir/
-  - wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" 
-  - chmod a+x linuxdeployqt*.AppImage
-  - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
-  - ./linuxdeployqt*.AppImage ./appdir/usr/share/applications/*.desktop -bundle-non-qt-libs -qmldir=. -verbose=2
-  - rm ./appdir/io.liri.Browser.png # Workaround for linuxedeloyqt bug
-  - ./linuxdeployqt*.AppImage ./appdir/usr/share/applications/*.desktop -appimage -qmldir=. -verbose=2
-  - find ./appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f 2-3 | sort | uniq
-  - curl --upload-file ./Liri_Browser*.AppImage https://transfer.sh/Liri_Browser-git.$(git rev-parse --short HEAD)-x86_64.AppImage
+deploy:
+  provider: bintray
+  file: .travis/bintray.json
+  on:
+    tags: true
+  user:
+    secure: "VkihJWmsRrCJaoN0TDEQYUxA+BzUr62x+zG+5WcUAU0jMhQjGa/ZIHhKPaIyx9lPZxQRvP2wtU70gMk5fnjD07TlkWfzskhIdjVZQViiu+0QDSSASTiyRFHx5MeVvV3v0nJKJssIzp9l4AG8fhnTXue6h35GpfGHrDE7+ol+fdIZM/E2dDm7Pt/ONS/LFcSiE3oB++glTE/z9YGIAXKjZgh8A0GicJNyvA+UgVd5ir0JspCnXN3TRnL6tm4upFhxeNII+O9SDdVQaQ055BicJiDdrjQcmdwRx3rzsT21mZ3xQqA5O2M2Hv2BQgZXaEtL1pf0udmmWlHcOyKVD7+UJmQqVi+oPO82GX0Zjr3DPHUUNHA2ZOTzVLOJz2G7VK+yZ6TSIQPSR3Lzlr09zsuHpnyuhH4IRl5HfIj+HAvhT/yFgZgaCqpDwxZFU67n49EMDjb42bhpNzBK/210VyCkIJIrAOikaeCZ0PgiwIuRJ3xMFr3vkQwePTswhkwGtw5SgWqb17WXX9tqwWvzS39nSLIWTXai5mHHm8CZTwbanJDafIRPuWaj5JwvpNMJr19vI8x4r1qJ1+aNnnjLT5Zk6UtPc/PkIOwTiB7+1WD3C1vqWWqa/KH9YPddcf7I58MCigiGSeOsjyh5SMFoyoGbk1zA8F+ihI35FOyaW+3czr4="
+  key:
+    secure: "NgyGHAg1dvzeT9oNq3buZglc9Dps5B7fuim1Xg2mH+OoWWL9GXRNJngEmER/NmzB4KYq6VqvdfdQnxgCnyLR/86u/t5tRe5bOYt5YLOGsOCpognEoGc9hHaIX0u0Hro/ApycRs5XsWQMt6G9Ih5zzbd4DM31Rn1HELFiIF7PMZCac18Q3sW1mfpivpc01X6EyDfniME1C0is+DVquJXGLZ2zWPx8UTypBsledBn5bFcwUkPJVlr0ofAqOcP/muVjjG6zsbqT6zx5CdjCaLtqRXLiMMB2i67TkmT4U2No+p1Qg19zD7pjsd9N/7CINq29yLlbsahxZr0ItE3Zl5D4JrZTpXbSXlH0Rfljsafo0dsIJCcJnqZHLLoJg0IWFOOrcCZ/qgH9aAyXKFahkPWorHFAyVffDQYwytOy0KCMs+aZE+VknQjmn/+rZKo4Yal2yHXtKgnra8jk8zyL50ZZ7fj6veKl1o5TP1qXwMYP11FmZ5B6x6svH6w8hr7lDAztFtN3P5w/aBHReSsW7HyqO9Jref9Ww3WjdPfbRg8TrgmSV4p3KLw1boHVbZCcp30Ew5y9TwjdhA2cbCoc/qaZQj+Dj823j6q+mREctetR7Ucj2Ma6fA0GVm5M/12w1DjSAVIKrHCr6jodWYcpaozow8EL5HC5eoeJTOWL91PEVd0="
 
 notifications:
   email: false

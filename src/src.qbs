@@ -1,14 +1,37 @@
 import qbs 1.0
 
 QtGuiApplication {
+    readonly property bool isBundle: qbs.targetOS.contains("darwin") && bundle.isBundle
+
     name: "liri-browser"
     consoleApplication: false
+
+    Properties {
+        condition: qbs.targetOS.contains("macos")
+        cpp.frameworks: ["AppKit", "Foundation"]
+    }
+
+    bundle.identifierPrefix: "io.liri"
+    bundle.identifier: "io.liri.Browser"
 
     Qt.core.resourcePrefix: "/"
     Qt.core.resourceSourceBase: "../src"
 
     Depends { name: "lirideployment" }
     Depends { name: "Qt"; submodules: ["qml", "quick", "quickcontrols2", "webengine"] }
+    Depends { name: "ib"; condition: qbs.targetOS.contains("macos") }
+
+    Group {
+        qbs.install: true
+        qbs.installDir: {
+            if (qbs.targetOS.contains("linux"))
+                return lirideployment.binDir;
+            else
+                return "";
+        }
+        qbs.installSourceBase: isBundle ? product.buildDirectory : ""
+        fileTagsFilter: isBundle ? ["bundle.content"] : ["application"]
+    }
 
     Group {
         name: "Core"
@@ -22,7 +45,7 @@ QtGuiApplication {
     }
 
     Group {
-        condition: qbs.targetOS.contains("darwin")
+        condition: qbs.targetOS.contains("macos")
         name: "macOS"
         files: ["main/mac/**"]
     }
@@ -61,18 +84,5 @@ QtGuiApplication {
             "scalable/io.liri.Browser.svg",
         ]
         fileTags: ["qt.core.resource_data"]
-    }
-
-    Group {
-        qbs.install: true
-        qbs.installDir: {
-            if (qbs.targetOS.contains("windows"))
-                return "";
-            else if (qbs.targetOS.contains("darwin"))
-                return "Contents/MacOS";
-            else
-                return lirideployment.binDir;
-        }
-        fileTagsFilter: product.type
     }
 }

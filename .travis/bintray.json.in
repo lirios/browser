@@ -1,0 +1,22 @@
+{
+  "package": {
+    "name": "Browser",
+    "repo": "@BINTRAY_REPO@",
+    "subject": "liri"
+  },
+  "version": {
+    "name": "@PKGVER@",
+    "desc": "Automatic CI build of the release",
+    "released": "@TODAY@",
+    "vcs_tag": "@GITTAG@",
+    "attributes": [
+      {"name": "gitrevision", "values": ["@GITREV@"], "type": "string"},
+      {"name": "gitdate", "values": ["@GITDATE@"], "type": "date"}
+    ],
+    "gpgSign": false
+  },
+  "files": [
+    {"includePattern": "build/(Liri_Browser.*\\.(AppImage|dmg))", "uploadPattern": "$1", "matrixParams": {"override": 1}}
+  ],
+  "publish": true
+}
