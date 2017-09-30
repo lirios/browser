@@ -21,6 +21,12 @@ QtGuiApplication {
     Depends { name: "Qt"; submodules: ["qml", "quick", "quickcontrols2", "webengine"] }
     Depends { name: "ib"; condition: qbs.targetOS.contains("macos") }
 
+    files: [
+        "core/**",
+        "main/main.cpp",
+        "3rdparty/**",
+    ]
+
     Group {
         qbs.install: true
         qbs.installDir: {
@@ -34,26 +40,9 @@ QtGuiApplication {
     }
 
     Group {
-        name: "Core"
-        prefix: "core/"
-        files: ["**"]
-    }
-
-    Group {
-        name: "Main"
-        files: ["main/main.cpp"]
-    }
-
-    Group {
         condition: qbs.targetOS.contains("macos")
         name: "macOS"
         files: ["main/mac/**"]
-    }
-
-    Group {
-        name: "Third party"
-        prefix: "3rdparty/"
-        files: ["**"]
     }
 
     Group {
