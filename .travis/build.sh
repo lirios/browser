@@ -18,6 +18,10 @@ if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
     cd ../
     qbs -d build -j $(sysctl -n hw.ncpu) profile:travis-qt5 project.withFluid:false
 else
+    # Build qbs
+    git clone -b v1.9.0 https://code.qt.io/qt-labs/qbs.git qbs-src
+    cd qbs-src && qmake -r qbs.pro && make -j$(nproc) && sudo make install && cd ..
+
     # Configure qbs
     qbs setup-toolchains --type gcc /usr/bin/g++ gcc
     qbs setup-qt $(which qmake) travis-qt5
@@ -26,7 +30,7 @@ else
 
     # Build and install Fluid
     cd fluid
-    sudo $(which qbs) -d build -j $(nproc) profile:travis-qt5 qbs.installRoot:/opt qbs.installPrefix:qt58 lirideployment.qmlDir:qml project.withDocumentation:false project.withDemo:false
+    sudo $(which qbs) -d build -j $(nproc) profile:travis-qt5 qbs.installRoot:/opt qbs.installPrefix:qt58 modules.lirideployment.qmlDir:qml project.withDocumentation:false project.withDemo:false
     sudo rm -fr build
 
     # Build and install app
