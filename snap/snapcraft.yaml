@@ -25,9 +25,11 @@ apps:
         # https://bugreports.qt.io/browse/QTBUG-41242
         QT_XCB_FORCE_SOFTWARE_OPENGL: 1
     plugs:
-      - x11
-      - opengl
+      - desktop
+      - desktop-legacy
+      - wayland
       - unity7
+      - opengl
       - browser-sandbox
       - network
       - network-bind
