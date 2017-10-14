@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Liri Browser
+Comment=Material Design Webbrowser
+Exec=liri-browser %U
+Terminal=false
+Type=Application
+Categories=Qt;Network;WebBrowser;
+Keywords=Web;Browser;
+Icon=${SNAP}/share/icons/hicolor/256x256/apps/io.liri.Browser.png

@@ -2,3 +2,6 @@
 	path = fluid
 	url = git://github.com/lirios/fluid.git
 	branch = develop
+[submodule "snap/plugins"]
+	path = snap/plugins
+	url = https://github.com/lirios/snapcraft-plugins
