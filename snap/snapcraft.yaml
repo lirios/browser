@@ -40,7 +40,6 @@ apps:
 parts:
   liri-browser:
     source: .
-    source-type: git
     plugin: qbs
     build-attributes: ["no-system-libraries"]
     after:
