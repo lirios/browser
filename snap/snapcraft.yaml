@@ -4,6 +4,7 @@ summary: A cross-platform material web browser
 description: A cross-platform material web browser
 grade: devel
 confinement: strict
+architectures: [amd64]
 
 plugs:
   browser-sandbox:
