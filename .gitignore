@@ -48,6 +48,7 @@ databases/
 /.project
 
 # Snapcraft
+.snapcraft/
 parts/
 prime/
 stage/
