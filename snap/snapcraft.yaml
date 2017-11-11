@@ -19,6 +19,7 @@ plugs:
 apps:
   liri-browser:
     command: liri-app-launch $SNAP/bin/liri-browser
+    desktop: share/applications/io.liri.Browser.desktop
     environment:
         # Workaround QtWebEngine crashing when
         # using Nouveau graphic drivers by forcing
@@ -42,6 +43,8 @@ parts:
   liri-browser:
     source: .
     plugin: qbs
+    prepare: |
+      sed -i 's|Icon=.*|Icon=${SNAP}/share/icons/hicolor/256x256/apps/io\.liri\.Browser\.png|g' res/io.liri.Browser.desktop
     build-attributes: ["no-system-libraries"]
     after:
       - liri-platform-0-9
