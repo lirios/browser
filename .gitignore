@@ -46,3 +46,11 @@ databases/
 
 #GitEye
 /.project
+
+# Snapcraft
+.snapcraft/
+parts/
+prime/
+stage/
+*.snap
+*source.tar.bz2

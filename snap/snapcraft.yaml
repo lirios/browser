@@ -1,0 +1,50 @@
+name: liri-browser
+version: git
+summary: A cross-platform material web browser
+description: A cross-platform material web browser
+grade: devel
+confinement: strict
+architectures: [amd64]
+
+plugs:
+  browser-sandbox:
+    interface: browser-support
+    allow-sandbox: true
+  platform:
+    interface: content
+    content: liri-platform
+    target: liri-platform
+    default-provider: liri-platform-0-9
+
+apps:
+  liri-browser:
+    command: liri-app-launch $SNAP/bin/liri-browser
+    desktop: share/applications/io.liri.Browser.desktop
+    environment:
+        # Workaround QtWebEngine crashing when
+        # using Nouveau graphic drivers by forcing
+        # the Qt xcb plugin to use software rendering:
+        # https://bugreports.qt.io/browse/QTBUG-41242
+        QT_XCB_FORCE_SOFTWARE_OPENGL: 1
+    plugs:
+      - desktop
+      - desktop-legacy
+      - wayland
+      - unity7
+      - opengl
+      - browser-sandbox
+      - network
+      - network-bind
+      - pulseaudio
+      - camera
+      - screen-inhibit-control
+
+parts:
+  liri-browser:
+    source: .
+    plugin: qbs
+    prepare: |
+      sed -i 's|Icon=.*|Icon=${SNAP}/share/icons/hicolor/256x256/apps/io\.liri\.Browser\.png|g' res/io.liri.Browser.desktop
+    build-attributes: ["no-system-libraries"]
+    after:
+      - liri-platform-0-9
