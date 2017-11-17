@@ -9,7 +9,7 @@ architectures: [amd64]
 plugs:
   browser-sandbox:
     interface: browser-support
-    allow-sandbox: true
+    allow-sandbox: false
   platform:
     interface: content
     content: liri-platform
@@ -26,6 +26,9 @@ apps:
         # the Qt xcb plugin to use software rendering:
         # https://bugreports.qt.io/browse/QTBUG-41242
         QT_XCB_FORCE_SOFTWARE_OPENGL: 1
+        # Disable Chromium sandbox since we're running
+        # strictly confined anyway.
+        QTWEBENGINE_DISABLE_SANDBOX: 1
     plugs:
       - desktop
       - desktop-legacy
