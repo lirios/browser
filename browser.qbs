@@ -30,6 +30,7 @@ Project {
 
         Properties {
             condition: withFluid
+            useSystemQbsShared: false
             autotestEnabled: false
             deploymentEnabled: false
             withDocumentation: false
