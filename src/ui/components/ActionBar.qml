@@ -44,18 +44,20 @@ Item {
         Repeater {
             id: actionRepeater
             model: actions
-            delegate: IconButton {
+            delegate: ToolButton {
                 id: iconButton
                 visible: model.visible
                 implicitHeight: 40
                 implicitWidth: 40
-                iconSource: model.iconSource
-                iconSize: actionBar.iconSize
+                icon.name: model.icon.name
+                icon.source: model.icon.source
+                icon.width: actionBar.iconSize
+                icon.height: actionBar.iconSize
                 enabled: model.enabled
-                iconColor: enabled ? foregroundColor : ColorUtils.shadeColor(foregroundColor, 0.5)
+                icon.color: enabled ? foregroundColor : ColorUtils.shadeColor(foregroundColor, 0.5)
                 onClicked: actions[index].triggered(iconButton)
 
-                Behavior on iconColor {
+                Behavior on icon.color {
                     enabled: animationsEnabled
                     ColorAnimation {
                         duration: Units.mediumDuration

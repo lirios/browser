@@ -59,30 +59,30 @@ BaseOverlay {
             }
         }
 
-        IconButton {
+        ToolButton {
             enabled: searchEnabled
             implicitHeight: 40
             implicitWidth: 40
-            iconName: "hardware/keyboard_arrow_up"
+            icon.name: "hardware/keyboard_arrow_up"
             onClicked: {
                 searchRequested(searchField.text, true);
             }
         }
 
-        IconButton {
+        ToolButton {
             enabled: searchEnabled
             implicitHeight: 40
             implicitWidth: 40
-            iconName: "hardware/keyboard_arrow_down"
+            icon.name: "hardware/keyboard_arrow_down"
             onClicked: {
                 searchRequested(searchField.text, false);
             }
         }
 
-        IconButton {
+        ToolButton {
             implicitHeight: 40
             implicitWidth: 40
-            iconName: "navigation/close"
+            icon.name: "navigation/close"
             onClicked: {
                 searchOverlay.close();
             }

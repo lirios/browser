@@ -112,15 +112,16 @@ Rectangle {
             }
         }
 
-        IconButton {
-            iconName: "navigation/close"
+        ToolButton {
+            icon.name: "navigation/close"
             onClicked: closeRequested()
-            iconColor: active ? foregroundColor : ColorUtils.shadeColor(foregroundColor, 0.5)
-            iconSize: 18
+            icon.color: active ? foregroundColor : ColorUtils.shadeColor(foregroundColor, 0.5)
+            icon.width: 18
+            icon.height: 18
             implicitHeight: 24
             implicitWidth: 24
 
-            Behavior on iconColor {
+            Behavior on icon.color {
                 ColorAnimation {
                     duration: Units.mediumDuration
                     easing.type: Easing.InOutQuad

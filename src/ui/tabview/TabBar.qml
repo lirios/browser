@@ -53,7 +53,7 @@ Item {
         Action {
             visible: tabBar.overflow
             enabled: tabsListView.contentX > 0
-            iconName: "navigation/chevron_left"
+            icon.name: "navigation/chevron_left"
             onTriggered: {
                 tabsListView.flick(programmaticFlickVelocity, 0);
             }
@@ -62,7 +62,7 @@ Item {
 
     property list<Action> floatingActions: [
         Action {
-            iconName: "content/add"
+            icon.name: "content/add"
             onTriggered: {
                 newTab();
             }
@@ -73,14 +73,14 @@ Item {
         Action {
             visible: tabBar.overflow
             enabled: tabsListView.contentX + tabsListView.width < tabsListView.contentWidth
-            iconName: "navigation/chevron_right"
+            icon.name: "navigation/chevron_right"
             onTriggered: {
                 tabsListView.flick(-programmaticFlickVelocity, 0);
             }
         },
         Action {
             visible: !floatingActionBar.canShow
-            iconName: "content/add"
+            icon.name: "content/add"
             onTriggered: {
                 newTab();
             }

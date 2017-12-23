@@ -84,8 +84,8 @@ ListItem {
             }
         }
 
-        IconButton {
-            iconName: "navigation/cancel"
+        ToolButton {
+            icon.name: "navigation/cancel"
             onClicked: {
                 // Cancel engine download
                 download.cancel();
