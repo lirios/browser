@@ -19,7 +19,7 @@ if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
     qbs -d build -j $(sysctl -n hw.ncpu) profile:travis-qt5 project.withFluid:false
 else
     # Build qbs
-    git clone -b v1.9.0 https://code.qt.io/qt-labs/qbs.git qbs-src
+    git clone -b v1.9.0 https://code.qt.io/qbs/qbs.git qbs-src
     cd qbs-src && qmake -r qbs.pro && make -j$(nproc) && sudo make install && cd ..
 
     # Configure qbs
