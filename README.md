@@ -6,7 +6,7 @@ Liri Browser
 [![Build Status](https://travis-ci.org/lirios/browser.svg?branch=develop)](https://travis-ci.org/lirios/browser)
 [![Snap Status](https://build.snapcraft.io/badge/lirios/browser.svg)](https://build.snapcraft.io/user/lirios/browser)
 [![GitHub issues](https://img.shields.io/github/issues/lirios/browser.svg)](https://github.com/lirios/browser/issues)
-[![Maintained](https://img.shields.io/maintenance/yes/2017.svg)](https://github.com/lirios/browser/commits/develop)
+[![Maintained](https://img.shields.io/maintenance/yes/2018.svg)](https://github.com/lirios/browser/commits/develop)
 
 A cross-platform Material Design web browser.
 
