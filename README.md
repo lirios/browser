@@ -26,9 +26,13 @@ The following modules and their dependencies are required:
  * [qbs-shared](https://github.com/lirios/qbs-shared.git)
  * [fluid](https://github.com/lirios/fluid.git)
 
-## Build
+## Installation
 
-Liri Browser uses [Qbs](http://doc.qt.io/qbs/) as build system.
+We use the [Qbs](http://doc.qt.io/qbs/) build system.
+
+If you want to learn more, please read the [Qbs manual](http://doc.qt.io/qbs/index.html),
+especially the [setup guide](http://doc.qt.io/qbs/configuring.html) and how to install artifacts
+from the [installation guide](http://doc.qt.io/qbs/installing-files.html).
 
 If you haven't already, start by setting up a `qt5` profile for `qbs`:
 
@@ -46,23 +50,30 @@ qbs -d build -j $(nproc) profile:qt5 # use sudo if necessary
 
 To the `qbs` call above you can append additional configuration parameters:
 
- * `project.withFluid:true`: use git submodule for Fluid
- * `qbs.installRoot:/install/root`: e.g. /
- * `qbs.installPrefix:path/to/install`: e.g. opt/liri or usr
+ * `modules.lirideployment.prefix:/path/to/prefix` where most files are installed (default: `/usr/local`)
+ * `modules.lirideployment.dataDir:path/to/lib` where data files are installed (default: `/usr/local/share`)
+ * `modules.lirideployment.libDir:path/to/lib` where libraries are installed (default: `/usr/local/lib`)
+ * `modules.lirideployment.qmlDir:path/to/qml` where QML plugins are installed (default: `/usr/local/lib/qml`)
+ * `modules.lirideployment.pluginsDir:path/to/plugins` where Qt plugins are installed (default: `/usr/local/lib/plugins`)
+ * `modules.lirideployment.qbsModulesDir:path/to/qbs` where Qbs modules are installed (default: `/usr/local/share/qbs/modules`)
 
-If you are looking for more detailed setup instructions, please head over to 
-[the Development Setup wiki page](https://github.com/lirios/browser/wiki/Development-Setup).
+See [lirideployment.qbs](https://github.com/lirios/qbs-shared/blob/develop/modules/lirideployment/lirideployment.qbs)
+for more deployment-related parameters.
+
+You can also append the following options to the last line:
+
+ * `project.withFluid:true`: use git submodule for Fluid
 
 ## Documentation
 
-Find more information in the [Liri Browser wiki](https://github.com/lirios/browser/wiki).
+Find more information in the [Liri Browser documentation](https://liri-dev.readthedocs.io/en/latest/modules/browser/).
 
 ## Credits
 
 Many thanks to ...
 
-* [Corbin Crutchley](https://github.com/crutchcorn) for creating the application icon
-* [Simon Peter](https://github.com/probonopd) for adding AppImage support
+ * [Corbin Crutchley](https://github.com/crutchcorn) for creating the application icon
+ * [Simon Peter](https://github.com/probonopd) for adding AppImage support
 
 Please refer to [AUTHORS.md](AUTHORS.md) for a list of everyone who directly contributed code via Git.
 
