@@ -48,7 +48,7 @@ ListItem {
         spacing: Units.smallSpacing
 
         Icon {
-            name: "file/file_download"
+            source: Utils.iconurl("file/file_download")
         }
 
         ColumnLayout {
@@ -85,7 +85,7 @@ ListItem {
         }
 
         ToolButton {
-            icon.name: "navigation/cancel"
+            icon.source: Utils.iconUrl("navigation/cancel")
             onClicked: {
                 // Cancel engine download
                 download.cancel();

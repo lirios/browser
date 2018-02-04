@@ -26,7 +26,6 @@ import QtQuick.Layouts 1.0
 import QtQuick.Controls 2.0
 import QtQuick.Controls.Material 2.0
 import QtGraphicalEffects 1.0
-import Fluid.Core 1.0
 import Fluid.Controls 1.0
 import ".."
 
@@ -74,7 +73,7 @@ Rectangle {
                 source: icon
                 color: {
                     if (adaptIconColor) {
-                        return Utils.lightDark(backgroundColor, "transparent", "white");
+                        return Color.lightDark(backgroundColor, "transparent", "white");
                     } else {
                         return iconColor;
                     }
@@ -113,7 +112,7 @@ Rectangle {
         }
 
         ToolButton {
-            icon.name: "navigation/close"
+            icon.source: Utils.iconUrl("navigation/close")
             onClicked: closeRequested()
             icon.color: active ? foregroundColor : ColorUtils.shadeColor(foregroundColor, 0.5)
             icon.width: 18

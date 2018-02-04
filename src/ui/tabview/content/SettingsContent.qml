@@ -25,7 +25,7 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.0
 import QtQuick.Controls 2.0
 import Fluid.Core 1.0
-import Fluid.Controls 1.0
+import Fluid.Controls 1.0 as FluidControls
 import core 1.0
 import "../.."
 
@@ -39,7 +39,7 @@ TabContent {
     Flickable {
         anchors {
             fill: parent
-            margins: 2 * Units.smallSpacing
+            margins: 2 * FluidControls.Units.smallSpacing
         }
 
         ScrollBar.vertical: ScrollBar {}
@@ -54,13 +54,13 @@ TabContent {
 
             Column {
                 width: parent.width
-                spacing: 2 * Units.smallSpacing
+                spacing: 2 * FluidControls.Units.smallSpacing
 
-                HeadlineLabel {
+                FluidControls.HeadlineLabel {
                     text: qsTr("Settings")
                 }
 
-                TitleLabel {
+                FluidControls.TitleLabel {
                     text: qsTr("Start")
                 }
 
@@ -71,7 +71,7 @@ TabContent {
 
                 GridLayout {
                     columns: 2
-                    columnSpacing: 2 * Units.smallSpacing
+                    columnSpacing: 2 * FluidControls.Units.smallSpacing
 
                     Label {
                         text: qsTr("Primary")
@@ -119,7 +119,7 @@ TabContent {
                     }
                 }
 
-                TitleLabel {
+                FluidControls.TitleLabel {
                     text: qsTr("Search")
                 }
 
@@ -197,7 +197,7 @@ TabContent {
                     }
                 }
 
-                TitleLabel {
+                FluidControls.TitleLabel {
                     text: qsTr("Theme")
                 }
 
@@ -318,7 +318,7 @@ TabContent {
     Binding {
         target: content.tab
         property: "iconUrl"
-        value: Utils.getSourceForIconName("action/settings")
+        value: FluidControls.Utils.iconUrl("action/settings")
     }
 
     Binding {

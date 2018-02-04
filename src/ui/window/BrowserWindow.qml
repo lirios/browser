@@ -27,7 +27,6 @@ import QtQuick.Controls 2.0
 import QtQuick.Controls.Material 2.0
 import QtQuick.Window 2.0
 import QtWebEngine 1.2
-import Fluid.Core 1.0
 import Fluid.Controls 1.0
 import core 1.0
 import ".."
@@ -195,8 +194,8 @@ ApplicationWindow {
                 return "white";
             }
         }
-        property color foregroundColor: Utils.lightDark(backgroundColor, Material.color(Material.Grey, Material.Shade900), "white")
-        property color accentColor: Utils.lightDark(backgroundColor, defaultAccentColor, "white")
+        property color foregroundColor: Color.lightDark(backgroundColor, Material.color(Material.Grey, Material.Shade900), "white")
+        property color accentColor: Color.lightDark(backgroundColor, defaultAccentColor, "white")
         property bool hidden: isFullScreen
                               && !(topAreaTrigger.containsMouse || isOnToolbarTrigger.containsMouse)
                               && !toolbar.omnibox.editingUrl
@@ -256,12 +255,12 @@ ApplicationWindow {
 
                     leftActions: [
                         Action {
-                            icon.name: "navigation/arrow_back"
+                            icon.source: Utils.iconUrl("navigation/arrow_back")
                             enabled: tabsModel.active.valid && tabsModel.active.canGoBack
                             onTriggered: tabsModel.active.goBack()
                         },
                         Action {
-                            icon.name: "navigation/arrow_forward"
+                            icon.source: Utils.iconUrl("navigation/arrow_forward")
                             enabled: tabsModel.active.valid && tabsModel.active.canGoForward
                             onTriggered: tabsModel.active.goForward()
                         }
@@ -269,7 +268,7 @@ ApplicationWindow {
                     rightActions: [
                         Action {
                             enabled: tabsModel.active.valid && tabsModel.active.canReload
-                            icon.name: tabsModel.active.loading ? "navigation/close" : "navigation/refresh"
+                            icon.source: Utils.iconUrl(tabsModel.active.loading ? "navigation/close" : "navigation/refresh")
                             onTriggered: {
                                 if (tabsModel.active.loading)
                                     tabsModel.active.stop();
@@ -279,14 +278,14 @@ ApplicationWindow {
                         },
                         Action {
                             visible: downloadsModel.count > 0
-                            icon.name: "file/file_download"
+                            icon.source: Utils.iconUrl("file/file_download")
                             onTriggered: {
                                 rightDrawer.loadContent(rightDrawer.downloads);
                                 rightDrawer.open();
                             }
                         },
                         Action {
-                            icon.name: "navigation/fullscreen_exit"
+                            icon.source: Utils.iconUrl("navigation/fullscreen_exit")
                             visible: window.isFullScreen
                             onTriggered: {
                                 toggleFullScreen()
@@ -294,7 +293,7 @@ ApplicationWindow {
                         },
                         Action {
                             id: toolbarOverflowAction
-                            icon.name: "navigation/more_vert"
+                            icon.source: Utils.iconUrl("navigation/more_vert")
                             onTriggered: {
                                 toolbarActionsOverflowMenu.open();
                             }
@@ -410,7 +409,7 @@ ApplicationWindow {
 
         MenuItem {
             text: qsTr("New window")
-            icon.name: "action/open_in_new"
+            icon.source: Utils.iconUrl("action/open_in_new")
             onClicked: {
                 var window = root.newWindow();
                 window.showNormal();
@@ -419,7 +418,7 @@ ApplicationWindow {
 
         MenuItem {
             text: qsTr("Private Window")
-            icon.name: "hardware/security"
+            icon.source: Utils.iconUrl("hardware/security")
             onClicked: {
                 var window = root.newIncognitoWindow();
                 window.showNormal();
@@ -428,7 +427,7 @@ ApplicationWindow {
 
         MenuItem {
             text: qsTr("Find in page")
-            icon.name: "action/find_in_page"
+            icon.source: Utils.iconUrl("action/find_in_page")
             // Disable find in page overlay when there is no open tab
             enabled: !tabController.tabsModel.empty
             onClicked: {
@@ -438,7 +437,7 @@ ApplicationWindow {
 
         MenuItem {
             text: qsTr("Downloads")
-            icon.name: "file/file_download"
+            icon.source: Utils.iconUrl("file/file_download")
             onClicked: {
                 rightDrawer.loadContent(rightDrawer.downloads);
                 rightDrawer.open();
@@ -447,7 +446,7 @@ ApplicationWindow {
 
         MenuItem {
             text: window.isFullScreen? qsTr("Exit fullscreen") : qsTr("Fullscreen")
-            icon.name: !window.isFullScreen ? "navigation/fullscreen" : "navigation/fullscreen_exit"
+            icon.source: Utils.iconUrl(!window.isFullScreen ? "navigation/fullscreen" : "navigation/fullscreen_exit")
             onClicked: {
                 toggleFullScreen();
             }
@@ -455,7 +454,7 @@ ApplicationWindow {
 
         MenuItem {
             text: qsTr("Settings")
-            icon.name: "action/settings"
+            icon.source: Utils.iconUrl("action/settings")
             onClicked: {
                 tabController.openUrl("liri://settings");
             }

@@ -53,7 +53,7 @@ Item {
         anchors.fill: parent
 
         radius: 2
-        color: Utils.lightDark(Material.background, Material.color(Material.Grey, Material.Shade200), "white")
+        color: Color.lightDark(Material.background, Material.color(Material.Grey, Material.Shade200), "white")
 
         RowLayout {
             anchors {
@@ -71,7 +71,7 @@ Item {
                 Layout.fillWidth: true
 
                 Material.foreground: Material.color(Material.Grey, Material.Shade900)
-                Material.accent: Utils.lightDark(Material.background, defaultAccentColor, Material.background)
+                Material.accent: Color.lightDark(Material.background, defaultAccentColor, Material.background)
 
                 bottomPadding: Units.smallSpacing
 
@@ -131,7 +131,7 @@ Item {
 
             height: 2
             width: parent.width * (tabsModel.active.loadProgress / 100)
-            color: Utils.lightDark(Material.background, defaultAccentColor, Material.background)
+            color: Color.lightDark(Material.background, defaultAccentColor, Material.background)
 
             Behavior on width {
                 enabled: tabsModel.active.loading

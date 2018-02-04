@@ -63,7 +63,7 @@ BaseOverlay {
             enabled: searchEnabled
             implicitHeight: 40
             implicitWidth: 40
-            icon.name: "hardware/keyboard_arrow_up"
+            icon.source: Utils.iconUrl("hardware/keyboard_arrow_up")
             onClicked: {
                 searchRequested(searchField.text, true);
             }
@@ -73,7 +73,7 @@ BaseOverlay {
             enabled: searchEnabled
             implicitHeight: 40
             implicitWidth: 40
-            icon.name: "hardware/keyboard_arrow_down"
+            icon.source: Utils.iconUrl("hardware/keyboard_arrow_down")
             onClicked: {
                 searchRequested(searchField.text, false);
             }
@@ -82,7 +82,7 @@ BaseOverlay {
         ToolButton {
             implicitHeight: 40
             implicitWidth: 40
-            icon.name: "navigation/close"
+            icon.source: Utils.iconUrl("navigation/close")
             onClicked: {
                 searchOverlay.close();
             }

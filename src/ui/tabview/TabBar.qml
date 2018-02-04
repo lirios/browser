@@ -25,7 +25,6 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.0
 import QtQuick.Controls 2.0
 import QtQuick.Controls.Material 2.0
-import Fluid.Core 1.0
 import Fluid.Controls 1.0
 import core 1.0
 
@@ -53,7 +52,7 @@ Item {
         Action {
             visible: tabBar.overflow
             enabled: tabsListView.contentX > 0
-            icon.name: "navigation/chevron_left"
+            icon.source: Utils.iconUrl("navigation/chevron_left")
             onTriggered: {
                 tabsListView.flick(programmaticFlickVelocity, 0);
             }
@@ -62,7 +61,7 @@ Item {
 
     property list<Action> floatingActions: [
         Action {
-            icon.name: "content/add"
+            icon.source: Utils.iconUrl("content/add")
             onTriggered: {
                 newTab();
             }
@@ -73,14 +72,14 @@ Item {
         Action {
             visible: tabBar.overflow
             enabled: tabsListView.contentX + tabsListView.width < tabsListView.contentWidth
-            icon.name: "navigation/chevron_right"
+            icon.source: Utils.iconUrl("navigation/chevron_right")
             onTriggered: {
                 tabsListView.flick(-programmaticFlickVelocity, 0);
             }
         },
         Action {
             visible: !floatingActionBar.canShow
-            icon.name: "content/add"
+            icon.source: Utils.iconUrl("content/add")
             onTriggered: {
                 newTab();
             }
