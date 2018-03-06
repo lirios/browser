@@ -86,7 +86,7 @@ ApplicationWindow {
             request.accept();
         }
         onOpenUrlInNewPrivateWindowRequested: {
-            root.openUrl(url, true);
+            root.openUrlInNewWindow(url, true);
         }
     }
 
@@ -131,6 +131,10 @@ ApplicationWindow {
 
     Material.theme: darkThemeActive || incognito ? Material.Dark : Material.Light
     Material.accent: defaultAccentColor
+
+    onClosing: {
+        root.destroyWindow(window);
+    }
 
     MouseArea {
         id: topAreaTrigger

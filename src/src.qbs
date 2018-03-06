@@ -23,7 +23,7 @@ QtGuiApplication {
 
     files: [
         "core/**",
-        "main/main.cpp",
+        "main/*",
         "3rdparty/**",
     ]
 

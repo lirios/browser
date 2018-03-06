@@ -21,8 +21,6 @@
  * $END_LICENSE$
 */
 
-#include <QtGlobal>
-#include <QGuiApplication>
 #include <QIcon>
 #include <QQmlApplicationEngine>
 #include <QtQuickControls2/QQuickStyle>
@@ -39,34 +37,11 @@
 #include "../core/models/downloadsmodel.h"
 #include "../core/settings/settings.h"
 #include "../core/utils/darkthemetimer.h"
+#include "browserapplication.h"
 
 #ifdef Q_OS_MACOS
     #include "mac/MacOsEventListener.h"
 #endif
-
-static void loadTranslations()
-{
-    #ifndef QT_NO_TRANSLATION
-        QString locale = QLocale::system().name();
-
-        // Find the translations directory
-        const QString path = QLatin1String("liri-browser/translations");
-        const QString translationsDir =
-            QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                   path,
-                                   QStandardPaths::LocateDirectory);
-
-        // Load translations
-        QTranslator *appTranslator = new QTranslator(qGuiApp);
-        if (appTranslator->load(QStringLiteral("%1/browser_%3").arg(translationsDir, locale))) {
-            QCoreApplication::installTranslator(appTranslator);
-        } else if (locale == QLatin1String("C") ||
-                    locale.startsWith(QLatin1String("en"))) {
-            // English is the default, it's translated anyway
-            delete appTranslator;
-        }
-    #endif
-}
 
 int main(int argc, char *argv[])
 {
@@ -92,43 +67,12 @@ int main(int argc, char *argv[])
 
     QtWebEngine::initialize();
 
-    // Create settings instance and load
-    Settings settings;
-    settings.load();
+    BrowserApplication browser;
 
-    // Create and start dark theme time
-    DarkThemeTimer darkThemeTimer;
-    darkThemeTimer.start();
+    // Launch the browser or forward arguments to an already running instance (if any)
+    if (browser.loadOrForward()) {
+        return app.exec();
+    }
 
-    // Load translations
-    loadTranslations();
-
-    // create qml app engine
-    QQmlApplicationEngine engine;
-
-    // register core types
-    qmlRegisterUncreatableType<SearchConfig>("core", 1, 0, "SearchConfig", "SearchConfig (from module core) may not be created directly.");
-
-    qmlRegisterUncreatableType<Tab>("core", 1, 0, "Tab", "Tab (from module core) may not be created directly.");
-    qmlRegisterType<TabsModel>("core", 1, 0, "TabsModel");
-
-    qmlRegisterType<DownloadsModel>("core", 1, 0, "DownloadsModel");
-
-    // Register context properties
-    engine.rootContext()->setContextProperty("Settings", &settings);
-    engine.rootContext()->setContextProperty("DarkThemeTimer", &darkThemeTimer);
-    #ifdef Q_OS_MACOS
-        engine.rootContext()->setContextProperty("MacEvents", &evListener);
-    #endif
-
-    // setup qml imports
-    engine.addImportPath("qrc:/");
-
-    // load main ui
-    engine.load(QUrl(QLatin1String("qrc:/ui/Main.qml")));
-
-    // load main
-    QMetaObject::invokeMethod(engine.rootObjects()[0], "load");
-
-    return app.exec();
+    return 0;
 }
