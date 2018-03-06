@@ -40,10 +40,6 @@
 #include "../core/utils/darkthemetimer.h"
 #include "browserapplication.h"
 
-#ifdef Q_OS_MACOS
-    #include "mac/MacOsEventListener.h"
-#endif
-
 const QString LOCAL_SOCKET_PATH = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/io.liri.Browser.sock";
 
 class BrowserApplication : public QObject

@@ -28,6 +28,10 @@
 #include <QFileInfo>
 #include <QDebug>
 
+#ifdef Q_OS_MACOS
+    #include "mac/MacOsEventListener.h"
+#endif
+
 #include "browserapplication.h"
 
 const int IPC_ARG_COUNT_LIMIT = 100;
