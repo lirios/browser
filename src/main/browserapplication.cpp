@@ -35,7 +35,8 @@
 #include "browserapplication.h"
 
 const int IPC_ARG_COUNT_LIMIT = 100;
-const QString IPC_HEADER = QLatin1String("io.liri.Browser");
+const QString IPC_VERSION = QStringLiteral("0");
+const QString IPC_HEADER = QStringLiteral("io.liri.Browser/") + IPC_VERSION;
 const int IPC_QDATASTREAM_VERSION = QDataStream::Qt_5_10;
 
 BrowserApplication::BrowserApplication(QObject *parent) : QObject(parent)
@@ -72,8 +73,7 @@ bool BrowserApplication::loadOrForward()
     }
 
     if (alreadyRunning) {
-        qDebug() << m_localSocket.isValid();
-        qDebug() << "Already running.";
+        qInfo() << "Already running.";
         QStringList args = qGuiApp->arguments();
         args.removeFirst();
         // Forward command line arguments to already running instance
@@ -91,6 +91,27 @@ bool BrowserApplication::loadOrForward()
             m_localSocket.write(data);
             m_localSocket.flush();
             m_localSocket.waitForBytesWritten();
+
+            if (m_localSocket.waitForReadyRead()) {
+                QByteArray data = m_localSocket.readAll();
+                QDataStream response(&data, QIODevice::ReadOnly);
+                response.setVersion(IPC_QDATASTREAM_VERSION);
+                QString response_message;
+                response >> response_message;
+                if (response_message != "SUCCESS") {
+                    qCritical() << "Error forwarding arguments to running instance:";
+                    qCritical() << qPrintable(response_message);
+                    // Print the error description (if available):
+                    if(!response.atEnd()) {
+                        QString msg;
+                        response >> msg;
+                        qCritical() << qPrintable(msg);
+                    }
+                }
+            } else {
+                qCritical() << "Timeout while waiting for response from already running instance";
+            }
+
             m_localSocket.close();
         }
         return false;
@@ -156,6 +177,14 @@ void BrowserApplication::onSocketConnection()
         QString header_message;
         request >> header_message;
         if (header_message != IPC_HEADER) {
+            QByteArray response_data;
+            QDataStream response(&response_data, QIODevice::WriteOnly);
+            response.setVersion(IPC_QDATASTREAM_VERSION);
+            response << QStringLiteral("ERROR_UNKNOWN_HEADER");
+            response << QStringLiteral("Unknown ipc header received. Is a different browser version already running?");
+            socket->write(response_data);
+            socket->flush();
+            socket->waitForBytesWritten();
             socket->close();
             socket->deleteLater();
             return;
@@ -169,8 +198,16 @@ void BrowserApplication::onSocketConnection()
             limit--;
         }
         if (limit == 0) {
-            qCritical() << "Socket connection reached local socket ipc message limit";
+            qWarning() << "Socket connection reached local socket ipc message limit";
         }
+
+        QByteArray response_data;
+        QDataStream response(&response_data, QIODevice::WriteOnly);
+        response.setVersion(IPC_QDATASTREAM_VERSION);
+        response << QStringLiteral("SUCCESS");
+        socket->write(response_data);
+        socket->flush();
+        socket->waitForBytesWritten();
     }
     socket->close();
     socket->deleteLater();
