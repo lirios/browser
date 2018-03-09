@@ -2,39 +2,62 @@
 
 set -e
 
+source .travis/library.sh
+
 if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
+    # Update
+    travis_start "brew_update"
+    msg "Update..."
+    brew update
+    travis_end
+
+    # Install
+    travis_start "brew_install"
+    msg "Install packages..."
+    brew install qt5 qbs
+    brew link qt5 --force
+    brew link qbs --force
+    travis_end
+
     # Configure qbs
+    travis_start "qbs_setup"
     qbs setup-toolchains --detect
     qbs setup-qt /usr/local/opt/qt/bin/qmake travis-qt5
     qbs config profiles.travis-qt5.baseProfile xcode-macosx-x86_64
     qbs config preferences.qbsSearchPaths $(pwd)/fluid/qbs/shared
+    travis_end "qbs_setup"
 
     # Build and install Fluid
-    cd fluid
-    sudo qbs -d build -j $(sysctl -n hw.ncpu) profile:travis-qt5 qbs.installRoot:/usr/local qbs.installPrefix:/opt/qt modules.lirideployment.qmlDir:qml project.withDocumentation:false project.withDemo:false
+    travis_start "build_fluid"
+    msg "Build Fluid..."
+    pushd fluid >/dev/null
+    sudo qbs -d build -j $(sysctl -n hw.ncpu) profile:travis-qt5 modules.qbs.installRoot:/usr/local modules.lirideployment.prefix:/opt/qt modules.lirideployment.qmlDir:/opt/qt/qml project.withDocumentation:false project.withDemo:false
     sudo rm -fr build
+    popd >/dev/null
+    travis_end "build_fluid"
 
     # Build app
-    cd ../
+    travis_start "build_app"
+    msg "Build..."
     qbs -d build -j $(sysctl -n hw.ncpu) profile:travis-qt5 project.withFluid:false
+    travis_end "build_app"
+
+    # Package
+    travis_start "package"
+    msg "Package..."
+    srcdir=$(pwd)/src
+    pushd build/default/install-root >/dev/null && macdeployqt ./liri-browser.app -dmg -qmldir=$srcdir -verbose=2 && popd >/dev/null
+    mv ./build/default/install-root/liri-browser.dmg Liri_Browser.dmg
+    curl --upload-file ./Liri_Browser.dmg https://transfer.sh/Liri_Browser-git-$(date +%Y%m%d-%H%M%S)-$(git rev-parse --short HEAD).dmg
+    travis_end "package"
 else
-    # Build qbs
-    git clone -b v1.9.0 https://code.qt.io/qbs/qbs.git qbs-src
-    cd qbs-src && qmake -r qbs.pro && make -j$(nproc) && sudo make install && cd ..
+    image=liridev/ci-ubuntu:latest
 
-    # Configure qbs
-    qbs setup-toolchains --type gcc /usr/bin/g++ gcc
-    qbs setup-qt $(which qmake) travis-qt5
-    qbs config profiles.travis-qt5.baseProfile gcc
-    qbs config preferences.qbsSearchPaths $(pwd)/fluid/qbs/shared
+    env_vars="-e CC=$CC -e DEBIAN_FRONTEND=noninteractive"
+    for line in $(env | egrep -e '^(FTP|TRAVIS|CLAZY)'); do
+        env_vars="$env_vars -e $line"
+    done
 
-    # Build and install Fluid
-    cd fluid
-    sudo $(which qbs) -d build -j $(nproc) profile:travis-qt5 qbs.installRoot:/opt qbs.installPrefix:qt58 modules.lirideployment.qmlDir:qml project.withDocumentation:false project.withDemo:false
-    sudo rm -fr build
-
-    # Build and install app
-    cd ../
-    mkdir -p appdir
-    qbs -d build -j $(nproc) profile:travis-qt5 project.withFluid:false qbs.installRoot:appdir qbs.installPrefix:usr
+    sudo docker pull $image
+    sudo docker run --privileged --rm -ti -v $(pwd):/home $env_vars --workdir /home $image ./.travis/docker.sh
 fi
