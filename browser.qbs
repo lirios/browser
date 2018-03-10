@@ -39,7 +39,7 @@ Project {
     }
 
     Product {
-        name: "Documents"
+        name: "Browser Documents"
         files: [
             "AUTHORS.md",
             "README.md",
