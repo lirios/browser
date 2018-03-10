@@ -21,7 +21,7 @@
  * $END_LICENSE$
 */
 
-#include "Session.h"
+#include "session.h"
 
 #include <QDir>
 #include <QDebug>
