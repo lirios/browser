@@ -39,6 +39,9 @@
 #include "../core/session/session.h"
 #include "../core/utils/darkthemetimer.h"
 
+#ifdef Q_OS_MACOS
+    #include "mac/MacOsEventListener.h"
+#endif
 
 class BrowserApplication : public QObject
 {
@@ -78,11 +81,15 @@ public slots:
     void onMessageReceived(const QString &message);
 
 private: // members
+    #ifdef Q_OS_MACOS
+        MacOsEventListener m_evListener;
+    #endif
     QQmlApplicationEngine m_engine;
     Settings m_settings;
     Session m_session;
     DarkThemeTimer m_darkThemeTimer;
     bool m_loaded = false;
+
 };
 
 #endif // BROWSERAPPLICATION_H
