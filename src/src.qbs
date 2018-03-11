@@ -20,11 +20,12 @@ QtGuiApplication {
     Depends { name: "lirideployment" }
     Depends { name: "Qt"; submodules: ["qml", "quick", "quickcontrols2", "webengine"] }
     Depends { name: "ib"; condition: qbs.targetOS.contains("macos") }
+    Depends { name: "qtsingleapplication" }
 
     files: [
         "core/**",
-        "main/main.cpp",
-        "3rdparty/**",
+        "main/*",
+        "3rdparty/regex-weburl/**",
     ]
 
     Group {
