@@ -50,6 +50,7 @@ int main(int argc, char *argv[])
     app.setOrganizationName(QStringLiteral("Liri"));
     app.setOrganizationDomain(QStringLiteral("liri.io"));
     app.setApplicationName(QStringLiteral("Browser"));
+    app.setApplicationVersion(QStringLiteral(PROJECT_VERSION));
     app.setDesktopFileName(QStringLiteral("io.liri.Browser.desktop"));
     app.setWindowIcon(QIcon(":/res/icons/512x512/io.liri.Browser.png"));
 
