@@ -26,7 +26,8 @@
 
 #include "browserapplication.h"
 
-BrowserApplication::BrowserApplication(QObject *parent) : QObject(parent)
+BrowserApplication::BrowserApplication(QObject *parent)
+    : QObject(parent)
 {
 
 }
