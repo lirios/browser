@@ -39,7 +39,7 @@ Project {
     }
 
     SubProject {
-        filePath: "qtsingleapplication/qtsingleapplication.qbs"
+        filePath: "3rdparty/qtsingleapplication/qtsingleapplication.qbs"
     }
 
     Product {
