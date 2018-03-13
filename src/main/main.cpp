@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
     auto args = parser.positionalArguments();
 
     // Send messages to already running instance (if any)
-    if (app.sendMessage("heartbeat")) {
+    if (app.isRunning()) {
         qDebug() << "Already running";
         if (args.count() > 0) {
             for (const QString &arg: args) {

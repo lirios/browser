@@ -97,9 +97,7 @@ void BrowserApplication::onMessageReceived(const QString &message)
 {
     QStringList fragments = message.split(' ');
 
-    if (message == QStringLiteral("heartbeat")) {
-        // Heartbeat received, doing nothing.
-    } else if (fragments[0] == QStringLiteral("open")) {
+    if (fragments[0] == QStringLiteral("open")) {
         if (fragments.count() >= 2) {
             auto url = QUrl(fragments[1]);
             openUrl(url);
