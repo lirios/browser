@@ -31,6 +31,8 @@ class TabState : public QObject
     Q_OBJECT
 
     Q_PROPERTY(QString url READ url WRITE setUrl)
+    Q_PROPERTY(QString title READ title WRITE setTitle)
+    Q_PROPERTY(QString icon READ icon WRITE setIcon)
     Q_PROPERTY(float readingProgress READ readingProgress WRITE setReadingProgress)
 
 public:
@@ -38,6 +40,10 @@ public:
 
     void setUrl(QString url);
     QString url() const;
+    void setTitle(QString title);
+    QString title() const;
+    void setIcon(QString icon);
+    QString icon() const;
     float readingProgress() const;
     void setReadingProgress(float readingProgress);
 
@@ -47,6 +53,8 @@ public slots:
 
 private:
     QString m_url;
+    QString m_title;
+    QString m_icon;
     float m_readingProgress;
 };
 

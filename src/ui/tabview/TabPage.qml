@@ -27,16 +27,25 @@ import ".."
 Item {
     id: tabPage
 
+    // binding. should be set from outside
+    property var activeTab
     property var tab
     property var actionManager
     property var profile
     property url previousUrl
     property bool loading: false
+    property bool loadContent: true
 
     property Component settingsContentComponent: Component {
         SettingsContent {
             tab: tabPage.tab
             actionManager: tabPage.actionManager
+        }
+    }
+
+    property Component lazyWebContentComponent: Component {
+        LazyWebContent {
+            parentTabPage: tabPage
         }
     }
 
@@ -75,24 +84,38 @@ Item {
         data.properties["profile"] = profile;
         data.properties["url"] = data.url;
 
-        // Create content item
-        switch(type) {
-            case TabType.webview:
-                newContent = webContentComponent.createObject(
-                    contentContainer,
-                    data.properties
-                );
-                break;
-            case TabType.settings:
-                newContent = settingsContentComponent.createObject(
-                    contentContainer,
-                    data.properties
-                );
-                break;
+        if (!loadContent)
+        {
+            // creating 'lazy' tab
+            var lazyProperties = {
+                "initProperties" : data
+            };
+
+            newContent = lazyWebContentComponent.createObject(contentContainer, lazyProperties)
         }
+        else
+        {
+            // Create content item
+            switch(type) {
+                case TabType.webview:
+                    newContent = webContentComponent.createObject(
+                        contentContainer,
+                        data.properties
+                    );
+                    break;
+                case TabType.settings:
+                    newContent = settingsContentComponent.createObject(
+                        contentContainer,
+                        data.properties
+                    );
+                    break;
+            }
+        }
+
         tabType = type;
         contentItem = newContent;
         loading = false;
+
         return true;
     }
 

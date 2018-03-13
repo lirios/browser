@@ -39,6 +39,9 @@ public:
 
     Q_INVOKABLE void save(TabsModel* tabs);
     Q_INVOKABLE QVariantList getTabsToRestore();
+    Q_PROPERTY(int activeTab READ getActiveTab)
+
+    int getActiveTab() { return m_activeTab; }
 signals:
 
 public slots:
@@ -49,6 +52,7 @@ private:
 
 private:
     QList<TabState*> m_tabs;
+    int m_activeTab;
 };
 
 #endif // SESSION_H

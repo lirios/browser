@@ -498,8 +498,17 @@ ApplicationWindow {
         if (Settings.startConfig.startupType === StartConfig.StartFromPreviouslyOpenedTabs &&
                 restoreTabs.length > 0) {
             for(var i = 0; i < restoreTabs.length; ++i) {
-                tabController.openUrl(restoreTabs[i].url, false);
+                var data = {
+                    'loadContent': false,
+                    'url': restoreTabs[i].url,
+                    'title': restoreTabs[i].title,
+                    'iconUrl': restoreTabs[i].iconUrl
+                };
+
+                tabController.openUrl(restoreTabs[i].url, false, data);
             }
+            tabController.tabsModel.setActive(Session.activeTab);
+            tabController.completeTabsRestore();
         } else if (openStartUrl) {
             tabController.openUrl(startUrl);
         }

@@ -33,7 +33,9 @@
 #include "../models/tabsmodel.h"
 #include "tabstate.h"
 
-Session::Session(QObject *parent) : QObject(parent)
+Session::Session(QObject *parent)
+    : QObject(parent)
+    , m_activeTab(0)
 {
     load();
 }
@@ -87,7 +89,15 @@ void Session::load()
         auto tabObj = tab.toObject();
         auto state = new TabState(this);
         state->setUrl(tabObj["url"].toString());
+        state->setTitle(tabObj["title"].toString());
+        state->setIcon(tabObj["icon"].toString());
         m_tabs.append(state);
+    }
+
+    m_activeTab = std::max(m_tabs.count() - 1, 0);
+    if (root.find("activeTab") != root.end())
+    {
+        m_activeTab = root["activeTab"].toInt();
     }
 }
 
@@ -101,7 +111,10 @@ QByteArray Session::json(TabsModel* tabs)
 
     for (int i = 0; i < tabs->count(); ++i) {
         QJsonObject tabObject;
-        tabObject["url"] = tabs->get(i)->url().toString();
+        auto tab = tabs->get(i);
+        tabObject["url"] = tab->url().toString();
+        tabObject["title"] = tab->title();
+        tabObject["icon"] = tab->iconUrl().toString().replace("image://favicon/","");
         tabObject["readingProgress"] = 0.f;
         tabsArray.append(tabObject);
     }
@@ -109,6 +122,7 @@ QByteArray Session::json(TabsModel* tabs)
     QJsonObject root {
         {"meta", meta},
         {"tabs", tabsArray},
+        {"activeTab", tabs->activeIndex()},
     };
 
     QJsonDocument doc(root);

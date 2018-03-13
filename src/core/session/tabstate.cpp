@@ -42,6 +42,26 @@ QString TabState::url() const
     return m_url;
 }
 
+void TabState::setTitle(QString title)
+{
+    m_title = title;
+}
+
+QString TabState::title() const
+{
+    return m_title;
+}
+
+void TabState::setIcon(QString icon)
+{
+   m_icon = icon;
+}
+
+QString TabState::icon() const
+{
+    return m_icon;
+}
+
 float TabState::readingProgress() const
 {
     return m_readingProgress;
