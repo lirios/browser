@@ -42,6 +42,11 @@ Session::Session(QObject *parent)
 
 void Session::save(TabsModel* tabs)
 {
+    if (!QDir(Paths::DataLocation).exists()) {
+        qDebug() << "DataLocation path doesn't exist.";
+        qDebug() << "Creating" << Paths::DataLocation << "...";
+        QDir().mkpath(Paths::DataLocation);
+    }
     QFile file(Paths::SessionDataFile);
     if (!file.open(QIODevice::WriteOnly)) {
         qWarning("Couldn't open session file for write!");
@@ -84,8 +89,7 @@ void Session::load()
         return;
     }
     QJsonArray tabs = root["tabs"].toArray();
-    for (QJsonValue tab : tabs)
-    {
+    for (QJsonValue tab : tabs) {
         auto tabObj = tab.toObject();
         auto state = new TabState(this);
         state->setUrl(tabObj["url"].toString());
@@ -95,8 +99,7 @@ void Session::load()
     }
 
     m_activeTab = std::max(m_tabs.count() - 1, 0);
-    if (root.find("activeTab") != root.end())
-    {
+    if (root.find("activeTab") != root.end()) {
         m_activeTab = root["activeTab"].toInt();
     }
 }

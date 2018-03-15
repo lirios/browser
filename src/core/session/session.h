@@ -42,10 +42,6 @@ public:
     Q_PROPERTY(int activeTab READ getActiveTab)
 
     int getActiveTab() { return m_activeTab; }
-signals:
-
-public slots:
-
 private:
     void load();
     QByteArray json(TabsModel *tabs);

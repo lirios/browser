@@ -61,13 +61,3 @@ QString TabState::icon() const
 {
     return m_icon;
 }
-
-float TabState::readingProgress() const
-{
-    return m_readingProgress;
-}
-
-void TabState::setReadingProgress(float readingProgress)
-{
-    m_readingProgress = readingProgress;
-}

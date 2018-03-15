@@ -31,6 +31,5 @@
         <file>tabview/content/SettingsContent.qml</file>
         <file>utils/qmldir</file>
         <file>window/ShortcutManager.qml</file>
-        <file>tabview/content/LazyWebContent.qml</file>
     </qresource>
 </RCC>

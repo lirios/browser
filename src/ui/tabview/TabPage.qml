@@ -35,17 +35,13 @@ Item {
     property url previousUrl
     property bool loading: false
     property bool loadContent: true
+    property var contentFabric
+    property var initData
 
     property Component settingsContentComponent: Component {
         SettingsContent {
             tab: tabPage.tab
             actionManager: tabPage.actionManager
-        }
-    }
-
-    property Component lazyWebContentComponent: Component {
-        LazyWebContent {
-            parentTabPage: tabPage
         }
     }
 
@@ -59,6 +55,15 @@ Item {
     property var contentItem
     property int tabType
 
+    function tryCreateContent() {
+        console.log("Try create content");
+        if (contentItem || !loadContent || tab !== activeTab)
+            return;
+
+        console.log("Creating content");
+        contentFabric();
+    }
+
     function openUrl(url) {
         load(TabType.fromUrl(url), {
             url: url,
@@ -69,54 +74,80 @@ Item {
         if (loading)
             return false;
         loading = true;
+        initData = data;
 
-        var newContent;
+        contentFabric = function() {
+            var newContent;
 
-        // Destroy old content if necessary
-        if (contentItem)
-            contentItem.destroy();
+            // Destroy old content if necessary
+            if (contentItem)
+                contentItem.destroy();
 
-        // Finalize properties
-        if (!("properties" in data))
-            data["properties"] = {};
+            // Finalize properties
+            if (!("properties" in initData))
+                initData["properties"] = {};
 
-        data.properties["anchors.fill"] = contentContainer;
-        data.properties["profile"] = profile;
-        data.properties["url"] = data.url;
+            initData.properties["anchors.fill"] = contentContainer;
+            initData.properties["profile"] = profile;
+            initData.properties["url"] = initData.url;
 
-        if (!loadContent)
-        {
-            // creating 'lazy' tab
-            var lazyProperties = {
-                "initProperties" : data
-            };
-
-            newContent = lazyWebContentComponent.createObject(contentContainer, lazyProperties)
-        }
-        else
-        {
             // Create content item
             switch(type) {
                 case TabType.webview:
                     newContent = webContentComponent.createObject(
                         contentContainer,
-                        data.properties
+                        initData.properties
                     );
                     break;
                 case TabType.settings:
                     newContent = settingsContentComponent.createObject(
                         contentContainer,
-                        data.properties
+                        initData.properties
                     );
                     break;
             }
+
+            tabType = type;
+            contentItem = newContent;
+            loading = false;
+        };
+
+        if (loadContent) {
+            contentFabric();
         }
 
-        tabType = type;
-        contentItem = newContent;
-        loading = false;
-
         return true;
+    }
+
+    onActiveTabChanged: {
+        console.log("onActiveTabChanged");
+        tryCreateContent();
+    }
+
+    onLoadContentChanged: {
+        if (contentFabric)
+            tryCreateContent();
+    }
+
+    Binding {
+        target: tab
+        property: "title"
+        value: initData['title']
+        when: !contentItem
+    }
+
+    Binding {
+        target: tab
+        property: "url"
+        value: initData['url']
+        when: !contentItem
+    }
+
+    Binding {
+        target: tab
+        property: "iconUrl"
+        value: initData['iconUrl']
+        when: !contentItem
     }
 
     Connections {

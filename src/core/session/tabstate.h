@@ -33,7 +33,6 @@ class TabState : public QObject
     Q_PROPERTY(QString url READ url WRITE setUrl)
     Q_PROPERTY(QString title READ title WRITE setTitle)
     Q_PROPERTY(QString icon READ icon WRITE setIcon)
-    Q_PROPERTY(float readingProgress READ readingProgress WRITE setReadingProgress)
 
 public:
     explicit TabState(QObject *parent = 0);
@@ -44,18 +43,11 @@ public:
     QString title() const;
     void setIcon(QString icon);
     QString icon() const;
-    float readingProgress() const;
-    void setReadingProgress(float readingProgress);
-
-signals:
-
-public slots:
 
 private:
     QString m_url;
     QString m_title;
     QString m_icon;
-    float m_readingProgress;
 };
 
 #endif // TABSTATE_H
