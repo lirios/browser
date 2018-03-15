@@ -50,8 +50,7 @@ QtObject {
     signal fullScreenRequested(var request)
     signal openUrlInNewPrivateWindowRequested(var url)
 
-    function completeTabsRestore()
-    {
+    function completeTabsRestore() {
         for (var i = 0; i < tabContentView.pages.count; ++i)
         {
             var tabPage = tabContentView.pages.get(i).item;
