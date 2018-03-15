@@ -51,16 +51,14 @@ QtObject {
     signal openUrlInNewPrivateWindowRequested(var url)
 
     function completeTabsRestore() {
-        for (var i = 0; i < tabContentView.pages.count; ++i)
-        {
+        for (var i = 0; i < tabContentView.pages.count; ++i) {
             var tabPage = tabContentView.pages.get(i).item;
             tabPage.loadContent = true;
         }
     }
 
     function openUrl(url, background, data) {
-        if (!data)
-        {
+        if (!data) {
             data = {}
         }
         data['url'] = url;
