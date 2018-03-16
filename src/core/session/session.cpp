@@ -62,8 +62,7 @@ void Session::save(TabsModel* tabs)
 QVariantList Session::getTabsToRestore()
 {
     QVariantList tabs;
-    for (TabState* state : m_tabs)
-    {
+    for (TabState* state : m_tabs) {
         tabs.append(QVariant::fromValue(state));
     }
     m_tabs.clear();
@@ -117,8 +116,7 @@ QByteArray Session::json(TabsModel* tabs)
         auto tab = tabs->get(i);
         tabObject["url"] = tab->url().toString();
         tabObject["title"] = tab->title();
-        tabObject["icon"] = tab->iconUrl().toString().replace("image://favicon/","");
-        tabObject["readingProgress"] = 0.f;
+        tabObject["icon"] = tab->iconUrl().toString().replace("image://favicon/" ,"");
         tabsArray.append(tabObject);
     }
 

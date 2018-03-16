@@ -502,7 +502,7 @@ ApplicationWindow {
                     'loadContent': false,
                     'url': restoreTabs[i].url,
                     'title': restoreTabs[i].title,
-                    'iconUrl': restoreTabs[i].iconUrl
+                    'iconUrl': restoreTabs[i].icon.replace("https", "http")
                 };
 
                 tabController.openUrl(restoreTabs[i].url, false, data);

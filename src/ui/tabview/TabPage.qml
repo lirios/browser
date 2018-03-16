@@ -56,11 +56,9 @@ Item {
     property int tabType
 
     function tryCreateContent() {
-        console.log("Try create content");
         if (contentItem || !loadContent || tab !== activeTab)
             return;
 
-        console.log("Creating content");
         contentFabric();
     }
 
@@ -120,7 +118,6 @@ Item {
     }
 
     onActiveTabChanged: {
-        console.log("onActiveTabChanged");
         tryCreateContent();
     }
 
