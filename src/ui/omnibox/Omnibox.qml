@@ -29,6 +29,7 @@ import Fluid.Controls 1.0
 import Fluid.Core 1.0
 import dperini.regexweburl 1.0
 import core 1.0
+import QtQml.StateMachine 1.0 as DSM
 import ".."
 
 Item {
@@ -36,17 +37,25 @@ Item {
     property TabController tabController
     property TabsModel tabsModel
     property string searchUrl
-    property alias editingUrl: showUrlField.editActive
+    property alias editingUrl: editing.active
     property color defaultAccentColor
+    property bool editingCompleted: idle.active
+
+    signal emptyTabActivated
 
     function focusUrlField() {
         showUrlField.forceActiveFocus();
         textField.selectAll();
     }
 
+    function checkForEmptyTab() {
+        if (tabsModel.active.url.toString().length === 0) {
+            emptyTabActivated();
+        }
+    }
+
     implicitHeight: 40
     implicitWidth: 256
-
 
     Rectangle {
         id: container
@@ -65,7 +74,7 @@ Item {
             TextField {
                 id: showUrlField
 
-                property bool editActive: false
+                text: editingCompleted ? tabsModel.active.url.toString() : textField.text
 
                 Layout.fillHeight: true
                 Layout.fillWidth: true
@@ -79,19 +88,11 @@ Item {
                 font.pixelSize: 14
                 readOnly: true
 
-                onActiveFocusChanged: {
-                    if (activeFocus) {
-                        editActive = true;
-                        textField.forceActiveFocus();
-                        textField.selectAll();
-                    }
-                }
-
                 TextField {
                     id: textField
 
                     anchors.fill: parent
-                    visible: showUrlField.editActive
+                    visible: editingUrl
 
                     selectionColor: Material.accent
                     selectByMouse: true
@@ -105,18 +106,12 @@ Item {
                             tabController.openUrl(url);
                         }
                         else {
-                            var reload = (tabsModel.active.url == url);
+                            var reload = (tabsModel.active.url === url);
                             tabsModel.active.url = url;
                             if (reload)
                                 tabsModel.active.reload();
                         }
-                        showUrlField.editActive = false;
-                    }
-
-                    onActiveFocusChanged: {
-                        if (!activeFocus) {
-                            showUrlField.editActive = false;
-                        }
+                        textField.focus = false;
                     }
                 }
             }
@@ -142,44 +137,92 @@ Item {
             }
         }
 
-        Binding {
-            when: tabsModel.active.valid
-            target: showUrlField
-            property: "text"
-            value: tabsModel.active.url
-        }
-
-        Binding {
-            when: !showUrlField.editActive
-            target: textField
-            property: "text"
-            value: tabsModel.active.url
-        }
-
-        Binding {
-            when: tabsModel.empty
-            target: showUrlField
-            property: "text"
-            value: ""
-        }
-
-        Binding {
-            when: tabsModel.empty
-            target: textField
-            property: "text"
-            value: ""
-        }
-
         Connections {
-            enabled: tabsModel.active.valid
             target: tabsModel
             onActiveChanged: {
-                showUrlField.editActive = false;
+                textField.text = tabsModel.active.url.toString();
+                checkForEmptyTab();
             }
+        }
+        Connections {
+            target: tabsModel.active
+            onUrlChanged: {
+                textField.text = tabsModel.active.url;
+            }
+        }
+
+        Binding {
+            when: tabsModel.empty
+            target: showUrlField
+            property: "text"
+            value: ""
+        }
+
+        Binding {
+            when: tabsModel.empty
+            target: textField
+            property: "text"
+            value: ""
         }
 
         Behavior on color {
             ColorAnimation { duration: 100 }
+        }
+    }
+
+    DSM.StateMachine {
+        id: stateMachine
+        initialState: idle
+        running: true
+
+        DSM.State {
+            id: idle
+
+            onEntered: {
+                checkForEmptyTab();
+                textField.text = showUrlField.text;
+            }
+            DSM.SignalTransition {
+                signal: showUrlField.activeFocusChanged
+                guard: showUrlField.activeFocus === true
+                targetState: editing
+            }
+            DSM.SignalTransition {
+                signal: emptyTabActivated
+                targetState: editing
+            }
+        }
+        DSM.State {
+            id: editing
+
+            onEntered: {
+                textField.forceActiveFocus();
+            }
+
+            DSM.SignalTransition {
+                signal: tabsModel.activeChanged
+                targetState: idle
+            }
+            DSM.SignalTransition {
+                signal: textField.activeFocusChanged
+                guard: textField.activeFocus === false
+                targetState: canceledEditing
+            }
+        }
+        DSM.State {
+            id: canceledEditing
+            onEntered: {
+                checkForEmptyTab();
+            }
+            DSM.SignalTransition {
+                signal: emptyTabActivated
+                targetState: editing
+            }
+            DSM.SignalTransition {
+                signal: showUrlField.activeFocusChanged
+                guard: showUrlField.activeFocus === true
+                targetState: editing
+            }
         }
     }
 }
