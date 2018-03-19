@@ -144,6 +144,7 @@ Item {
                 checkForEmptyTab();
             }
         }
+
         Connections {
             target: tabsModel.active
             onUrlChanged: {
@@ -182,16 +183,19 @@ Item {
                 checkForEmptyTab();
                 textField.text = showUrlField.text;
             }
+
             DSM.SignalTransition {
                 signal: showUrlField.activeFocusChanged
                 guard: showUrlField.activeFocus === true
                 targetState: editing
             }
+
             DSM.SignalTransition {
                 signal: emptyTabActivated
                 targetState: editing
             }
         }
+
         DSM.State {
             id: editing
 
@@ -203,21 +207,26 @@ Item {
                 signal: tabsModel.activeChanged
                 targetState: idle
             }
+
             DSM.SignalTransition {
                 signal: textField.activeFocusChanged
                 guard: textField.activeFocus === false
                 targetState: canceledEditing
             }
         }
+
         DSM.State {
             id: canceledEditing
+
             onEntered: {
                 checkForEmptyTab();
             }
+
             DSM.SignalTransition {
                 signal: emptyTabActivated
                 targetState: editing
             }
+
             DSM.SignalTransition {
                 signal: showUrlField.activeFocusChanged
                 guard: showUrlField.activeFocus === true
