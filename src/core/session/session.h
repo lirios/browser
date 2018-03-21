@@ -1,7 +1,7 @@
 /*
  * This file is part of Liri Browser
  *
- * Copyright (C) 2016 Tim Süberkrüb <tim.sueberkrueb@web.de>
+ * Copyright (C) 2017 Ivan Fateev <johnny.j.poison@gmail.com>
  *
  * $BEGIN_LICENSE:GPL3+$
  *
@@ -21,13 +21,34 @@
  * $END_LICENSE$
 */
 
-#include "startconfig.h"
+#ifndef SESSION_H
+#define SESSION_H
 
-StartConfig::StartConfig(QObject *parent)
-    : QObject(parent)
+#include <QObject>
+#include <QVariantList>
+#include <QList>
+
+class TabsModel;
+class TabState;
+
+class Session : public QObject
 {
-    m_defaultPrimaryStartUrl = QUrl("https://duckduckgo.com");
-    m_defaultDarkStartUrl = QUrl("https://duckduckgo.com/?kae=#303030");
-    m_defaultIncognitoStartUrl = QUrl("https://duckduckgo.com/?kae=#37474f");
-    m_startupType = StartupType::StartFromNewPage;
-}
+    Q_OBJECT
+public:
+    explicit Session(QObject *parent = 0);
+
+    Q_INVOKABLE void save(TabsModel* tabs);
+    Q_INVOKABLE QVariantList getTabsToRestore();
+    Q_PROPERTY(int activeTab READ getActiveTab)
+
+    int getActiveTab() { return m_activeTab; }
+private:
+    void load();
+    QByteArray json(TabsModel *tabs);
+
+private:
+    QList<TabState*> m_tabs;
+    int m_activeTab;
+};
+
+#endif // SESSION_H

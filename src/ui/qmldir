@@ -14,6 +14,7 @@ singleton TabType 1.0 tabview/TabType.qml
 # content
 WebContent 1.0 tabview/content/WebContent.qml
 SettingsContent 1.0 tabview/content/SettingsContent.qml
+LazyWebContent 1.0 tabview/content/LazyWebContent.qml
 
 # omnibox
 Omnibox 1.0 omnibox/Omnibox.qml

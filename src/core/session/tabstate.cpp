@@ -1,7 +1,7 @@
 /*
  * This file is part of Liri Browser
  *
- * Copyright (C) 2016 Tim Süberkrüb <tim.sueberkrueb@web.de>
+ * Copyright (C) 2017 Ivan Fateev <johnny.j.poison@gmail.com>
  *
  * $BEGIN_LICENSE:GPL3+$
  *
@@ -21,13 +21,43 @@
  * $END_LICENSE$
 */
 
-#include "startconfig.h"
 
-StartConfig::StartConfig(QObject *parent)
-    : QObject(parent)
+#include "tabstate.h"
+
+TabState::TabState(QObject *parent) : QObject(parent)
 {
-    m_defaultPrimaryStartUrl = QUrl("https://duckduckgo.com");
-    m_defaultDarkStartUrl = QUrl("https://duckduckgo.com/?kae=#303030");
-    m_defaultIncognitoStartUrl = QUrl("https://duckduckgo.com/?kae=#37474f");
-    m_startupType = StartupType::StartFromNewPage;
+
+}
+
+void TabState::setUrl(QString url)
+{
+    if (m_url == url)
+        return;
+
+    m_url = url;
+}
+
+QString TabState::url() const
+{
+    return m_url;
+}
+
+void TabState::setTitle(QString title)
+{
+    m_title = title;
+}
+
+QString TabState::title() const
+{
+    return m_title;
+}
+
+void TabState::setIcon(QString icon)
+{
+   m_icon = icon;
+}
+
+QString TabState::icon() const
+{
+    return m_icon;
 }

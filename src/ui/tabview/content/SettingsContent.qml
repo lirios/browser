@@ -61,11 +61,35 @@ TabContent {
                 }
 
                 FluidControls.TitleLabel {
-                    text: qsTr("Start")
+                    text: qsTr("Startup")
                 }
 
-                Label {
-                    text: qsTr("Start url")
+                Column {
+                    Label { text: qsTr("Start new window with") }
+                    RadioButton {
+                        text: qsTr("New page")
+                        checked: Settings.startConfig.startupType === StartConfig.StartFromNewPage
+                        onClicked: {
+                            if (Settings.startConfig.startupType !== StartConfig.StartFromNewPage) {
+                                Settings.startConfig.startupType = StartConfig.StartFromNewPage;
+                                Settings.dirty = true;
+                            }
+                        }
+                    }
+                    RadioButton {
+                        text: qsTr("Continue where you left off")
+                        checked: Settings.startConfig.startupType === StartConfig.StartFromPreviouslyOpenedTabs
+                        onClicked: {
+                            if (Settings.startConfig.startupType !== StartConfig.StartFromPreviouslyOpenedTabs) {
+                                Settings.startConfig.startupType = StartConfig.StartFromPreviouslyOpenedTabs;
+                                Settings.dirty = true;
+                            }
+                        }
+                    }
+                }
+
+                FluidControls.TitleLabel {
+                    text: qsTr("New page url")
                     font.pixelSize: 16
                 }
 

@@ -50,11 +50,21 @@ QtObject {
     signal fullScreenRequested(var request)
     signal openUrlInNewPrivateWindowRequested(var url)
 
-    function openUrl(url, background) {
-        addTab(TabType.fromUrl(url), {
-            url: url,
-            background: background
-        });
+    function completeTabsRestore() {
+        for (var i = 0; i < tabContentView.pages.count; ++i) {
+            var tabPage = tabContentView.pages.get(i).item;
+            tabPage.loadContent = true;
+        }
+    }
+
+    function openUrl(url, background, data) {
+        if (!data) {
+            data = {}
+        }
+        data['url'] = url;
+        data['background'] = background;
+
+        addTab(TabType.fromUrl(url), data);
     }
 
     function openNewViewRequest(request) {
@@ -85,6 +95,7 @@ QtObject {
         page = tabPageComponent.createObject(tabContentView.container, {
             profile: profile,
             tab: tabsModel.byUID(uid),
+            loadContent: !('loadContent' in data) ||  data['loadContent']
         });
 
         // Load page
@@ -94,6 +105,7 @@ QtObject {
         page.actionManager = actionManagerComponent.createObject(page, {});
         page.actionManager.internal.tabController = tabController;
         page.actionManager.internal.uid = uid;
+        page.activeTab = Qt.binding(function () { return tabsModel.active } );
         // Register page to content view
         tabContentView.registerPage(uid, page);
 

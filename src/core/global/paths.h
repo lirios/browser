@@ -27,6 +27,7 @@ namespace Paths {
     const QString ConfigLocation = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + "/liri-browser/";
     const QString DataLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/liri-browser/";
     const QString SettingsFile = ConfigLocation + "settings.json";
+    const QString SessionDataFile = DataLocation + "session.json";
 }
 
 #endif // PATHS_H
