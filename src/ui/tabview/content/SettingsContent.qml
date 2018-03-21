@@ -65,7 +65,7 @@ TabContent {
                 }
 
                 Column {
-                    Label { text: "Start new window with" }
+                    Label { text: qsTr("Start new window with") }
                     RadioButton {
                         text: qsTr("New page")
                         checked: Settings.startConfig.startupType === StartConfig.StartFromNewPage
