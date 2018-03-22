@@ -339,8 +339,7 @@ TabContent {
                         text: qsTr("Save cookies")
                         checked: Settings.startConfig.persistentCookies
                         onCheckedChanged: {
-                            if (checked === Settings.startConfig.persistentCookies)
-                            {
+                            if (checked === Settings.startConfig.persistentCookies) {
                                 return;
                             }
 
