@@ -92,6 +92,7 @@ void Settings::load()
         startupType = StartConfig::StartupType::StartFromPreviouslyOpenedTabs;
 
     m_startConfig->setStartupType(startupType);
+    m_startConfig->setPersistentCookies(dataStart["persistent_cookies"].toBool());
 
     QJsonObject dataSearch = data["search"].toObject();
     QString searchEngineString = dataSearch["engine"].toString();
@@ -192,6 +193,7 @@ QByteArray Settings::json()
         {"dark_theme_url", m_startConfig->darkStartUrl().toString()},
         {"incognito_url", m_startConfig->incognitoStartUrl().toString()},
         {"startupType", startupTypeString},
+        {"persistent_cookies", m_startConfig->persistentCookies()},
     };
 
     QString searchEngineString;

@@ -23,6 +23,7 @@
 
 import QtQuick 2.0
 import QtWebEngine 1.1
+import Qt.labs.platform 1.0
 import core 1.0
 import "."
 
@@ -30,6 +31,10 @@ QtObject {
     id: root
 
     property WebEngineProfile defaultProfile: WebEngineProfile {
+        persistentCookiesPolicy: Settings.startConfig.persistentCookies
+                                        ? WebEngineProfile.ForcePersistentCookies
+                                        : WebEngineProfile.NoPersistentCookies
+        storageName: "liri-browser"
         onDownloadRequested: {
             __handleDownloadRequest(download);
         }

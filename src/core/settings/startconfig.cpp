@@ -30,4 +30,5 @@ StartConfig::StartConfig(QObject *parent)
     m_defaultDarkStartUrl = QUrl("https://duckduckgo.com/?kae=#303030");
     m_defaultIncognitoStartUrl = QUrl("https://duckduckgo.com/?kae=#37474f");
     m_startupType = StartupType::StartFromNewPage;
+    m_persistentCookies = true;
 }

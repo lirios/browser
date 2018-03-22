@@ -37,6 +37,7 @@ class StartConfig : public QObject
     Q_PROPERTY(QUrl incognitoStartUrl READ incognitoStartUrl WRITE setIncognitoStartUrl NOTIFY incognitoStartUrlChanged)
     Q_PROPERTY(QUrl defaultIncognitoStartUrl MEMBER m_defaultIncognitoStartUrl NOTIFY defaultIncognitoStartUrlChanged)
     Q_PROPERTY(StartupType startupType MEMBER m_startupType NOTIFY startupTypeChanged)
+    Q_PROPERTY(bool persistentCookies MEMBER m_persistentCookies WRITE setPersistentCookies NOTIFY persistentCookiesChanged)
     Q_ENUMS(StartupType)
 public:
     explicit StartConfig(QObject *parent = nullptr);
@@ -62,6 +63,9 @@ public:
     StartupType startupType() const { return m_startupType; }
     void setStartupType(const StartupType &startupType) { startupTypeChanged(m_startupType = startupType); }
 
+    bool persistentCookies() const { return m_persistentCookies; }
+    void setPersistentCookies(bool value) { persistentCookiesChanged(m_persistentCookies = value); }
+
 signals:
     void primaryStartUrlChanged(QUrl url);
     void defaultPrimaryStartUrlChanged(QUrl url);
@@ -70,6 +74,7 @@ signals:
     void incognitoStartUrlChanged(QUrl url);
     void defaultIncognitoStartUrlChanged(QUrl url);
     void startupTypeChanged(StartupType url);
+    void persistentCookiesChanged(bool persistentCookies);
 
 private:
     QUrl m_primaryStartUrl;
@@ -79,6 +84,7 @@ private:
     QUrl m_darkStartUrl;
     QUrl m_defaultDarkStartUrl;
     StartupType m_startupType;
+    bool m_persistentCookies;
 
 };
 
