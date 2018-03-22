@@ -146,7 +146,8 @@ QByteArray Settings::defaultJSON()
         {"primary_url", m_startConfig->defaultPrimaryStartUrl().toString()},
         {"dark_theme_url", m_startConfig->defaultDarkStartUrl().toString()},
         {"incognito_url", m_startConfig->defaultIncognitoStartUrl().toString()},
-        {"startupType", "start_from_new_page"}
+        {"startupType", "start_from_new_page"},
+        {"persistent_cookies", true}
     };
     QJsonObject dataSearch {
         {"engine", "duckduckgo"},
