@@ -92,6 +92,7 @@ void Settings::load()
         startupType = StartConfig::StartupType::StartFromPreviouslyOpenedTabs;
 
     m_startConfig->setStartupType(startupType);
+    m_startConfig->setPersistentCookies(dataStart["persistent_cookies"].toBool());
 
     QJsonObject dataSearch = data["search"].toObject();
     QString searchEngineString = dataSearch["engine"].toString();
@@ -145,7 +146,8 @@ QByteArray Settings::defaultJSON()
         {"primary_url", m_startConfig->defaultPrimaryStartUrl().toString()},
         {"dark_theme_url", m_startConfig->defaultDarkStartUrl().toString()},
         {"incognito_url", m_startConfig->defaultIncognitoStartUrl().toString()},
-        {"startupType", "start_from_new_page"}
+        {"startupType", "start_from_new_page"},
+        {"persistent_cookies", true}
     };
     QJsonObject dataSearch {
         {"engine", "duckduckgo"},
@@ -192,6 +194,7 @@ QByteArray Settings::json()
         {"dark_theme_url", m_startConfig->darkStartUrl().toString()},
         {"incognito_url", m_startConfig->incognitoStartUrl().toString()},
         {"startupType", startupTypeString},
+        {"persistent_cookies", m_startConfig->persistentCookies()},
     };
 
     QString searchEngineString;

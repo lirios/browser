@@ -30,6 +30,10 @@ QtObject {
     id: root
 
     property WebEngineProfile defaultProfile: WebEngineProfile {
+        persistentCookiesPolicy: Settings.startConfig.persistentCookies
+                                        ? WebEngineProfile.ForcePersistentCookies
+                                        : WebEngineProfile.NoPersistentCookies
+        storageName: "liri-browser"
         onDownloadRequested: {
             __handleDownloadRequest(download);
         }

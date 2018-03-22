@@ -329,6 +329,25 @@ TabContent {
                         }
                     }
                 }
+
+                FluidControls.TitleLabel {
+                    text: qsTr("Privacy")
+                }
+
+                Column {
+                    CheckBox {
+                        text: qsTr("Save cookies")
+                        checked: Settings.startConfig.persistentCookies
+                        onCheckedChanged: {
+                            if (checked === Settings.startConfig.persistentCookies) {
+                                return;
+                            }
+
+                            Settings.startConfig.persistentCookies = checked;
+                            Settings.dirty = true;
+                        }
+                    }
+                }
             }
         }
     }
