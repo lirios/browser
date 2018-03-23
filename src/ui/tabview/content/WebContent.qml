@@ -102,23 +102,27 @@ TabContent {
         MenuItem {
             enabled: webview.canGoBack
             text: qsTr("Back")
-            onClicked: webview.goBack()
+            onTriggered: webview.goBack()
+            Keys.onReturnPressed: triggered()
         }
 
         MenuItem {
             enabled: webview.canGoForward
             text: qsTr("Forward")
-            onClicked: webview.goForward()
+            onTriggered: webview.goForward()
+            Keys.onReturnPressed: triggered()
         }
 
         MenuItem {
             text: qsTr("Reload")
-            onClicked: webview.reload()
+            onTriggered: webview.reload()
+            Keys.onReturnPressed: triggered()
         }
 
         MenuItem {
             text: qsTr("View page source")
-            onClicked: webview.triggerWebAction(WebEngineView.ViewSource)
+            onTriggered: webview.triggerWebAction(WebEngineView.ViewSource)
+            Keys.onReturnPressed: triggered()
         }
 
         Connections {
@@ -143,35 +147,40 @@ TabContent {
             visible: textContextMenu.isLink
             height: visible ? MenuItem.implicitHeight : 0
             text: qsTr("Open in new tab")
-            onClicked: webview.triggerWebAction(WebEngineView.OpenLinkInNewTab)
+            onTriggered: webview.triggerWebAction(WebEngineView.OpenLinkInNewTab)
+            Keys.onReturnPressed: triggered()
         }
 
         MenuItem {
             visible: textContextMenu.isLink
             height: visible ? MenuItem.implicitHeight : 0
             text: qsTr("Open in new window")
-            onClicked: webview.triggerWebAction(WebEngineView.OpenLinkInNewWindow)
+            onTriggered: webview.triggerWebAction(WebEngineView.OpenLinkInNewWindow)
+            Keys.onReturnPressed: triggered()
         }
 
         MenuItem {
             visible: textContextMenu.isLink
             height: visible ? MenuItem.implicitHeight : 0
             text: qsTr("Open in  private window")
-            onClicked: actionManager.openUrlInNewPrivateWindowRequested(textContextMenu.request.linkUrl)
+            onTriggered: actionManager.openUrlInNewPrivateWindowRequested(textContextMenu.request.linkUrl)
+            Keys.onReturnPressed: triggered()
         }
 
         MenuItem {
             visible: textContextMenu.isLink
             height: visible ? MenuItem.implicitHeight : 0
             text: qsTr("Copy link location")
-            onClicked: webview.triggerWebAction(WebEngineView.CopyLinkToClipboard)
+            onTriggered: webview.triggerWebAction(WebEngineView.CopyLinkToClipboard)
+            Keys.onReturnPressed: triggered()
         }
 
         MenuItem {
             visible: textContextMenu.isLink
             height: visible ? MenuItem.implicitHeight : 0
             text: qsTr("Download link location")
-            onClicked: webview.triggerWebAction(WebEngineView.DownloadLinkToDisk)
+            onTriggered: webview.triggerWebAction(WebEngineView.DownloadLinkToDisk)
+            Keys.onReturnPressed: triggered()
         }
 
         MenuItem {
@@ -179,7 +188,8 @@ TabContent {
             enabled: textContextMenu.isTextSelected
             height: visible ? MenuItem.implicitHeight : 0
             text: qsTr("Cut")
-            onClicked: webview.triggerWebAction(WebEngineView.Cut)
+            onTriggered: webview.triggerWebAction(WebEngineView.Cut)
+            Keys.onReturnPressed: triggered()
         }
 
         MenuItem {
@@ -187,21 +197,24 @@ TabContent {
             enabled: textContextMenu.isTextSelected
             height: visible ? MenuItem.implicitHeight : 0
             text: qsTr("Copy")
-            onClicked: webview.triggerWebAction(WebEngineView.Copy)
+            onTriggered: webview.triggerWebAction(WebEngineView.Copy)
+            Keys.onReturnPressed: triggered()
         }
 
         MenuItem {
             visible: textContextMenu.isEditable
             height: visible ? MenuItem.implicitHeight : 0
             text: qsTr("Paste")
-            onClicked: webview.triggerWebAction(WebEngineView.Paste)
+            onTriggered: webview.triggerWebAction(WebEngineView.Paste)
+            Keys.onReturnPressed: triggered()
         }
 
         MenuItem {
             visible: textContextMenu.isTextSelected || textContextMenu.isEditable
             height: visible ? MenuItem.implicitHeight : 0
             text: qsTr("Select all")
-            onClicked: webview.triggerWebAction(WebEngineView.SelectAll)
+            onTriggered: webview.triggerWebAction(WebEngineView.SelectAll)
+            Keys.onReturnPressed: triggered()
         }
 
         Connections {
