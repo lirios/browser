@@ -129,21 +129,21 @@ Item {
     Binding {
         target: tab
         property: "title"
-        value: initData['title']
+        value: initData ? initData['title'] : ""
         when: !contentItem
     }
 
     Binding {
         target: tab
         property: "url"
-        value: initData['url']
+        value: initData ? initData['url'] : ""
         when: !contentItem
     }
 
     Binding {
         target: tab
         property: "iconUrl"
-        value: initData['iconUrl']
+        value: initData ? initData['iconUrl'] : ""
         when: !contentItem
     }
 
