@@ -61,7 +61,7 @@ QtObject {
         if (!data) {
             data = {}
         }
-        data['url'] = url;
+        data['url'] = UrlUtils.validUrl(url.toString());
         data['background'] = background;
 
         addTab(TabType.fromUrl(url), data);
