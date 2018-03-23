@@ -414,19 +414,21 @@ ApplicationWindow {
         MenuItem {
             text: qsTr("New window")
             icon.source: Utils.iconUrl("action/open_in_new")
-            onClicked: {
+            onTriggered: {
                 var window = root.newWindow();
                 window.showNormal();
             }
+            Keys.onReturnPressed: triggered()
         }
 
         MenuItem {
             text: qsTr("Private Window")
             icon.source: Utils.iconUrl("hardware/security")
-            onClicked: {
+            onTriggered: {
                 var window = root.newIncognitoWindow();
                 window.showNormal();
             }
+            Keys.onReturnPressed: triggered()
         }
 
         MenuItem {
@@ -434,34 +436,38 @@ ApplicationWindow {
             icon.source: Utils.iconUrl("action/find_in_page")
             // Disable find in page overlay when there is no open tab
             enabled: !tabController.tabsModel.empty
-            onClicked: {
+            onTriggered: {
                 searchOverlay.open();
             }
+            Keys.onReturnPressed: triggered()
         }
 
         MenuItem {
             text: qsTr("Downloads")
             icon.source: Utils.iconUrl("file/file_download")
-            onClicked: {
+            onTriggered: {
                 rightDrawer.loadContent(rightDrawer.downloads);
                 rightDrawer.open();
             }
+            Keys.onReturnPressed: triggered()
         }
 
         MenuItem {
             text: window.isFullScreen? qsTr("Exit fullscreen") : qsTr("Fullscreen")
             icon.source: Utils.iconUrl(!window.isFullScreen ? "navigation/fullscreen" : "navigation/fullscreen_exit")
-            onClicked: {
+            onTriggered: {
                 toggleFullScreen();
             }
+            Keys.onReturnPressed: triggered()
         }
 
         MenuItem {
             text: qsTr("Settings")
             icon.source: Utils.iconUrl("action/settings")
-            onClicked: {
+            onTriggered: {
                 tabController.openUrl("liri://settings");
             }
+            Keys.onReturnPressed: triggered()
         }
 
         Connections {
@@ -471,6 +477,7 @@ ApplicationWindow {
                 if (empty && searchOverlay.showing)
                     searchOverlay.close();
             }
+            Keys.onReturnPressed: triggered()
         }
 
         Connections {
