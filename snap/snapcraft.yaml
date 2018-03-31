@@ -46,6 +46,8 @@ parts:
   liri-browser:
     source: .
     plugin: qbs
+    qbs-options:
+      - modules.lirideployment.prefix:/
     prepare: |
       sed -i 's|Icon=.*|Icon=${SNAP}/share/icons/hicolor/256x256/apps/io\.liri\.Browser\.png|g' res/io.liri.Browser.desktop
     build-attributes: ["no-system-libraries"]
