@@ -12,7 +12,7 @@ A cross-platform Material Design web browser.
 
 ## Dependencies
 
-Qt >= 5.8.0 with at least the following modules is required:
+Qt >= 5.10.0 with at least the following modules is required:
 
  * [qtbase](http://code.qt.io/cgit/qt/qtbase.git)
  * [qtdeclarative](http://code.qt.io/cgit/qt/qtdeclarative.git)
