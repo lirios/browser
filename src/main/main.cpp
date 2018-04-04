@@ -29,7 +29,7 @@
 #include <QtWebEngine>
 #include <QCommandLineParser>
 #ifndef QT_NO_TRANSLATION
-    #include <QtCore/QTranslator>
+#include <QtCore/QTranslator>
 #endif
 #include <QDebug>
 

@@ -40,7 +40,7 @@
 #include "../core/utils/darkthemetimer.h"
 
 #ifdef Q_OS_MACOS
-    #include "mac/MacOsEventListener.h"
+#include "mac/MacOsEventListener.h"
 #endif
 
 class BrowserApplication : public QObject
@@ -51,26 +51,26 @@ public:
 
     static void loadTranslations()
     {
-        #ifndef QT_NO_TRANSLATION
-            QString locale = QLocale::system().name();
+#ifndef QT_NO_TRANSLATION
+        QString locale = QLocale::system().name();
 
-            // Find the translations directory
-            const QString path = QLatin1String("liri-browser/translations");
-            const QString translationsDir =
-                QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                       path,
-                                       QStandardPaths::LocateDirectory);
+        // Find the translations directory
+        const QString path = QLatin1String("liri-browser/translations");
+        const QString translationsDir =
+            QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                   path,
+                                   QStandardPaths::LocateDirectory);
 
-            // Load translations
-            QTranslator *appTranslator = new QTranslator(qGuiApp);
-            if (appTranslator->load(QStringLiteral("%1/browser_%3").arg(translationsDir, locale))) {
-                QCoreApplication::installTranslator(appTranslator);
-            } else if (locale == QLatin1String("C") ||
-                        locale.startsWith(QLatin1String("en"))) {
-                // English is the default, it's translated anyway
-                delete appTranslator;
-            }
-        #endif
+        // Load translations
+        QTranslator *appTranslator = new QTranslator(qGuiApp);
+        if (appTranslator->load(QStringLiteral("%1/browser_%3").arg(translationsDir, locale))) {
+            QCoreApplication::installTranslator(appTranslator);
+        } else if (locale == QLatin1String("C") ||
+                    locale.startsWith(QLatin1String("en"))) {
+            // English is the default, it's translated anyway
+            delete appTranslator;
+        }
+#endif
     }
 
     void load();
@@ -81,9 +81,9 @@ public slots:
     void onMessageReceived(const QString &message);
 
 private: // members
-    #ifdef Q_OS_MACOS
-        MacOsEventListener m_evListener;
-    #endif
+#ifdef Q_OS_MACOS
+    MacOsEventListener m_evListener;
+#endif
     QQmlApplicationEngine m_engine;
     Settings m_settings;
     Session m_session;
