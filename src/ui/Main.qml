@@ -29,6 +29,8 @@ import "."
 QtObject {
     id: root
 
+    property var windows: []
+
     property WebEngineProfile defaultProfile: WebEngineProfile {
         persistentCookiesPolicy: Settings.startConfig.persistentCookies
                                         ? WebEngineProfile.ForcePersistentCookies
@@ -79,6 +81,17 @@ QtObject {
     }
 
     function openUrl(url, incognito) {
+        for (var i=0; i<windows.length; i++) {
+            var window = windows[i];
+            if (incognito === window.incognito) {
+                window.openUrl(url, false);
+                return;
+            }
+        }
+        openUrlInNewWindow(url, incognito);
+    }
+
+    function openUrlInNewWindow(url, incognito) {
         var window = newWindow(incognito, false);
         window.openUrl(url, false);
         window.showNormal();
@@ -90,6 +103,7 @@ QtObject {
             properties["profile"] = incognitoProfile;
         properties["openStartUrl"] = openStartUrl;
         var window = browserWindowComponent.createObject(root, properties);
+        windows.push(window);
         return window;
     }
 
@@ -97,11 +111,18 @@ QtObject {
         return newWindow(true);
     }
 
-    function load() {
+    function openNewWindow(incognito, openStartUrl) {
+        newWindow(incognito, openStartUrl).showNormal();
+    }
+
+    function destroyWindow(window) {
+        windows.splice(windows.indexOf(window), 1);
+        window.destroy();
+    }
+
+    Component.onCompleted: {
         // Update dark theme timer
         DarkThemeTimer.update();
-        // Create the first window and show it
-        newWindow().showNormal();
     }
 
     Component.onDestruction: {

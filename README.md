@@ -80,4 +80,7 @@ Please refer to [AUTHORS.md](AUTHORS.md) for a list of everyone who directly con
 
 ## Licensing
 
-Licensed under the terms of the GNU General Public License version 3 or, at your option, any later version.
+Contains the [QtSingleApplication](https://github.com/qtproject/qt-solutions/tree/master/qtsingleapplication)
+(see the `3rdparty/qtsingleapplication` folder) module which is licensed under the 3-clause BSD license (see `LICENSE.BSD`).
+
+Liri Browser is licensed under the terms of the GNU General Public License version 3 or, at your option, any later version.

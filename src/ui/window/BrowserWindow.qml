@@ -86,7 +86,7 @@ ApplicationWindow {
             request.accept();
         }
         onOpenUrlInNewPrivateWindowRequested: {
-            root.openUrl(url, true);
+            root.openUrlInNewWindow(url, true);
         }
     }
 
@@ -134,6 +134,7 @@ ApplicationWindow {
 
     onClosing: {
         Session.save(tabsModel);
+        root.destroyWindow(window);
     }
 
     MouseArea {

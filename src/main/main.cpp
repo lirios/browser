@@ -21,119 +21,92 @@
  * $END_LICENSE$
 */
 
-#include <QtGlobal>
-#include <QGuiApplication>
 #include <QIcon>
+#include <QList>
 #include <QQmlApplicationEngine>
 #include <QtQuickControls2/QQuickStyle>
 #include <QQmlContext>
 #include <QtWebEngine>
-#include <QStandardPaths>
+#include <QCommandLineParser>
 #ifndef QT_NO_TRANSLATION
-    #include <QtCore/QTranslator>
+#include <QtCore/QTranslator>
 #endif
 #include <QDebug>
 
-#include "../core/models/tabsmodel.h"
-#include "../core/models/tab.h"
-#include "../core/models/downloadsmodel.h"
-#include "../core/settings/settings.h"
-#include "../core/session/session.h"
-#include "../core/utils/darkthemetimer.h"
 
-#ifdef Q_OS_MACOS
-    #include "mac/MacOsEventListener.h"
-#endif
+#include <qtsingleapplication.h>
 
-static void loadTranslations()
-{
-    #ifndef QT_NO_TRANSLATION
-        QString locale = QLocale::system().name();
+#include "browserapplication.h"
 
-        // Find the translations directory
-        const QString path = QLatin1String("liri-browser/translations");
-        const QString translationsDir =
-            QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                   path,
-                                   QStandardPaths::LocateDirectory);
-
-        // Load translations
-        QTranslator *appTranslator = new QTranslator(qGuiApp);
-        if (appTranslator->load(QStringLiteral("%1/browser_%3").arg(translationsDir, locale))) {
-            QCoreApplication::installTranslator(appTranslator);
-        } else if (locale == QLatin1String("C") ||
-                    locale.startsWith(QLatin1String("en"))) {
-            // English is the default, it's translated anyway
-            delete appTranslator;
-        }
-    #endif
-}
 
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QQuickStyle::setStyle(QLatin1String("Material"));
 
-    QGuiApplication app(argc, argv);
+    QtSingleApplication app(argc, argv);
 
     // Set app info
     app.setOrganizationName(QStringLiteral("Liri"));
     app.setOrganizationDomain(QStringLiteral("liri.io"));
     app.setApplicationName(QStringLiteral("Browser"));
+    app.setApplicationVersion(QStringLiteral(PROJECT_VERSION));
     app.setDesktopFileName(QStringLiteral("io.liri.Browser.desktop"));
     app.setWindowIcon(QIcon(":/res/icons/512x512/io.liri.Browser.png"));
 
     // Set the X11 WM_CLASS so X11 desktops can find the desktop file
     qputenv("RESOURCE_NAME", "io.liri.Browser");
 
-    #ifdef Q_OS_MACOS
-        MacOsEventListener evListener;
-        initMacOsEventListener(&evListener);
-    #endif
+    QCommandLineParser parser;
+    parser.setApplicationDescription(QStringLiteral("Liri Browser\n\nA cross-platform Material Design web browser"));
+    parser.addHelpOption();
+    parser.addVersionOption();
+
+    QCommandLineOption incognitoOption(QStringLiteral("incognito"), QStringLiteral("Open incognito mode"));
+    parser.addOption(incognitoOption);
+
+    parser.addPositionalArgument("urls", "Space-separated list of urls to open");
+
+    parser.process(app);
+
+    bool incognito = parser.isSet(incognitoOption);
+    auto args = parser.positionalArguments();
+
+    // Send messages to already running instance (if any)
+    if (app.isRunning()) {
+        qDebug() << "Already running";
+        if (args.count() > 0) {
+            for (const QString &arg: args) {
+                QString message = incognito ? QStringLiteral("open_incognito ")
+                                            : QStringLiteral("open ");
+                message.append(QUrl(arg).toString(QUrl::FullyEncoded));
+                app.sendMessage(message);
+            }
+        } else {
+            QString message = incognito ? QStringLiteral("open_incognito")
+                                        : QStringLiteral("open");
+            app.sendMessage(message);
+        }
+        return 0;
+    }
 
     QtWebEngine::initialize();
 
-    // Create settings instance and load
-    Settings settings;
-    settings.load();
+    BrowserApplication browser;
 
-    Session session;
+    QObject::connect(&app, &QtSingleApplication::messageReceived,
+                     &browser, &BrowserApplication::onMessageReceived);
 
-    // Create and start dark theme time
-    DarkThemeTimer darkThemeTimer;
-    darkThemeTimer.start();
+    browser.load();
 
-    // Load translations
-    loadTranslations();
-
-    // create qml app engine
-    QQmlApplicationEngine engine;
-
-    // register core types
-    qmlRegisterUncreatableType<SearchConfig>("core", 1, 0, "SearchConfig", "SearchConfig (from module core) may not be created directly.");
-    qmlRegisterUncreatableType<StartConfig>("core", 1, 0, "StartConfig", "StartConfig (from module core) may not be created directly.");
-
-    qmlRegisterUncreatableType<Tab>("core", 1, 0, "Tab", "Tab (from module core) may not be created directly.");
-    qmlRegisterType<TabsModel>("core", 1, 0, "TabsModel");
-
-    qmlRegisterType<DownloadsModel>("core", 1, 0, "DownloadsModel");
-
-    // Register context properties
-    engine.rootContext()->setContextProperty("Settings", &settings);
-    engine.rootContext()->setContextProperty("Session", &session);
-    engine.rootContext()->setContextProperty("DarkThemeTimer", &darkThemeTimer);
-    #ifdef Q_OS_MACOS
-        engine.rootContext()->setContextProperty("MacEvents", &evListener);
-    #endif
-
-    // setup qml imports
-    engine.addImportPath("qrc:/");
-
-    // load main ui
-    engine.load(QUrl(QLatin1String("qrc:/ui/Main.qml")));
-
-    // load main
-    QMetaObject::invokeMethod(engine.rootObjects()[0], "load");
+    if (args.count() > 0) {
+        // Open urls from commandline arguments
+        for (const QString &arg: args) {
+            browser.openUrl(QUrl(arg), incognito);
+        }
+    } else {
+        browser.openStartUrl(incognito);
+    }
 
     return app.exec();
 }

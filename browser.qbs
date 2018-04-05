@@ -38,6 +38,10 @@ Project {
         }
     }
 
+    SubProject {
+        filePath: "3rdparty/qtsingleapplication/qtsingleapplication.qbs"
+    }
+
     Product {
         name: "Browser Documents"
         files: [
