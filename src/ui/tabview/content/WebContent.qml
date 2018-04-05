@@ -23,6 +23,8 @@
 
 import QtQuick 2.0
 import QtQuick.Controls 2.0
+import QtQuick.Dialogs 1.1
+import Fluid.Controls 1.0
 import QtWebEngine 1.4
 import "../.."
 
@@ -89,6 +91,11 @@ TabContent {
             contextMenu.y = request.y;
             contextMenu.open();
             request.accepted = true;
+        }
+        onCertificateError: {
+            error.defer();
+            certificateErrorDialog.error = error;
+            certificateErrorDialog.open();
         }
     }
 
@@ -309,6 +316,33 @@ TabContent {
             target: webview
             onScrollPositionChanged: {
                 mediaContextMenu.close();
+            }
+        }
+    }
+
+    AlertDialog {
+        id: certificateErrorDialog
+
+        property WebEngineCertificateError error
+
+        title: qsTr("This connection is untrusted")
+        //: %1 is an URL
+        text: qsTr("You are about to securely connect to %1 but we can't confirm that your connection is secure: %2")
+            .arg(url).arg(error !== null ? error.description : "")
+        standardButtons: (error === null || error.overridable) ? StandardButton.Ignore | StandardButton.Close : StandardButton.Close
+        closePolicy: Popup.NoAutoClose
+        implicitWidth: 400
+
+        onAccepted: {
+            error.ignoreCertificateError();
+        }
+
+        onRejected: {
+            error.rejectCertificate();
+            if (webview.canGoBack) {
+                webview.goBack();
+            } else {
+                actionManager.closeRequested();
             }
         }
     }
