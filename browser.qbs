@@ -23,6 +23,7 @@ Project {
     references: [
         "res/res.qbs",
         "src/src.qbs",
+        "3rdparty/qtsingleapplication/qtsingleapplication.qbs"
     ]
 
     SubProject {
@@ -36,10 +37,6 @@ Project {
             withDocumentation: false
             withDemo: false
         }
-    }
-
-    SubProject {
-        filePath: "3rdparty/qtsingleapplication/qtsingleapplication.qbs"
     }
 
     Product {
