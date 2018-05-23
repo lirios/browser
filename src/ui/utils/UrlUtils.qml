@@ -57,7 +57,7 @@ QtObject {
         }
         // Search term
         else {
-            return searchUrl + url;
+            return searchUrl + encodeURIComponent(url);
         }
     }
 }
