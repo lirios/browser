@@ -105,6 +105,8 @@ void Settings::load()
         searchEngine = SearchConfig::SearchEngine::Bing;
     else if (searchEngineString == "Yahoo")
         searchEngine = SearchConfig::SearchEngine::Yahoo;
+    else if (searchEngineString == "StartPage")
+        searchEngine = SearchConfig::SearchEngine::StartPage;
     else
         searchEngine = SearchConfig::SearchEngine::Custom;
     m_searchConfig->setSearchEngine(searchEngine);
@@ -210,6 +212,9 @@ QByteArray Settings::json()
             break;
         case SearchConfig::SearchEngine::Yahoo:
             searchEngineString = "Yahoo";
+            break;
+        case SearchConfig::SearchEngine::StartPage:
+            searchEngineString = "StartPage";
             break;
         default:
             searchEngineString = "Custom";

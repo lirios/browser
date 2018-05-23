@@ -192,6 +192,17 @@ TabContent {
                         }
                     }
 
+                    RadioButton {
+                        text: "StartPage"
+                        checked: Settings.searchConfig.searchEngine == SearchConfig.StartPage
+                        onClicked: {
+                            if (Settings.searchConfig.searchEngine != SearchConfig.StartPage) {
+                                Settings.searchConfig.searchEngine = SearchConfig.StartPage;
+                                Settings.dirty = true;
+                            }
+                        }
+                    }
+
                     ColumnLayout {
                         RowLayout {
                             RadioButton {

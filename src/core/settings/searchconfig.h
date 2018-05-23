@@ -43,6 +43,7 @@ public:
         Google,
         Bing,
         Yahoo,
+        StartPage,
         Custom
     };
 
@@ -62,6 +63,8 @@ public:
                 return QUrl("https://www.bing.com/search?q=");
             case SearchEngine::Yahoo:
                 return QUrl("https://search.yahoo.com/search?q=");
+            case SearchEngine::StartPage:
+                return QUrl("https://www.startpage.com/do/search?query=");
             default:
                 return customSearchUrl();
         }
