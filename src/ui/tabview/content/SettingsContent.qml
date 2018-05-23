@@ -104,6 +104,7 @@ TabContent {
                     TextField {
                         Layout.minimumWidth: 256
                         text: Settings.startConfig.primaryStartUrl
+                        selectByMouse: true
                         onEditingFinished: {
                             if (Settings.startConfig.primaryStartUrl != text) {
                                 Settings.startConfig.primaryStartUrl = text;
@@ -119,6 +120,7 @@ TabContent {
                     TextField {
                         Layout.minimumWidth: 256
                         text: Settings.startConfig.darkStartUrl
+                        selectByMouse: true
                         onEditingFinished: {
                             if (Settings.startConfig.darkStartUrl != text) {
                                 Settings.startConfig.darkStartUrl = text;
@@ -134,6 +136,7 @@ TabContent {
                     TextField {
                         Layout.minimumWidth: 256
                         text: Settings.startConfig.incognitoStartUrl
+                        selectByMouse: true
                         onEditingFinished: {
                             if (Settings.startConfig.incognitoStartUrl != text) {
                                 Settings.startConfig.incognitoStartUrl = text;
@@ -220,6 +223,7 @@ TabContent {
                                 Layout.minimumWidth: 256
                                 enabled: Settings.searchConfig.searchEngine == SearchConfig.Custom
                                 text: Settings.searchConfig.customSearchUrl
+                                selectByMouse: true
                                 placeholderText: qsTr("e.g https://example.com/?q=")
                                 onEditingFinished: {
                                     if (Settings.searchConfig.customSearchUrl != text) {
@@ -306,6 +310,7 @@ TabContent {
                             id: inputStartTime
                             Layout.maximumWidth: 56
                             text: Qt.formatTime(Settings.themeConfig.darkThemeStartTime, "HH:mm")
+                            selectByMouse: true
                             enabled: radioButtonDarkBetween.checked
                             maximumLength: 5
                             validator: RegExpValidator {
@@ -327,6 +332,7 @@ TabContent {
                             id: inputEndTime
                             Layout.maximumWidth: 56
                             text: Qt.formatTime(Settings.themeConfig.darkThemeEndTime, "HH:mm")
+                            selectByMouse: true
                             enabled: radioButtonDarkBetween.checked
                             maximumLength: 5
                             validator: RegExpValidator {
