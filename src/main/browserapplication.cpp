@@ -115,3 +115,10 @@ void BrowserApplication::onMessageReceived(const QString &message)
         qWarning() << "Received invalid message" << message;
     }
 }
+
+void BrowserApplication::onAboutToQuit()
+{
+    if (m_settings.dirty()) {
+        m_settings.save();
+    }
+}

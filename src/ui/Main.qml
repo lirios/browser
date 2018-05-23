@@ -124,11 +124,4 @@ QtObject {
         // Update dark theme timer
         DarkThemeTimer.update();
     }
-
-    Component.onDestruction: {
-        if (Settings.dirty) {
-            console.log("Saving settings ...");
-            Settings.save();
-        }
-    }
 }

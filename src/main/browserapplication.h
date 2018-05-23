@@ -79,6 +79,7 @@ public:
 
 public slots:
     void onMessageReceived(const QString &message);
+    void onAboutToQuit();
 
 private: // members
 #ifdef Q_OS_MACOS

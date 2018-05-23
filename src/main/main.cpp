@@ -97,6 +97,9 @@ int main(int argc, char *argv[])
     QObject::connect(&app, &QtSingleApplication::messageReceived,
                      &browser, &BrowserApplication::onMessageReceived);
 
+    QObject::connect(&app, &QApplication::aboutToQuit,
+                     &browser, &BrowserApplication::onAboutToQuit);
+
     browser.load();
 
     if (args.count() > 0) {
