@@ -79,45 +79,45 @@ void Settings::load()
     }
     QJsonObject data = root["data"].toObject();
     QJsonObject dataStart = data["start"].toObject();
-    m_startConfig->setPrimaryStartUrl(QUrl(dataStart["primary_url"].toString()));
-    m_startConfig->setDarkStartUrl(QUrl(dataStart["dark_theme_url"].toString()));
-    m_startConfig->setIncognitoStartUrl(QUrl(dataStart["incognito_url"].toString()));
+    m_startConfig->setPrimaryStartUrl(QUrl(dataStart["primaryUrl"].toString()));
+    m_startConfig->setDarkStartUrl(QUrl(dataStart["darkThemeUrl"].toString()));
+    m_startConfig->setIncognitoStartUrl(QUrl(dataStart["incognitoUrl"].toString()));
 
     StartConfig::StartupType startupType;
     QString startupTypeString = dataStart["startupType"].toString();
 
-    if (startupTypeString == "start_from_new_page")
+    if (startupTypeString == "StartFromNewPage")
         startupType = StartConfig::StartupType::StartFromNewPage;
-    else if (startupTypeString == "start_from_previously_opened_tabs")
+    else if (startupTypeString == "StartFromPreviouslyOpenedTabs")
         startupType = StartConfig::StartupType::StartFromPreviouslyOpenedTabs;
 
     m_startConfig->setStartupType(startupType);
-    m_startConfig->setPersistentCookies(dataStart["persistent_cookies"].toBool());
+    m_startConfig->setPersistentCookies(dataStart["persistentCookies"].toBool());
 
     QJsonObject dataSearch = data["search"].toObject();
     QString searchEngineString = dataSearch["engine"].toString();
     SearchConfig::SearchEngine searchEngine;
-    if (searchEngineString == "duckduckgo")
+    if (searchEngineString == "DuckDuckGo")
         searchEngine = SearchConfig::SearchEngine::DuckDuckGo;
-    else if (searchEngineString == "google")
+    else if (searchEngineString == "Google")
         searchEngine = SearchConfig::SearchEngine::Google;
-    else if (searchEngineString == "bing")
+    else if (searchEngineString == "Bing")
         searchEngine = SearchConfig::SearchEngine::Bing;
-    else if (searchEngineString == "yahoo")
+    else if (searchEngineString == "Yahoo")
         searchEngine = SearchConfig::SearchEngine::Yahoo;
     else
         searchEngine = SearchConfig::SearchEngine::Custom;
     m_searchConfig->setSearchEngine(searchEngine);
-    m_searchConfig->setCustomSearchUrl(QUrl(dataSearch["custom_url"].toString()));
+    m_searchConfig->setCustomSearchUrl(QUrl(dataSearch["customUrl"].toString()));
     QJsonObject dataTheme = data["theme"].toObject();
-    m_themeConfig->setThemeColorEnabled(dataTheme["adapt_website_theme"].toBool());
-    m_themeConfig->setDarkThemeEnabled(dataTheme["dark_theme_enabled"].toBool());
+    m_themeConfig->setThemeColorEnabled(dataTheme["adaptWebsiteTheme"].toBool());
+    m_themeConfig->setDarkThemeEnabled(dataTheme["darkThemeEnabled"].toBool());
     m_themeConfig->setDarkThemeStartTime(QTime::fromString(
-        dataTheme["dark_theme_start_time"].toString(),
+        dataTheme["darkThemeStartTime"].toString(),
         "HH:mm"
     ));
     m_themeConfig->setDarkThemeEndTime(QTime::fromString(
-        dataTheme["dark_theme_end_time"].toString(),
+        dataTheme["darkThemeEndTime"].toString(),
         "HH:mm"
     ));
     setDirty(false);
@@ -143,21 +143,21 @@ QByteArray Settings::defaultJSON()
         {"schema", "0.1"}
     };
     QJsonObject dataStart {
-        {"primary_url", m_startConfig->defaultPrimaryStartUrl().toString()},
-        {"dark_theme_url", m_startConfig->defaultDarkStartUrl().toString()},
-        {"incognito_url", m_startConfig->defaultIncognitoStartUrl().toString()},
-        {"startupType", "start_from_new_page"},
-        {"persistent_cookies", true}
+        {"primaryUrl", m_startConfig->defaultPrimaryStartUrl().toString()},
+        {"darkThemeUrl", m_startConfig->defaultDarkStartUrl().toString()},
+        {"incognitoUrl", m_startConfig->defaultIncognitoStartUrl().toString()},
+        {"startupType", "StartFromNewPage"},
+        {"persistentCookies", true}
     };
     QJsonObject dataSearch {
-        {"engine", "duckduckgo"},
-        {"custom_url", ""}
+        {"engine", "DuckDuckGo"},
+        {"customUrl", ""}
     };
     QJsonObject dataTheme {
-        {"adapt_website_theme", true},
-        {"dark_theme_enabled", false},
-        {"dark_theme_start_time", "21:00"},
-        {"dark_theme_end_time", "07:00"}
+        {"adaptWebsiteTheme", true},
+        {"darkThemeEnabled", false},
+        {"darkThemeStartTime", "21:00"},
+        {"darkThemeEndTime", "07:00"}
     };
     QJsonObject data {
         {"start", dataStart},
@@ -182,48 +182,48 @@ QByteArray Settings::json()
 
     switch (m_startConfig->startupType()) {
         case StartConfig::StartupType::StartFromNewPage:
-            startupTypeString = "start_from_new_page";
+            startupTypeString = "StartFromNewPage";
             break;
         case StartConfig::StartupType::StartFromPreviouslyOpenedTabs:
-            startupTypeString = "start_from_previously_opened_tabs";
+            startupTypeString = "StartFromPreviouslyOpenedTabs";
             break;
     }
 
     QJsonObject dataStart {
-        {"primary_url", m_startConfig->primaryStartUrl().toString()},
-        {"dark_theme_url", m_startConfig->darkStartUrl().toString()},
-        {"incognito_url", m_startConfig->incognitoStartUrl().toString()},
+        {"primaryUrl", m_startConfig->primaryStartUrl().toString()},
+        {"darkThemeUrl", m_startConfig->darkStartUrl().toString()},
+        {"incognitoUrl", m_startConfig->incognitoStartUrl().toString()},
         {"startupType", startupTypeString},
-        {"persistent_cookies", m_startConfig->persistentCookies()},
+        {"persistentCookies", m_startConfig->persistentCookies()},
     };
 
     QString searchEngineString;
     switch (m_searchConfig->searchEngine()) {
         case SearchConfig::SearchEngine::DuckDuckGo:
-            searchEngineString = "duckduckgo";
+            searchEngineString = "DuckDuckGo";
             break;
         case SearchConfig::SearchEngine::Google:
-            searchEngineString = "google";
+            searchEngineString = "Google";
             break;
         case SearchConfig::SearchEngine::Bing:
-            searchEngineString = "bing";
+            searchEngineString = "Bing";
             break;
         case SearchConfig::SearchEngine::Yahoo:
-            searchEngineString = "yahoo";
+            searchEngineString = "Yahoo";
             break;
         default:
-            searchEngineString = "custom";
+            searchEngineString = "Custom";
             break;
     }
     QJsonObject dataSearch {
         {"engine", searchEngineString},
-        {"custom_url", m_searchConfig->customSearchUrl().toString()}
+        {"customUrl", m_searchConfig->customSearchUrl().toString()}
     };
     QJsonObject dataTheme {
-        {"adapt_website_theme", m_themeConfig->themeColorEnabled()},
-        {"dark_theme_enabled", m_themeConfig->darkThemeEnabled()},
-        {"dark_theme_start_time", m_themeConfig->darkThemeStartTime().toString("HH:mm")},
-        {"dark_theme_end_time", m_themeConfig->darkThemeEndTime().toString("HH:mm")}
+        {"adaptWebsiteTheme", m_themeConfig->themeColorEnabled()},
+        {"darkThemeEnabled", m_themeConfig->darkThemeEnabled()},
+        {"darkThemeStartTime", m_themeConfig->darkThemeStartTime().toString("HH:mm")},
+        {"darkThemeEndTime", m_themeConfig->darkThemeEndTime().toString("HH:mm")}
     };
     QJsonObject data {
         {"start", dataStart},
