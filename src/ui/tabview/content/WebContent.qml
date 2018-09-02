@@ -23,7 +23,6 @@
 
 import QtQuick 2.0
 import QtQuick.Controls 2.0
-import QtQuick.Dialogs 1.1
 import Fluid.Controls 1.0 as FluidControls
 import QtWebEngine 1.4
 import "../.."
