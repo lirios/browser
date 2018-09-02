@@ -1,6 +1,6 @@
 import qbs 1.0
 
-DynamicLibrary {
+StaticLibrary {
     name: "qtsingleapplication"
 
     files: [
@@ -8,19 +8,6 @@ DynamicLibrary {
         "*.cpp", "*.h",
     ]
     excludeFiles: ["*_win.cpp", "*_unix.cpp", "qtlockedfile.cpp"]
-
-    Group {
-        name: "lib"
-        fileTagsFilter: ["dynamiclibrary"]
-        qbs.install: true
-        qbs.installDir: {
-            if (qbs.targetOS.contains("linux"))
-                return lirideployment.libDir;
-            else
-                return "";
-        }
-        qbs.installSourceBase: destinationDirectory
-    }
 
     Depends { name: "cpp" }
     Depends { name: "Qt"; submodules: ["widgets", "network"] }
