@@ -328,7 +328,7 @@ TabContent {
         //: %1 is an URL
         text: qsTr("You are about to securely connect to %1 but we can't confirm that your connection is secure: %2")
             .arg(url).arg(error !== null ? error.description : "")
-        standardButtons: (error === null || error.overridable) ? StandardButton.Ignore | StandardButton.Close : StandardButton.Close
+        standardButtons: (error === null || error.overridable) ? Dialog.Ignore | Dialog.Close : Dialog.Close
         closePolicy: Popup.NoAutoClose
         implicitWidth: 400
 
