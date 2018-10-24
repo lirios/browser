@@ -11,9 +11,6 @@ QtGuiApplication {
         cpp.frameworks: ["AppKit", "Foundation"]
     }
 
-    bundle.identifierPrefix: "io.liri"
-    bundle.identifier: "io.liri.Browser"
-
     Qt.core.resourcePrefix: "/"
     Qt.core.resourceSourceBase: "../src"
 
@@ -23,6 +20,12 @@ QtGuiApplication {
     Depends { name: "Qt"; submodules: ["qml", "quick", "quickcontrols2", "webengine"] }
     Depends { name: "ib"; condition: qbs.targetOS.contains("macos") }
     Depends { name: "qtsingleapplication" }
+
+    Properties {
+        condition: qbs.targetOS.contains("darwin")
+        bundle.identifierPrefix: "io.liri"
+        bundle.identifier: "io.liri.Browser"
+    }
 
     files: [
         "core/**",
