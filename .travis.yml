@@ -18,8 +18,8 @@ branches:
     - /^(?i:continuous)$/
 
 script:
-  - curl "https://raw.githubusercontent.com/lirios/infra-travis/master/installer" | bash
-  - ./.travis/build.sh
+  - wget -c https://raw.githubusercontent.com/lirios/infra-travis/master/run
+  - bash run ./.travis/build-${TRAVIS_OS_NAME}.sh
 
 after_success:
   - ls -lh travis-out/*

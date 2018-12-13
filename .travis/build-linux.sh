@@ -10,7 +10,7 @@ source /usr/local/share/liri-travis/functions
 travis_start "qbs_setup"
 msg "Setup qbs..."
 qbs setup-toolchains --detect
-qbs setup-qt $(which qmake) travis-qt5
+qbs setup-qt $(which qmake-qt5) travis-qt5
 qbs config profiles.travis-qt5.baseProfile $CC
 travis_end "qbs_setup"
 
@@ -29,9 +29,9 @@ pushd fluid >/dev/null
 qbs -d build -j $(nproc) profile:travis-qt5 \
     modules.qbs.installRoot:/ \
     modules.lirideployment.prefix:/usr \
-    modules.lirideployment.libDir:/usr/lib/x86_64-linux-gnu \
-    modules.lirideployment.qmlDir:/usr/lib/x86_64-linux-gnu/qt5/qml \
-    modules.lirideployment.pluginsDir:/usr/lib/x86_64-linux-gnu/qt5/plugins \
+    modules.lirideployment.libDir:/usr/lib64 \
+    modules.lirideployment.qmlDir:/usr/lib64/qt5/qml \
+    modules.lirideployment.pluginsDir:/usr/lib64/qt5/plugins \
     project.useSystemQbsShared:true \
     project.withDocumentation:false \
     project.withDemo:false
