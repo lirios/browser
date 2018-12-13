@@ -1,7 +1,3 @@
-[submodule "fluid"]
-	path = fluid
-	url = git://github.com/lirios/fluid.git
-	branch = develop
 [submodule "snap/plugins"]
 	path = snap/plugins
 	url = git://github.com/lirios/snapcraft-plugins

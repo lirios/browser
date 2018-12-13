@@ -4,48 +4,68 @@ set -e
 
 source /usr/local/share/liri-travis/functions
 
-# Update
+# Update brew
 travis_start "brew_update"
 msg "Update..."
 brew update
-travis_end
+travis_end "brew_update"
 
-# Install
+# Install dependencies
 travis_start "brew_install"
 msg "Install packages..."
-brew install qt5 qbs
+brew install qt5
 brew link qt5 --force
-brew link qbs --force
-travis_end
+echo 'export PATH="/usr/local/opt/qt/bin:$PATH"' >> ~/.bash_profile
+export PATH="/usr/local/opt/qt/bin:$PATH"
+export LDFLAGS="-L/usr/local/opt/qt/lib"
+export CPPFLAGS="-I/usr/local/opt/qt/include"
+export PKG_CONFIG_PATH="/usr/local/opt/qt/lib/pkgconfig"
+travis_end "brew_install"
 
-# Configure qbs
-travis_start "qbs_setup"
-qbs setup-toolchains --detect
-qbs setup-qt /usr/local/opt/qt/bin/qmake travis-qt5
-qbs config profiles.travis-qt5.baseProfile xcode-macosx-x86_64
-qbs config preferences.qbsSearchPaths $(pwd)/fluid/qbs/shared
-travis_end "qbs_setup"
-
-# Build and install Fluid
-travis_start "build_fluid"
+# Fluid
+travis_start "fluid"
 msg "Build Fluid..."
-pushd fluid >/dev/null
-sudo qbs -d build -j $(sysctl -n hw.ncpu) profile:travis-qt5 modules.qbs.installRoot:/usr/local modules.lirideployment.prefix:/opt/qt modules.lirideployment.qmlDir:/opt/qt/qml project.withDocumentation:false project.withDemo:false
-sudo rm -fr build
-popd >/dev/null
-travis_end "build_fluid"
+git clone -b develop git://github.com/lirios/fluid.git
+cd fluid
+git submodule update --init
+mkdir build
+cd build
+cmake .. \
+    -DFLUID_WITH_DOCUMENTATION:BOOL=OFF \
+    -DFLUID_WITH_DEMO:BOOL=OFF \
+    -DCMAKE_INSTALL_PREFIX=/usr/local/opt/qt \
+    -DINSTALL_LIBDIR=/usr/local/opt/qt/lib \
+    -DINSTALL_QMLDIR=/usr/local/opt/qt/qml \
+    -DINSTALL_PLUGINSDIR=/usr/local/opt/qt/lib/plugins
+make -j $(sysctl -n hw.ncpu)
+sudo make install
+cd ../..
+travis_end "fluid"
 
-# Build app
-travis_start "build_app"
+# Configure
+travis_start "configure"
+msg "Setup CMake..."
+mkdir build
+cd build
+cmake .. \
+    -DLIRI_LOCAL_ECM:BOOL=ON \
+    -DCMAKE_INSTALL_PREFIX=/opt/liri \
+    -DINSTALL_LIBDIR=/opt/liri/lib \
+    -DINSTALL_QMLDIR=/opt/liri/lib/qml \
+    -DINSTALL_PLUGINSDIR=/opt/liri/lib/plugins
+travis_end "configure"
+
+# Build
+travis_start "build"
 msg "Build..."
-qbs -d build -j $(sysctl -n hw.ncpu) profile:travis-qt5 project.withFluid:false
-travis_end "build_app"
+make -j $(sysctl -n hw.ncpu)
+travis_end "build"
 
 # Package
 travis_start "package"
 msg "Package..."
-srcdir=$(pwd)/src
-pushd build/default/install-root >/dev/null && macdeployqt ./liri-browser.app -dmg -qmldir=$srcdir -verbose=2 && popd >/dev/null
-mkdir -p travis-out
-mv ./build/default/install-root/liri-browser.dmg travis-out/Liri_Browser-git-$(date +%Y%m%d-%H%M%S)-$(git rev-parse --short HEAD).dmg
+srcdir=$(pwd)/../src
+#macdeployqt src/LiriBrowser.app -dmg -qmldir=$srcdir -verbose=2
+#mkdir -p travis-out
+#mv src/LiriBrowser.dmg travis-out/LiriBrowser-git-$(date +%Y%m%d-%H%M%S)-$(git rev-parse --short HEAD).dmg
 travis_end "package"

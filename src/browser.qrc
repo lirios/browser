@@ -1,0 +1,33 @@
+<RCC>
+    <qresource prefix="/">
+        <file>ui/components/ActionBar.qml</file>
+        <file>ui/drawer/content/downloads/DownloadItemDelegate.qml</file>
+        <file>ui/drawer/content/downloads/DrawerDownloadsContent.qml</file>
+        <file>ui/drawer/Drawer.qml</file>
+        <file>ui/drawer/DrawerContentItem.qml</file>
+        <file>ui/expansionbar/ExpansionBar.qml</file>
+        <file>ui/expansionbar/ExpansionBarItem.qml</file>
+        <file>ui/Main.qml</file>
+        <file>ui/omnibox/Omnibox.qml</file>
+        <file>ui/overlay/BaseOverlay.qml</file>
+        <file>ui/overlay/SearchOverlay.qml</file>
+        <file>ui/tabview/content/SettingsContent.qml</file>
+        <file>ui/tabview/content/WebContent.qml</file>
+        <file>ui/tabview/TabActionManager.qml</file>
+        <file>ui/tabview/TabBar.qml</file>
+        <file>ui/tabview/TabBarActionBar.qml</file>
+        <file>ui/tabview/TabContent.qml</file>
+        <file>ui/tabview/TabContentView.qml</file>
+        <file>ui/tabview/TabController.qml</file>
+        <file>ui/tabview/TabDelegate.qml</file>
+        <file>ui/tabview/TabIndicator.qml</file>
+        <file>ui/tabview/TabPage.qml</file>
+        <file>ui/tabview/TabType.qml</file>
+        <file>ui/tabview/TabView.qml</file>
+        <file>ui/toolbar/Toolbar.qml</file>
+        <file>ui/utils/ColorUtils.qml</file>
+        <file>ui/utils/UrlUtils.qml</file>
+        <file>ui/window/BrowserWindow.qml</file>
+        <file>ui/window/ShortcutManager.qml</file>
+    </qresource>
+</RCC>

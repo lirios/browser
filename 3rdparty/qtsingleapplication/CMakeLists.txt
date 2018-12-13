@@ -1,0 +1,20 @@
+add_library(qtsingleapplication STATIC
+    qtlocalpeer.cpp
+    qtlocalpeer.h
+    QtLockedFile
+    qtlockedfile.h
+    QtSingleApplication
+    qtsingleapplication.cpp
+    qtsingleapplication.h
+    qtsinglecoreapplication.cpp
+    qtsinglecoreapplication.h
+)
+target_link_libraries(qtsingleapplication
+    PUBLIC
+        Qt5::Widgets
+        Qt5::Network
+)
+target_include_directories(qtsingleapplication
+    PUBLIC
+        "${CMAKE_CURRENT_SOURCE_DIR}"
+)

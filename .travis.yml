@@ -13,6 +13,11 @@ matrix:
         - docker
     - os: osx
 
+env:
+  global:
+    # DEPLOY_HOST
+    - secure: "Dxu8lVYUxTxs3he3ukESJtl7D70QrJ0XO0nyaHBGh/YtCb0KVmyOtclEobHFQ6SwZFaAAkQmh5FONhrWJdPJj/QfQAG8N1nlcs4+dEx163XrSP4U9VRQtVArdd/85BLgVQN+4E3EZXmHWoyrzViHtra+x+UQeaXM6Zy3Z7/JL7+nxmv/dTlvPWHrnqSOnlfIuZ8bEE4+0L5jwbqDsipRG706ggluiV0tFuVXszGckUVxM1FMb6kMHg8UphAbve1S1Ya7PFRkiRv6NXUzeP42gAHhmhGDu4WM5RdQ73AcLCzgtkEA8qlgAnTx1eYCs0UhRhaBNRiMwiUZS1Ief5wacgaPP8HxvFkBVyz9M5ShyLqUCDSuQpTq9ERoHO5sdPKf5yyr76Do1M3sTrFOx03JtWKUF2aVmjvXEhA/MXa7mFOE5A6i7Dy2j+qg90vYdlhFDWtu5tucEdA3lBQJMUlOlU/SkjgNv+gQQkYlLHlPBYhTP/ZSycGg2Nni77CG3lSfGiOmXjvEoR05kM9PmciewZ/y6XRva06dCAA22q3siG22tV3IMnPTW04nAoBgQWh4QdtjNjt99aC5++reqRmyjJabKvEwaLrlhgi8Wk5G1g448oy2Y1iWCdZCdw+VXAyyYz5nJKybeiau7jFR/N9t02Z71o8yUWd6An4jK05tP6o="
+
 branches:
   except:
     - /^(?i:continuous)$/

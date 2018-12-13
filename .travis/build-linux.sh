@@ -6,51 +6,61 @@ curl "https://raw.githubusercontent.com/lirios/infra-travis/master/installer" | 
 
 source /usr/local/share/liri-travis/functions
 
-# Configure qbs
-travis_start "qbs_setup"
-msg "Setup qbs..."
-qbs setup-toolchains --detect
-qbs setup-qt $(which qmake-qt5) travis-qt5
-qbs config profiles.travis-qt5.baseProfile $CC
-travis_end "qbs_setup"
+# Install packages
+travis_start "install_packages"
+msg "Install packages..."
+dnf install -y \
+    desktop-file-utils \
+    libappstream-glib
+travis_end "install_packages"
 
-# Install qbs-shared
-travis_start "qbs_shared"
-msg "Install qbs-shared..."
-pushd fluid/qbs/shared >/dev/null
-qbs -d build -j $(nproc) profile:travis-qt5 modules.qbs.installRoot:/ project.prefix:/usr
-popd >/dev/null
-travis_end "qbs_shared"
+# Install artifacts
+travis_start "artifacts"
+msg "Install artifacts..."
+for name in cmakeshared fluid; do
+    /usr/local/bin/liri-download-artifacts $TRAVIS_BRANCH ${name}-artifacts.tar.gz
+done
+travis_end "artifacts"
 
-# Build and install Fluid
-travis_start "build_fluid"
-msg "Build Fluid..."
-pushd fluid >/dev/null
-qbs -d build -j $(nproc) profile:travis-qt5 \
-    modules.qbs.installRoot:/ \
-    modules.lirideployment.prefix:/usr \
-    modules.lirideployment.libDir:/usr/lib64 \
-    modules.lirideployment.qmlDir:/usr/lib64/qt5/qml \
-    modules.lirideployment.pluginsDir:/usr/lib64/qt5/plugins \
-    project.useSystemQbsShared:true \
-    project.withDocumentation:false \
-    project.withDemo:false
-popd >/dev/null
-travis_end "build_fluid"
+# Configure
+travis_start "configure"
+msg "Setup CMake..."
+mkdir build
+cd build
+cmake .. \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DINSTALL_LIBDIR=/usr/lib64 \
+    -DINSTALL_QMLDIR=/usr/lib64/qt5/qml \
+    -DINSTALL_PLUGINSDIR=/usr/lib64/qt5/plugins
+travis_end "configure"
 
-# Build and install app
-travis_start "build_app"
-msg "Build and install app..."
-qbs -d build -j $(nproc) profile:travis-qt5 \
-    modules.qbs.installRoot:/appdir \
-    modules.lirideployment.prefix:/usr \
-    project.withFluid:false
-travis_end "build_app"
+# Build
+travis_start "build"
+msg "Build..."
+make -j $(nproc)
+travis_end "build"
+
+# Install
+travis_start "install"
+msg "Install..."
+make install
+travis_end "install"
+
+# Validate desktop file and appdata
+travis_start "validate"
+msg "Validate..."
+for filename in $(find . -type f -name "*.desktop"); do
+    desktop-file-validate $filename
+done
+for filename in $(find . -type f -name "*.appdata.xml"); do
+    appstream-util validate-relax --nonet $filename
+done
+travis_end "validate"
 
 # Package
-travis_start "appimage"
-msg "Create AppImage..."
-/usr/local/bin/liri-build-appimage io.liri.Browser
-mkdir -p travis-out
-mv Liri_Browser*.AppImage travis-out/Liri_Browser-git-$(date +%Y%m%d-%H%M%S)-$(git rev-parse --short HEAD)-x86_64.AppImage
-travis_end "appimage"
+#travis_start "appimage"
+#msg "Create AppImage..."
+#/usr/local/bin/liri-build-appimage io.liri.Browser
+#mkdir -p travis-out
+#mv LiriBrowser*.AppImage travis-out/LiriBrowser-git-$(date +%Y%m%d-%H%M%S)-$(git rev-parse --short HEAD)-x86_64.AppImage
+#travis_end "appimage"
