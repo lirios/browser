@@ -25,11 +25,31 @@
 #import <Foundation/Foundation.h>
 #import <AppKit/NSEvent.h>
 
-static const unsigned short kTabKey = 0x30;
+#include <AvailabilityMacros.h>
 
+#ifndef MAC_OS_X_VERSION_10_12
+#  define MAC_OS_X_VERSION_10_12 101200
+#endif
+
+static const unsigned short kTabKey = 0x30;
 
 MacOsEventListener* initMacOsEventListener(MacOsEventListener* ev)
 {
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_12
+    [NSEvent addLocalMonitorForEventsMatchingMask:
+                (NSEventMaskLeftMouseDown | NSEventMaskRightMouseDown | NSEventMaskOtherMouseDown | NSEventMaskKeyDown)
+                handler:^NSEvent*(NSEvent *incomingEvent) {
+                    NSUInteger flags = [incomingEvent modifierFlags] & NSEventModifierFlagDeviceIndependentFlagsMask;
+                    if ([incomingEvent type] == NSEventTypeKeyDown && ([incomingEvent keyCode] == kTabKey) && (flags & NSEventModifierFlagControl)) {
+                        if(flags & NSEventModifierFlagShift) {
+                            emit ev->ctrlShiftTabPressed();
+                        } else {
+                            emit ev->ctrlTabPressed();
+                        }
+                    }
+                    return incomingEvent;
+        }];
+#else
     [NSEvent addLocalMonitorForEventsMatchingMask:
                 (NSLeftMouseDownMask | NSRightMouseDownMask | NSOtherMouseDownMask | NSKeyDownMask)
                 handler:^NSEvent*(NSEvent *incomingEvent) {
@@ -43,5 +63,5 @@ MacOsEventListener* initMacOsEventListener(MacOsEventListener* ev)
                     }
                     return incomingEvent;
         }];
-
+#endif
 }
