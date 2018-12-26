@@ -1,6 +1,6 @@
 if(UNIX AND NOT APPLE AND NOT ANDROID)
-    file(GLOB png_icons "${CMAKE_CURRENT_SOURCE_DIR}/icons/*/*.png")
-    file(GLOB svg_icons "${CMAKE_CURRENT_SOURCE_DIR}/icons/*/*.svg")
+    file(GLOB png_icons "${CMAKE_CURRENT_SOURCE_DIR}/icons/*/*/*.png")
+    file(GLOB svg_icons "${CMAKE_CURRENT_SOURCE_DIR}/icons/*/*/*.svg")
     foreach(source_path IN LISTS png_icons svg_icons)
         string(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/icons/" "" icon_basename "${source_path}")
         get_filename_component(icon_directory "${icon_basename}" DIRECTORY)
@@ -9,7 +9,4 @@ if(UNIX AND NOT APPLE AND NOT ANDROID)
         set(dest_path "${INSTALL_DATADIR}/icons/hicolor/${icon_directory}/")
         install(FILES "${source_path}" DESTINATION "${dest_path}")
     endforeach()
-
-    install(FILES "io.liri.Browser.desktop"
-            DESTINATION "${INSTALL_APPLICATIONSDIR}")
 endif()

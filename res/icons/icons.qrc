@@ -1,7 +1,0 @@
-<RCC>
-    <qresource prefix="/res/icons">
-        <file alias="icon.svg">scalable/io.liri.Browser.svg</file>
-        <file alias="iconx256.png">256x256/io.liri.Browser.png</file>
-        <file alias="iconx512.png">512x512/io.liri.Browser.png</file>
-    </qresource>
-</RCC>
