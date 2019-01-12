@@ -1,0 +1,35 @@
+<RCC>
+    <qresource prefix="/ui">
+        <file>components/ActionBar.qml</file>
+        <file>drawer/content/downloads/DownloadItemDelegate.qml</file>
+        <file>drawer/content/downloads/DrawerDownloadsContent.qml</file>
+        <file>drawer/Drawer.qml</file>
+        <file>drawer/DrawerContentItem.qml</file>
+        <file>expansionbar/ExpansionBar.qml</file>
+        <file>expansionbar/ExpansionBarItem.qml</file>
+        <file>Main.qml</file>
+        <file>omnibox/Omnibox.qml</file>
+        <file>overlay/BaseOverlay.qml</file>
+        <file>overlay/SearchOverlay.qml</file>
+        <file>tabview/content/SettingsContent.qml</file>
+        <file>tabview/content/WebContent.qml</file>
+        <file>tabview/TabActionManager.qml</file>
+        <file>tabview/TabBar.qml</file>
+        <file>tabview/TabBarActionBar.qml</file>
+        <file>tabview/TabContent.qml</file>
+        <file>tabview/TabContentView.qml</file>
+        <file>tabview/TabController.qml</file>
+        <file>tabview/TabDelegate.qml</file>
+        <file>tabview/TabIndicator.qml</file>
+        <file>tabview/TabPage.qml</file>
+        <file>tabview/TabType.qml</file>
+        <file>tabview/TabView.qml</file>
+        <file>toolbar/Toolbar.qml</file>
+        <file>utils/ColorUtils.qml</file>
+        <file>utils/UrlUtils.qml</file>
+        <file>window/BrowserWindow.qml</file>
+        <file>window/ShortcutManager.qml</file>
+        <file>qmldir</file>
+        <file>utils/qmldir</file>
+    </qresource>
+</RCC>

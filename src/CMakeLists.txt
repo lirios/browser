@@ -29,7 +29,6 @@ set(LiriBrowser_SOURCES
     main/browserapplication.cpp
     main/browserapplication.h
     main/main.cpp
-    3rdparty/regex-weburl/regex-weburl.qrc
 )
 if(APPLE)
     set(LiriBrowser_SOURCES
@@ -44,7 +43,8 @@ liri_add_executable(LiriBrowser
     SOURCES
         ${LiriBrowser_SOURCES}
     RESOURCES
-        browser.qrc
+        3rdparty/regex-weburl/regex-weburl.qrc
+        ui/ui.qrc
     DEFINES
         #QT_NO_CAST_FROM_ASCII
         QT_NO_FOREACH
