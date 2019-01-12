@@ -478,7 +478,6 @@ ApplicationWindow {
                 if (empty && searchOverlay.showing)
                     searchOverlay.close();
             }
-            Keys.onReturnPressed: triggered()
         }
 
         Connections {
