@@ -2,8 +2,8 @@
 host = https://www.transifex.com
 
 [liri-browser.browser]
+type = QT
+source_lang = en
+liri_source_directory = src
 file_filter = res/translations/browser_<lang>.ts
 source_file = res/translations/browser.ts
-source_lang = en
-type = QT
-
