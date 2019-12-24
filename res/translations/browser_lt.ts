@@ -38,11 +38,11 @@
     <name>DownloadItemDelegate</name>
     <message>
         <source>Finished</source>
-        <translation>Užbaigta</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Failed</source>
-        <translation>Nepavyko</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -139,11 +139,11 @@
     </message>
     <message>
         <source>Privacy</source>
-        <translation>Privatumas</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Save cookies</source>
-        <translation>Įrašyti slapukus</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -157,15 +157,15 @@
     <name>WebContent</name>
     <message>
         <source>Back</source>
-        <translation>Atgal</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Forward</source>
-        <translation>Pirmyn</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Reload</source>
-        <translation>Įkelti iš naujo</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>View page source</source>
@@ -173,19 +173,19 @@
     </message>
     <message>
         <source>Open in new tab</source>
-        <translation>Atverti naujoje kortelėje</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Open in new window</source>
-        <translation>Atverti naujame lange</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Open in  private window</source>
-        <translation>Atverti privačiame lange</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Copy link location</source>
-        <translation>Kopijuoti nuorodos adresą</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Download link location</source>
@@ -193,19 +193,19 @@
     </message>
     <message>
         <source>Cut</source>
-        <translation>Iškirpti</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Copy</source>
-        <translation>Kopijuoti</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Paste</source>
-        <translation>Įdėti</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Select all</source>
-        <translation>Pažymėti viską</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>image</source>
@@ -233,20 +233,20 @@
     </message>
     <message>
         <source>Copy image</source>
-        <translation>Kopijuoti paveikslą</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Download %1</source>
-        <translation>Atsisiųsti %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>This connection is untrusted</source>
-        <translation>Šis ryšys yra nepatikimas</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>You are about to securely connect to %1 but we can&apos;t confirm that your connection is secure: %2</source>
         <extracomment>%1 is an URL</extracomment>
-        <translation>Jūs ketinate saugiai prisijungti prie %1, tačiau mes negalime patvirtinti, kad jūsų ryšys yra saugus: %2</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>
