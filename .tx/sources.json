@@ -1,0 +1,7 @@
+[
+  {
+    "type": "ts",
+    "directory": "src",
+    "output_path": "res/translations/browser.ts"
+  }
+]
