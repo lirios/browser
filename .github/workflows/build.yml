@@ -1,0 +1,291 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+    tags:
+      - v*
+  pull_request:
+    branches:
+      - master
+      - develop
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  CLAZY_CHECKS: "level1"
+
+jobs:
+  linux:
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    strategy:
+      matrix:
+        compiler:
+          - gcc
+          - clang
+        container:
+          - suse-qt512
+          - suse-qt514
+          - suse-qt515
+    runs-on: ubuntu-latest
+    container:
+      image: liridev/${{ matrix.container }}
+    steps:
+      - name: Extract branch name
+        id: extract_branch
+        shell: bash
+        run: |
+          if [ -n "${{ github.base_ref }}" ]; then
+            echo "##[set-output name=branch;]${{ github.base_ref }}"
+          else
+            github_ref=${{ github.ref }}
+            echo "##[set-output name=branch;]${github_ref##*/}"
+          fi
+      - name: Qt version identifier
+        id: qt_version
+        shell: bash
+        run: |
+          qtverid=`echo "${{ matrix.container }}" | sed -e 's,suse-qt,,g'`
+          echo "##[set-output name=id;]${qtverid}"
+      - name: Fetch cmake-shared artifact
+        uses: liri-infra/fetch-artifact@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          repository: lirios/cmake-shared
+          workflow_path: .github/workflows/build.yml
+          artifact_name: artifacts-${{ steps.extract_branch.outputs.branch }}
+          save_as: cmake-shared.zip
+      - name: Fetch fluid artifact
+        uses: liri-infra/fetch-artifact@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          repository: lirios/fluid
+          workflow_path: .github/workflows/build.yml
+          artifact_name: artifacts-${{ matrix.compiler }}-${{ steps.qt_version.outputs.id }}-${{ steps.extract_branch.outputs.branch }}
+          save_as: fluid.zip
+      - name: Uncompress artifacts
+        run: |
+          set -x
+          for what in cmake-shared fluid; do
+              sudo tar xf ${what}.tar.gz -C /
+              rm -f ${what}.zip ${what}.tar.gz
+          done
+      - uses: actions/checkout@v2
+      - name: Build
+        run: |
+          set -x
+          mkdir -p build
+          cd build
+          if [ "${{ matrix.compiler }}" == "clang" ]; then
+            export CC=clang
+            export CXX=clang++
+            cmake .. -DLIRI_ENABLE_CLAZY:BOOL=ON -DCMAKE_INSTALL_PREFIX=/usr
+          else
+            cmake .. -DCMAKE_INSTALL_PREFIX=/usr
+          fi
+          make -j $(getconf _NPROCESSORS_ONLN)
+          sudo make install
+
+  flatpak:
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install flatpak flatpak-builder
+      - name: Install Flatpak KDE SDK
+        run: |
+          set -x
+          sudo flatpak remote-add --system --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+          sudo flatpak install --system -y flathub org.kde.Platform//5.14
+          sudo flatpak install --system -y flathub org.kde.Sdk//5.14
+          sudo flatpak install --system -y flathub io.qt.qtwebengine.BaseApp//5.14
+      - name: Build the Flatpak package
+        run: |
+          set -x
+          outdir=$(pwd)/github-release-artifacts
+          mkdir $outdir
+          pushd dist/flatpak
+          # We are not using YAML for the manifest because Ubuntu 18.04 has an older flatpak that only supports JSON
+          sudo flatpak-builder --repo=flatpak-repo --force-clean --subject="Build of io.liri.Browser at $(LC_ALL=C date +'%Y-%m-%d %H:%M:%S')" flatpak-build io.liri.Browser.json
+          flatpak build-bundle flatpak-repo $outdir/io.liri.Browser.flatpak io.liri.Browser
+          popd
+      - name: Archive result
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v1
+        with:
+          name: Flatpak
+          path: github-release-artifacts/
+
+  # Browser doesn't build on Windows:
+  # d:\a\browser\browser\3rdparty\qtsingleapplication\qtlockedfile_win.cpp(66): error C2664: 'HANDLE CreateMutexW(LPSECURITY_ATTRIBUTES,BOOL,LPCWSTR)': cannot convert argument 3 from 'TCHAR *' to 'LPCWSTR' [D:\a\browser\browser\build\3rdparty\qtsingleapplication\qtsingleapplication.vcxproj]
+  # d:\a\browser\browser\3rdparty\qtsingleapplication\qtlockedfile_win.cpp(67): note: Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+  # d:\a\browser\browser\3rdparty\qtsingleapplication\qtlockedfile_win.cpp(74): error C2664: 'HANDLE OpenMutexW(DWORD,BOOL,LPCWSTR)': cannot convert argument 3 from 'TCHAR *' to 'LPCWSTR' [D:\a\browser\browser\build\3rdparty\qtsingleapplication\qtsingleapplication.vcxproj]
+  # d:\a\browser\browser\3rdparty\qtsingleapplication\qtlockedfile_win.cpp(75): note: Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+#  windows:
+#    if: "!contains(github.event.head_commit.message, 'ci skip')"
+#    strategy:
+#      matrix:
+#        compiler:
+#          - win32_msvc2017
+#        qt:
+#          - 5.12.8
+#    runs-on: windows-2016
+#    steps:
+#      - name: Cache Qt
+#        id: cache-qt
+#        uses: actions/cache@v1
+#        with:
+#          path: ../Qt
+#          key: ${{ runner.os }}-QtCache-${{ matrix.qt }}
+#      - name: Install Qt
+#        uses: jurplel/install-qt-action@v2
+#        with:
+#          version: ${{ matrix.qt }}
+#          arch: ${{ matrix.compiler }}
+#          cached: ${{ steps.cache-qt.outputs.cache-hit }}
+#          modules: "qtwebengine qtwebglplugin"
+#      - uses: actions/checkout@v2
+#      - name: Build
+#        run: |
+#          # Fluid
+#          git clone -b develop git://github.com/lirios/fluid.git
+#          cd fluid
+#          git submodule update --init --recursive
+#          cd ..
+#          # Browser
+#          mkdir build
+#          cd build
+#          cmake .. -DLIRI_LOCAL_ECM:BOOL=ON
+#          cmake --build .
+#      - name: Package
+#        run: |
+#          mkdir github-release-artifacts
+#          mkdir out
+#          windeployqt --qmldir=src --dir=out --compiler-runtime --angle -qml -quick -svg build\src\Debug\LiriBrowser.exe
+#          copy build\src\*.qm out/translations
+#          copy build\src\Debug\LiriBrowser.exe out
+#          Compress-Archive -Path out\* -DestinationPath github-release-artifacts\LiriBrowser.zip
+#      - name: Archive result
+#        if: github.event_name == 'push'
+#        uses: actions/upload-artifact@v1
+#        with:
+#          name: Windows
+#          path: github-release-artifacts/
+
+  osx:
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    runs-on: macos-latest
+    steps:
+      - name: Install dependencies
+        run: |
+          brew update
+          brew install qt5
+          brew link qt5 --force
+      - uses: actions/checkout@v2
+      - name: Build
+        run: |
+          set -x
+          export PATH="/usr/local/opt/qt/bin:$PATH"
+          export LDFLAGS="-L/usr/local/opt/qt/lib"
+          export CPPFLAGS="-I/usr/local/opt/qt/include"
+          export PKG_CONFIG_PATH="/usr/local/opt/qt/lib/pkgconfig"
+          # Fluid
+          git clone -b develop git://github.com/lirios/fluid.git
+          cd fluid
+          git submodule update --init --recursive
+          mkdir build
+          cd build
+          cmake .. \
+              -DFLUID_WITH_DOCUMENTATION:BOOL=OFF \
+              -DFLUID_WITH_DEMO:BOOL=OFF \
+              -DCMAKE_INSTALL_PREFIX=/usr/local/opt/qt \
+              -DINSTALL_LIBDIR=/usr/local/opt/qt/lib \
+              -DINSTALL_QMLDIR=/usr/local/opt/qt/qml \
+              -DINSTALL_PLUGINSDIR=/usr/local/opt/qt/lib/plugins
+          make -j $(sysctl -n hw.ncpu)
+          sudo make install
+          cd ../..
+          # Browser
+          mkdir build
+          cd build
+          cmake .. \
+              -DLIRI_LOCAL_ECM:BOOL=ON \
+              -DCMAKE_INSTALL_PREFIX=/opt/liri \
+              -DINSTALL_LIBDIR=/opt/liri/lib \
+              -DINSTALL_QMLDIR=/opt/liri/lib/qml \
+              -DINSTALL_PLUGINSDIR=/opt/liri/lib/plugins
+          make -j $(sysctl -n hw.ncpu)
+      - name: Package
+        run: |
+          set -x
+          outdir=$(pwd)/github-release-artifacts
+          mkdir $outdir
+          cd build
+          srcdir=$(pwd)/../src
+          macdeployqt src/LiriBrowser.app -dmg -qmldir=$srcdir -verbose=2
+          mv src/LiriBrowser.dmg $outdir
+      - name: Archive result
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v1
+        with:
+          name: macOS
+          path: github-release-artifacts/
+
+  release:
+    if: "!contains(github.event.head_commit.message, 'ci skip') && github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')"
+    runs-on: ubuntu-latest
+    needs:
+      - linux
+      - flatpak
+#      - windows
+      - osx
+    steps:
+      - uses: actions/checkout@v2
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          body: Fill the release notes
+          draft: true
+          prerelease: false
+#      - name: Download Windows artifact
+#        uses: actions/download-artifact@v1
+#        with:
+#          name: Windows
+#      - name: Upload Windows artifact to release
+#        uses: actions/upload-release-asset@v1
+#        with:
+#          upload_url: ${{ steps.create_release.outputs.upload_url }}
+#          asset_path: github-release-artifacts/LiriBrowser.zip
+#          asset_name: LiriBrowser.zip
+#          asset_content_type: application/zip
+      - name: Download macOS artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: macOS
+      - name: Upload macOS artifact to release
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: github-release-artifacts/LiriBrowser.dmg
+          asset_name: LiriBrowser.dmg
+          asset_content_type: application/octet-stream
+      - name: Download Flatpak artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: Flatpak
+      - name: Upload Flatpak artifact to release
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: github-release-artifacts/io.liri.Browser.flatpak
+          asset_name: io.liri.Browser.flatpak
+          asset_content_type: application/octet-stream
