@@ -1,0 +1,64 @@
+{
+  "id": "io.liri.Browser",
+  "branch": "master",
+  "runtime": "org.kde.Platform",
+  "runtime-version": "5.14",
+  "base": "io.qt.qtwebengine.BaseApp",
+  "base-version": "5.14",
+  "sdk": "org.kde.Sdk",
+  "command": "liri-browser",
+  "tags": [
+    "nightly"
+  ],
+  "desktop-file-name-suffix": " (Nightly)",
+  "finish-args": [
+    "--device=dri",
+    "--filesystem=host",
+    "--socket=wayland",
+    "--socket=x11",
+    "--socket=pulseaudio",
+    "--share=ipc",
+    "--share=network",
+    "--system-talk-name=org.freedesktop.GeoClue2"
+  ],
+  "modules": [
+    {
+      "name": "cmake-shared",
+      "buildsystem": "cmake-ninja",
+      "sources": [
+        {
+          "type": "git",
+          "url": "git://github.com/lirios/cmake-shared.git",
+          "branch": "develop"
+        }
+      ]
+    },
+    {
+      "name": "fluid",
+      "buildsystem": "cmake-ninja",
+      "config-opts": [
+        "-DFLUID_USE_SYSTEM_LCS:BOOL=ON",
+        "-DFLUID_WITH_DOCUMENTATION:BOOL=OFF",
+        "-DFLUID_WITH_DEMO:BOOL=OFF"
+      ],
+      "sources": [
+        {
+          "type": "git",
+          "url": "git://github.com/lirios/fluid.git",
+          "branch": "develop"
+        }
+      ]
+    },
+    {
+      "name": "browser",
+      "buildsystem": "cmake-ninja",
+      "sources": [
+        {
+          "type": "git",
+          "url": "git://github.com/lirios/browser.git",
+          "branch": "develop"
+        }
+      ]
+    }
+  ]
+}
