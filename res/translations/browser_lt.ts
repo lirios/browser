@@ -35,6 +35,17 @@
     </message>
 </context>
 <context>
+    <name>DownloadItemDelegate</name>
+    <message>
+        <source>Finished</source>
+        <translation>Užbaigta</translation>
+    </message>
+    <message>
+        <source>Failed</source>
+        <translation>Nepavyko</translation>
+    </message>
+</context>
+<context>
     <name>DrawerDownloadsContent</name>
     <message>
         <source>Downloads</source>
@@ -57,14 +68,6 @@
     <message>
         <source>Settings</source>
         <translation>Nustatymai</translation>
-    </message>
-    <message>
-        <source>Start</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Start url</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <source>Primary</source>
@@ -114,12 +117,136 @@
         <source>and</source>
         <translation>ir</translation>
     </message>
+    <message>
+        <source>Startup</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Start new window with</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>New page</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Continue where you left off</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>New page url</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Privacy</source>
+        <translation>Privatumas</translation>
+    </message>
+    <message>
+        <source>Save cookies</source>
+        <translation>Įrašyti slapukus</translation>
+    </message>
 </context>
 <context>
     <name>TabDelegate</name>
     <message id="new-tab">
         <source>New tab</source>
         <translation>Nauja kortelė</translation>
+    </message>
+</context>
+<context>
+    <name>WebContent</name>
+    <message>
+        <source>Back</source>
+        <translation>Atgal</translation>
+    </message>
+    <message>
+        <source>Forward</source>
+        <translation>Pirmyn</translation>
+    </message>
+    <message>
+        <source>Reload</source>
+        <translation>Įkelti iš naujo</translation>
+    </message>
+    <message>
+        <source>View page source</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Open in new tab</source>
+        <translation>Atverti naujoje kortelėje</translation>
+    </message>
+    <message>
+        <source>Open in new window</source>
+        <translation>Atverti naujame lange</translation>
+    </message>
+    <message>
+        <source>Open in  private window</source>
+        <translation>Atverti privačiame lange</translation>
+    </message>
+    <message>
+        <source>Copy link location</source>
+        <translation>Kopijuoti nuorodos adresą</translation>
+    </message>
+    <message>
+        <source>Download link location</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cut</source>
+        <translation>Iškirpti</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation>Kopijuoti</translation>
+    </message>
+    <message>
+        <source>Paste</source>
+        <translation>Įdėti</translation>
+    </message>
+    <message>
+        <source>Select all</source>
+        <translation>Pažymėti viską</translation>
+    </message>
+    <message>
+        <source>image</source>
+        <translation>paveikslas</translation>
+    </message>
+    <message>
+        <source>video</source>
+        <translation>vaizdo įrašas</translation>
+    </message>
+    <message>
+        <source>audio</source>
+        <translation>garso įrašas</translation>
+    </message>
+    <message>
+        <source>unknown</source>
+        <translation>nežinoma</translation>
+    </message>
+    <message>
+        <source>Open %1 in new tab</source>
+        <translation>Atverti %1 naujoje kortelėje</translation>
+    </message>
+    <message>
+        <source>Copy %1 location</source>
+        <translation>Kopijuoti %1 adresą</translation>
+    </message>
+    <message>
+        <source>Copy image</source>
+        <translation>Kopijuoti paveikslą</translation>
+    </message>
+    <message>
+        <source>Download %1</source>
+        <translation>Atsisiųsti %1</translation>
+    </message>
+    <message>
+        <source>This connection is untrusted</source>
+        <translation>Šis ryšys yra nepatikimas</translation>
+    </message>
+    <message>
+        <source>You are about to securely connect to %1 but we can&apos;t confirm that your connection is secure: %2</source>
+        <extracomment>%1 is an URL</extracomment>
+        <translation>Jūs ketinate saugiai prisijungti prie %1, tačiau mes negalime patvirtinti, kad jūsų ryšys yra saugus: %2</translation>
     </message>
 </context>
 </TS>

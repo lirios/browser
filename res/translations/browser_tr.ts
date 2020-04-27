@@ -35,6 +35,17 @@
     </message>
 </context>
 <context>
+    <name>DownloadItemDelegate</name>
+    <message>
+        <source>Finished</source>
+        <translation>Bitti</translation>
+    </message>
+    <message>
+        <source>Failed</source>
+        <translation>Başarısız</translation>
+    </message>
+</context>
+<context>
     <name>DrawerDownloadsContent</name>
     <message>
         <source>Downloads</source>
@@ -57,14 +68,6 @@
     <message>
         <source>Settings</source>
         <translation>Ayarlar</translation>
-    </message>
-    <message>
-        <source>Start</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Start url</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <source>Primary</source>
@@ -114,12 +117,136 @@
         <source>and</source>
         <translation>ve</translation>
     </message>
+    <message>
+        <source>Startup</source>
+        <translation>Başlangıç</translation>
+    </message>
+    <message>
+        <source>Start new window with</source>
+        <translation>Yeni pencereyi şununla başlat</translation>
+    </message>
+    <message>
+        <source>New page</source>
+        <translation>Yeni sayfa</translation>
+    </message>
+    <message>
+        <source>Continue where you left off</source>
+        <translation>Nerede bıraktıysanız oradan sürdür</translation>
+    </message>
+    <message>
+        <source>New page url</source>
+        <translation>Yeni sayfa adresi</translation>
+    </message>
+    <message>
+        <source>Privacy</source>
+        <translation>Gizlilik</translation>
+    </message>
+    <message>
+        <source>Save cookies</source>
+        <translation>Çerezleri kaydet</translation>
+    </message>
 </context>
 <context>
     <name>TabDelegate</name>
     <message id="new-tab">
         <source>New tab</source>
         <translation>Yeni sekme</translation>
+    </message>
+</context>
+<context>
+    <name>WebContent</name>
+    <message>
+        <source>Back</source>
+        <translation>Geri</translation>
+    </message>
+    <message>
+        <source>Forward</source>
+        <translation>İleri</translation>
+    </message>
+    <message>
+        <source>Reload</source>
+        <translation>Yenile</translation>
+    </message>
+    <message>
+        <source>View page source</source>
+        <translation>Sayfa kaynağını gör</translation>
+    </message>
+    <message>
+        <source>Open in new tab</source>
+        <translation>Yeni sekmede aç</translation>
+    </message>
+    <message>
+        <source>Open in new window</source>
+        <translation>Yeni pencerede aç</translation>
+    </message>
+    <message>
+        <source>Open in  private window</source>
+        <translation>Özel pencerede aç</translation>
+    </message>
+    <message>
+        <source>Copy link location</source>
+        <translation>Bağlantı konumunu kopyala</translation>
+    </message>
+    <message>
+        <source>Download link location</source>
+        <translation>Bağlantı konumunu indir</translation>
+    </message>
+    <message>
+        <source>Cut</source>
+        <translation>Kes</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation>Kopyala</translation>
+    </message>
+    <message>
+        <source>Paste</source>
+        <translation>Yapıştır</translation>
+    </message>
+    <message>
+        <source>Select all</source>
+        <translation>Tümünü seç</translation>
+    </message>
+    <message>
+        <source>image</source>
+        <translation>resim</translation>
+    </message>
+    <message>
+        <source>video</source>
+        <translation>video</translation>
+    </message>
+    <message>
+        <source>audio</source>
+        <translation>ses</translation>
+    </message>
+    <message>
+        <source>unknown</source>
+        <translation>bilinmeyen</translation>
+    </message>
+    <message>
+        <source>Open %1 in new tab</source>
+        <translation>Yeni sekmede aç: %1</translation>
+    </message>
+    <message>
+        <source>Copy %1 location</source>
+        <translation>%1 konumunu kopyala</translation>
+    </message>
+    <message>
+        <source>Copy image</source>
+        <translation>Resmi kopyala</translation>
+    </message>
+    <message>
+        <source>Download %1</source>
+        <translation>İndir: %1</translation>
+    </message>
+    <message>
+        <source>This connection is untrusted</source>
+        <translation>Bu bağlantı güvensiz</translation>
+    </message>
+    <message>
+        <source>You are about to securely connect to %1 but we can&apos;t confirm that your connection is secure: %2</source>
+        <extracomment>%1 is an URL</extracomment>
+        <translation>%1 adresine güvenle bağlanmak üzeresiniz ama bağlantınızın güvenli olduğunu doğrulayamıyoruz: %2</translation>
     </message>
 </context>
 </TS>
