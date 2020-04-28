@@ -38,11 +38,11 @@
     <name>DownloadItemDelegate</name>
     <message>
         <source>Finished</source>
-        <translation type="unfinished"/>
+        <translation>Færdig</translation>
     </message>
     <message>
         <source>Failed</source>
-        <translation type="unfinished"/>
+        <translation>Mislykkedes</translation>
     </message>
 </context>
 <context>
@@ -91,7 +91,7 @@
     </message>
     <message>
         <source>e.g https://example.com/?q=</source>
-        <translation>f.eks. https://eksempel.dk/?q=</translation>
+        <translation>f.eks. https://example.com/?q=</translation>
     </message>
     <message>
         <source>Theme</source>
@@ -119,31 +119,31 @@
     </message>
     <message>
         <source>Startup</source>
-        <translation type="unfinished"/>
+        <translation>Opstart</translation>
     </message>
     <message>
         <source>Start new window with</source>
-        <translation type="unfinished"/>
+        <translation>Start nyt vindue med</translation>
     </message>
     <message>
         <source>New page</source>
-        <translation type="unfinished"/>
+        <translation>Ny side</translation>
     </message>
     <message>
         <source>Continue where you left off</source>
-        <translation type="unfinished"/>
+        <translation>Fortsæt hvor du slap</translation>
     </message>
     <message>
         <source>New page url</source>
-        <translation type="unfinished"/>
+        <translation>Ny side-url</translation>
     </message>
     <message>
         <source>Privacy</source>
-        <translation type="unfinished"/>
+        <translation>Privatliv</translation>
     </message>
     <message>
         <source>Save cookies</source>
-        <translation type="unfinished"/>
+        <translation>Gem cookies</translation>
     </message>
 </context>
 <context>
@@ -157,96 +157,96 @@
     <name>WebContent</name>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Tilbage</translation>
     </message>
     <message>
         <source>Forward</source>
-        <translation type="unfinished"/>
+        <translation>Fremad</translation>
     </message>
     <message>
         <source>Reload</source>
-        <translation type="unfinished"/>
+        <translation>Genindlæs</translation>
     </message>
     <message>
         <source>View page source</source>
-        <translation type="unfinished"/>
+        <translation>Vis sidens kilde</translation>
     </message>
     <message>
         <source>Open in new tab</source>
-        <translation type="unfinished"/>
+        <translation>Åbn i nyt faneblad</translation>
     </message>
     <message>
         <source>Open in new window</source>
-        <translation type="unfinished"/>
+        <translation>Åbn i nyt vindue</translation>
     </message>
     <message>
         <source>Open in  private window</source>
-        <translation type="unfinished"/>
+        <translation>Åbn i privat vindue</translation>
     </message>
     <message>
         <source>Copy link location</source>
-        <translation type="unfinished"/>
+        <translation>Kopiér linkets placering</translation>
     </message>
     <message>
         <source>Download link location</source>
-        <translation type="unfinished"/>
+        <translation>Download linkets placering</translation>
     </message>
     <message>
         <source>Cut</source>
-        <translation type="unfinished"/>
+        <translation>Klip</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished"/>
+        <translation>Kopiér</translation>
     </message>
     <message>
         <source>Paste</source>
-        <translation type="unfinished"/>
+        <translation>Indsæt</translation>
     </message>
     <message>
         <source>Select all</source>
-        <translation type="unfinished"/>
+        <translation>Markér alt</translation>
     </message>
     <message>
         <source>image</source>
-        <translation type="unfinished"/>
+        <translation>billede</translation>
     </message>
     <message>
         <source>video</source>
-        <translation type="unfinished"/>
+        <translation>video</translation>
     </message>
     <message>
         <source>audio</source>
-        <translation type="unfinished"/>
+        <translation>lyd</translation>
     </message>
     <message>
         <source>unknown</source>
-        <translation type="unfinished"/>
+        <translation>ukendt</translation>
     </message>
     <message>
         <source>Open %1 in new tab</source>
-        <translation type="unfinished"/>
+        <translation>Åbn %1 i nyt faneblad</translation>
     </message>
     <message>
         <source>Copy %1 location</source>
-        <translation type="unfinished"/>
+        <translation>Kopiér %1 placering</translation>
     </message>
     <message>
         <source>Copy image</source>
-        <translation type="unfinished"/>
+        <translation>Kopiér billede</translation>
     </message>
     <message>
         <source>Download %1</source>
-        <translation type="unfinished"/>
+        <translation>Download %1</translation>
     </message>
     <message>
         <source>This connection is untrusted</source>
-        <translation type="unfinished"/>
+        <translation>Der er ikke tillid til forbindelsen</translation>
     </message>
     <message>
         <source>You are about to securely connect to %1 but we can&apos;t confirm that your connection is secure: %2</source>
         <extracomment>%1 is an URL</extracomment>
-        <translation type="unfinished"/>
+        <translation>Du er ved at oprette sikker forbindelse til %1 men vi kan ikke bekræfte at din forbindelse er sikker: %2</translation>
     </message>
 </context>
 </TS>
