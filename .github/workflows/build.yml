@@ -48,29 +48,11 @@ jobs:
         run: |
           qtverid=`echo "${{ matrix.container }}" | sed -e 's,suse-qt,,g'`
           echo "##[set-output name=id;]${qtverid}"
-      - name: Fetch cmake-shared artifact
-        uses: liri-infra/fetch-artifact@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          repository: lirios/cmake-shared
-          workflow_path: .github/workflows/build.yml
-          artifact_name: artifacts-${{ steps.extract_branch.outputs.branch }}
-          save_as: cmake-shared.zip
-      - name: Fetch fluid artifact
-        uses: liri-infra/fetch-artifact@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          repository: lirios/fluid
-          workflow_path: .github/workflows/build.yml
-          artifact_name: artifacts-${{ matrix.compiler }}-${{ steps.qt_version.outputs.id }}-${{ steps.extract_branch.outputs.branch }}
-          save_as: fluid.zip
-      - name: Uncompress artifacts
+      - name: Fetch and uncompress artifacts
         run: |
           set -x
-          for what in cmake-shared fluid; do
-              sudo tar xf ${what}.tar.gz -C /
-              rm -f ${what}.zip ${what}.tar.gz
-          done
+          curl -L -o - "https://dl.bintray.com/liri/artifacts-${{ steps.extract_branch.outputs.branch }}/cmake-shared.tar.gz" | sudo tar -xz -f - -C /
+          curl -L -o - "https://dl.bintray.com/liri/artifacts-${{ steps.extract_branch.outputs.branch }}/fluid-${{ matrix.compiler }}-${{ steps.qt_version.outputs.id }}.tar.gz" | sudo tar -xz -f - -C /
       - uses: actions/checkout@v2
       - name: Build
         run: |
