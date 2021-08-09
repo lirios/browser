@@ -48,26 +48,11 @@ jobs:
         run: |
           qtverid=`echo "${{ matrix.container }}" | sed -e 's,suse-qt,,g'`
           echo "##[set-output name=id;]${qtverid}"
-      - name: Fetch and uncompress artifacts
-        run: |
-          set -x
-          curl -L -o - "https://dl.bintray.com/liri/artifacts-${{ steps.extract_branch.outputs.branch }}/cmake-shared.tar.gz" | sudo tar -xz -f - -C /
-          curl -L -o - "https://dl.bintray.com/liri/artifacts-${{ steps.extract_branch.outputs.branch }}/fluid-${{ matrix.compiler }}-${{ steps.qt_version.outputs.id }}.tar.gz" | sudo tar -xz -f - -C /
       - uses: actions/checkout@v2
       - name: Build
         run: |
           set -x
-          mkdir -p build
-          cd build
-          if [ "${{ matrix.compiler }}" == "clang" ]; then
-            export CC=clang
-            export CXX=clang++
-            cmake .. -DLIRI_ENABLE_CLAZY:BOOL=ON -DCMAKE_INSTALL_PREFIX=/usr
-          else
-            cmake .. -DCMAKE_INSTALL_PREFIX=/usr
-          fi
-          make -j $(getconf _NPROCESSORS_ONLN)
-          sudo make install
+          ./.github/workflows/scripts/build-deps ${{ steps.extract_branch.outputs.branch }}
 
   flatpak:
     if: "!contains(github.event.head_commit.message, 'ci skip')"
