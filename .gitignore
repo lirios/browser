@@ -1,56 +1,8 @@
-# C++ objects and libs
+# SPDX-FileCopyrightText: 2020 Pier Luigi Fiorini <pierluigi.fiorini@gmail.com>
+#
+# SPDX-License-Identifier: CC0-1.0
 
-*.slo
-*.lo
-*.o
-*.a
-*.la
-*.lai
-*.so
-*.dll
-*.dylib
-
-# Qt-es
-
-/.qmake.cache
-/.qmake.stash
-*.pro.user
-*.pro.user.*
-*.qbs.user
-*.qbs.user.*
-*.moc
-moc_*.cpp
-qrc_*.cpp
-ui_*.h
-Makefile*
-*build-*
 build/
-
-# QtCreator
-
+*.user
 *.autosave
-
-# QtCtreator Qml
-*.qmlproject.user
-*.qmlproject.user.*
-
-# QtCtreator CMake
-CMakeLists.txt.user
-
-# Oxide and QtWebEngine
-GPUCache/
-QuotaManager
-QuotaManager-journal
-TransportSecurity
-databases/
-
-#GitEye
-/.project
-
-# Snapcraft
-.snapcraft/
-parts/
-prime/
-stage/
-*.snap
-*source.tar.bz2
+*.swp
