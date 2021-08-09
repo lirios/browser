@@ -49,10 +49,24 @@ jobs:
           qtverid=`echo "${{ matrix.container }}" | sed -e 's,suse-qt,,g'`
           echo "##[set-output name=id;]${qtverid}"
       - uses: actions/checkout@v2
-      - name: Build
+      - name: Build dependencies
         run: |
           set -x
           ./.github/workflows/scripts/build-deps ${{ steps.extract_branch.outputs.branch }}
+      - name: Build
+        run: |
+          set -x
+          mkdir -p build
+          cd build
+          if [ "${{ matrix.compiler }}" == "clang" ]; then
+            export CC=clang
+            export CXX=clang++
+            cmake .. -DLIRI_ENABLE_CLAZY:BOOL=ON -DCMAKE_INSTALL_PREFIX=/usr
+          else
+            cmake .. -DCMAKE_INSTALL_PREFIX=/usr
+          fi
+          make -j $(getconf _NPROCESSORS_ONLN)
+          sudo make install
 
   flatpak:
     if: "!contains(github.event.head_commit.message, 'ci skip')"
