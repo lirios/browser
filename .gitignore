@@ -6,3 +6,11 @@ build/
 *.user
 *.autosave
 *.swp
+
+# Snapcraft
+.snapcraft/
+parts/
+prime/
+stage/
+*.snap
+*source.tar.bz2
