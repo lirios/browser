@@ -15,7 +15,7 @@ endif()
 if(LIRI_LOCAL_ECM)
     list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/fluid/cmake/shared/modules")
 else()
-    find_package(LiriCMakeShared "1.0.0" REQUIRED NO_MODULE)
+    find_package(LiriCMakeShared "2.0.0" REQUIRED NO_MODULE)
     list(APPEND CMAKE_MODULE_PATH "${LCS_MODULE_PATH}")
 endif()
 
