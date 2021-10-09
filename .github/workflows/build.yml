@@ -164,8 +164,8 @@ jobs:
       - name: Install dependencies
         run: |
           brew update
-          brew install qt5
-          brew link qt5 --force
+          brew install qt@5
+          brew link qt@5 --force
       - uses: actions/checkout@v2
       - name: Build
         run: |
