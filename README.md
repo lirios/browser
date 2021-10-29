@@ -45,7 +45,7 @@ You can also append the following options to the `cmake` command:
 
 ## Documentation
 
-Find more information in the [Liri Browser documentation](https://liri-dev.readthedocs.io/en/latest/modules/browser/).
+Find more information in the [Liri Browser documentation](https://docs.liri.io/modules/browser/).
 
 ## Credits
 
