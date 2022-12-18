@@ -1,4 +1,4 @@
 [submodule "snap/plugins"]
 	path = snap/plugins
-	url = git://github.com/lirios/snapcraft-plugins
+	url = https://github.com/lirios/snapcraft-plugins
 	branch = develop
