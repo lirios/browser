@@ -168,7 +168,7 @@ TabContent {
         MenuItem {
             visible: textContextMenu.isLink
             height: visible ? MenuItem.implicitHeight : 0
-            text: qsTr("Open in  private window")
+            text: qsTr("Open in private window")
             onTriggered: actionManager.openUrlInNewPrivateWindowRequested(textContextMenu.request.linkUrl)
             Keys.onReturnPressed: triggered()
         }
